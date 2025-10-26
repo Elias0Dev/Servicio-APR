@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'boletas',
     'usuarios',
     'avisos',
+    'pwa'
     
 ]
 
@@ -126,3 +127,28 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+import os
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
+PWA_APP_NAME = "Servicios APR"
+PWA_APP_DESCRIPTION = "Consultas del Servicio APR"
+PWA_APP_THEME_COLOR = "#2563eb"
+PWA_APP_BACKGROUND_COLOR  = "#FFFFFF"
+
+PWA_APP_ICONS = [
+    {
+        "src": "/static/inicio/img/logo.png",
+        "sizes":"160x160"
+            
+    }
+]
+
+PWA_APP_ICONS_APPLE = [
+    {
+        "src": "/static/inicio/img/logo.png",
+        "sizes":"160x160"
+            
+    }
+]
