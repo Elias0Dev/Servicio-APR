@@ -21,7 +21,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('inicio.urls')),       # páginas públicas: home, FAQ, contacto
     path('pagos/', include('pagos.urls')),  # pagos públicos y privados
-    path('boleta/', include('boleta.urls')), # ver información de boleta
+    path('boletas/', include('boletas.urls')), # ver información de boleta
     path('usuarios/', include('usuarios.urls')), # dashboard según rol
-    path('aviso/', include('aviso.urls')),  # avisos y notificaciones
+    path('aviso/', include('avisos.urls')),  # avisos y notificaciones
 ]
