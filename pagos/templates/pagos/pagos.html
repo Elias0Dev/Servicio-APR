@@ -1,1 +1,93 @@
-<!--<zewwwedqw-->
+<div class="page-header">
+    <h2>Gestión de Pagos</h2>
+    <button class="btn btn-primary" onclick="alert('Abriendo formulario para Registrar Nuevo Pago')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.5rem;"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+        Registrar Pago
+    </button>
+</div>
+
+<div class="card filters-area">
+    <h3>Filtros de Búsqueda</h3>
+    <div class="filter-group">
+        <div class="filter-item">
+            <label for="filter-date">Filtrar por Fecha</label>
+            <input type="date" id="filter-date" class="input-filter">
+        </div>
+        <div class="filter-item">
+            <label for="filter-status">Estado del Pago</label>
+            <select id="filter-status" class="input-filter">
+                <option value="all">Todos los estados</option>
+                <option value="confirmado">Confirmado</option>
+                <option value="pendiente">Pendiente</option>
+                <option value="vencido">Vencido</option>
+            </select>
+        </div>
+        <div class="filter-item">
+            <label for="filter-user">Buscar Usuario (RUT/Nombre)</label>
+            <input type="text" id="filter-user" class="input-filter" placeholder="Ej: María González o 11.222.333-4">
+        </div>
+    </div>
+    <button class="btn btn-secondary" onclick="alert('Aplicando filtros a los pagos...')">Aplicar Filtros</button>
+</div>
+
+<div class="card table-container">
+    <h3>Registros de Pagos</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>N° Pago</th>
+                <th>Usuario</th>
+                <th>Factura Asociada</th>
+                <th>Método</th>
+                <th>Monto</th>
+                <th>Fecha de Pago</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>#PAG-523</td>
+                <td>María González</td>
+                <td>#2024-1523</td>
+                <td>Transferencia</td>
+                <td>$12,500</td>
+                <td>24/10/2025</td>
+                <td>
+                    <span class="badge badge-success">Confirmado</span>
+                </td>
+                <td>
+                    <div class="actions">
+                        <button class="btn-icon" title="Ver Detalle" onclick="alert('Detalles del Pago PAG-523')">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                        </button>
+                        <button class="btn-icon" title="Eliminar Pago" onclick="alert('Eliminar Pago PAG-523')">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>#PAG-526</td>
+                <td>Andrés Rojas</td>
+                <td>#2024-1526</td>
+                <td>Transferencia</td>
+                <td>$8,500</td>
+                <td>15/09/2025</td>
+                <td>
+                    <span class="badge badge-danger">Vencido</span>
+                </td>
+                <td>
+                    <div class="actions">
+                        <button class="btn-icon" title="Ver Detalle" onclick="alert('Detalles del Pago PAG-526')">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                        </button>
+                        <button class="btn-icon" title="Eliminar Pago" onclick="alert('Eliminar Pago PAG-526')">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
