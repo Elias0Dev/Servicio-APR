@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'boletas',
     'usuarios',
     'avisos',
+    'login',
+    'registro',
     'pwa'
     
 ]

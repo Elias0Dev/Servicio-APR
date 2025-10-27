@@ -24,5 +24,7 @@ urlpatterns = [
     path('boletas/', include('boletas.urls')), # ver información de boleta
     path('usuarios/', include('usuarios.urls')), # dashboard según rol
     path('aviso/', include('avisos.urls')),  # avisos y notificaciones
+    path('login/', include('login.urls')),
+    path('registro/', include('registro.urls')),
     path('',include('pwa.urls')),
 ]

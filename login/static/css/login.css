@@ -1,0 +1,112 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f8ff;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-container, .register-container {
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(37,107,177,0.12);
+    padding: 40px 38px;
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+h1, h2 {
+    color: #2371ad;
+    margin-bottom: 16px;
+    font-size: 1.6em;
+    font-weight: 700;
+}
+
+.subtitle {
+    color: #6f7890;
+    font-size: 1em;
+    margin-bottom: 22px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+label {
+    align-self: flex-start;
+    margin-bottom: 4px;
+    font-weight: bold;
+    color: #2371ad;
+    font-size: 1em;
+}
+
+input[type="text"], input[type="password"], input[type="email"] {
+    padding: 11px 12px;
+    margin-bottom: 14px;
+    border: 1px solid #dbeafe;
+    border-radius: 6px;
+    font-size: 1em;
+    background-color: #f7fafe;
+    width: 100%;
+    max-width: 340px;
+    box-sizing: border-box;
+    transition: border 0.2s;
+}
+
+input[type="text"]:focus, input[type="password"]:focus, input[type="email"]:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+.button-primary, .register-btn {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 13px 0;
+    border-radius: 5px;
+    font-size: 1.13em;
+    cursor: pointer;
+    font-weight: 600;
+    width: 100%;
+    max-width: 340px;
+    margin: 10px 0 0 0;
+    transition: background 0.3s;
+    box-shadow: 0 2px 8px rgba(0, 123, 255, 0.09);
+    text-decoration: none;
+    display: block;
+    /* Para no estar abajo flotando, ponle margin-top si quieres separarlos */
+}
+
+.button-primary:hover, .register-btn:hover {
+    background-color: #0056b3;
+}
+
+.error {
+    color: #dc3545;
+    margin-bottom: 12px;
+    font-size: 14px;
+    text-align: center;
+}
+
+.footer, .login-links, .register-section {
+    margin-top: 18px;
+    font-size: 14px;
+    color: #666;
+    text-align: center;
+}
+
+.footer a, .login-links a, .register-section a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.footer a:hover, .login-links a:hover, .register-section a:hover {
+    text-decoration: underline;
+}

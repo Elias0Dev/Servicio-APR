@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Agua Potable Rural (APR)</title>
+    {%load static%}
+    <link rel="stylesheet" href="{%static 'inicio/css/inicio.css'%}">
+
+    {% load pwa %}
+
+    {% progressive_web_app_meta %}
+</head>
+<body>
+    <header>
+        <h1>Sistema Agua Potable Rural (APR)</h1>
+        <p>Soluciones integrales para el abastecimiento y gestión del agua potable rural en Chile.</p>
+    </header>
+
+    <main>
+        <section class="info">
+            <h2>¿Qué es la APR?</h2>
+            <p>
+              La APR (Agua Potable Rural) es un sistema que abastece de agua potable a comunidades rurales alejadas de centros urbanos en Chile. Gestionada por comités locales, la APR promueve la autonomía, la calidad de vida, el desarrollo sostenible y la equidad social para más de 2 millones de personas en el país.
+            </p>
+        </section>
+
+        <section class="impacto">
+            <h2>Impacto y Beneficios</h2>
+            <ul>
+                <li>Cobertura nacional en todas las regiones rurales.</li>
+                <li>Adminstración local y participación activa de la comunidad.</li>
+                <li>Mejoras económicas por tarifas accesibles e inversión social.</li>
+                <li>Innovación: gestión digital, medidores inteligentes y telemetría.</li>
+                <li>Sostenibilidad y adaptación a normativas modernas.</li>
+            </ul>
+        </section>
+
+        <section class="caracteristicas">
+            <h2>Características del Sistema</h2>
+            <div class="features">
+                <div>
+                    <h3>Autonomía Comunitaria</h3>
+                    <p>Gestión y administración por comités de usuarios locales.</p>
+                </div>
+                <div>
+                    <h3>Sistema Seguro</h3>
+                    <p>Infraestructura y software moderno, seguro y adaptable.</p>
+                </div>
+                <div>
+                    <h3>Desarrollo Sustentable</h3>
+                    <p>Mejora continua de infraestructura y servicios para todos.</p>
+                </div>
+            </div>
+        </section>
+        
+        <div class="login-section">
+           <a href="{% url 'login' %}" class="login-btn">Iniciar Sesión</a>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2025 Sistema APR | Gestión de Agua Potable Rural en Chile</p>
+    </footer>
+</body>
+</html>
