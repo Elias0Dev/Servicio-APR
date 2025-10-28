@@ -1,27 +1,23 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    {%block title%}
-    <title>Sistema Agua Potable Rural (APR)</title>
-    {%endblock%}
-    {%load static%}
-    
-    <link rel="stylesheet" href="{%static 'inicio/css/inicio.css'%}">
+{%extends 'inicio/base.html'  %}
+{%block title%}
+<title>Sistema APR</title>
+{%endblock%}
 
-    {% load pwa %}
+{%load static%}
 
-    {% progressive_web_app_meta %}
-</head>
-<body>
-    <header>
-        <h1>Sistema Agua Potable Rural (APR)</h1>
-        <p>Soluciones integrales para el abastecimiento y gestión del agua potable rural en Chile.</p>
-    </header>
+{% block js%}
+{%endblock%}
 
-    <main>
+{% block css%}
+<link rel="stylesheet" href="{%static 'inicio/css/inicio.css'%}">
+{%endblock%}
+{% load pwa %}
+
+{% progressive_web_app_meta %}
+
+
+{% block contenido%}
+<main>
         <section class="info">
             <h2>¿Qué es la APR?</h2>
             <p>
@@ -62,9 +58,5 @@
            <a href="{% url 'login' %}" class="login-btn">Iniciar Sesión</a>
         </div>
     </main>
+{%endblock%}
 
-    <footer>
-        <p>© 2025 Sistema APR | Gestión de Agua Potable Rural en Chile</p>
-    </footer>
-</body>
-</html>
