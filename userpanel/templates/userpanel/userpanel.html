@@ -1,42 +1,34 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Panel de Usuario - APR de Illapel</title>
-    {%load static%}
-    <link rel="stylesheet" href="{% static 'css/userpanel.css' %}" />
-</head>
-<body>
-    <header>
-        <div class="header-container">
-            <h1>Bienvenido, {{ user.username }}</h1>
-            <form method="post" action="">
-                {% csrf_token %}
-                <button type="submit" class="button-primary">Cerrar Sesión</button>
-            </form>
-        </div>
-    </header>
+{%extends 'inicio/base.html'  %}
+{%block title%}
+    <title>Panel de Usuario - Sistema APR</title>
+{%endblock%}
 
+{%load static%}
+
+{% block js%}
+{%endblock%}
+
+{% block css%}
+    <link rel="stylesheet" href="{% static 'userpanel/css/userpanel.css' %}" />
+{%endblock%}
+
+
+{% block contenido%}
     <main>
-        <section class="dashboard-info">
-            <h2>Información General</h2>
-            <p>Esta es tu página de inicio. Aquí puedes ver estadísticas, notificaciones y gestionar tu cuenta.</p>
-        </section>
+            <section class="dashboard-info">
+                <h2>Información General</h2>
+                <p>Esta es tu página de inicio. Aquí puedes ver estadísticas, notificaciones y gestionar tu cuenta.</p>
+            </section>
 
-        <section class="user-actions">
-            <h2>Acciones Disponibles</h2>
-            <ul>
-                <li><a href="#">Ver Perfil</a></li>
-                <li><a href="#">Actualizar Datos</a></li>
-                <li><a href="#">Solicitar Soporte</a></li>
-                <li><a href="#">Configuraciones</a></li>
-            </ul>
-        </section>
+            <section class="user-actions">
+                <h2>Acciones Disponibles</h2>
+                <ul>
+                    <li><a href="#">Ver Perfil</a></li>
+                    <li><a href="#">Actualizar Datos</a></li>
+                    <li><a href="#">Solicitar Soporte</a></li>
+                    <li><a href="#">Configuraciones</a></li>
+                </ul>
+            </section>
     </main>
+{%endblock%}
 
-    <footer>
-        <p>© 2025 APR de Illapel. Todos los derechos reservados.</p>
-    </footer>
-</body>
-</html>

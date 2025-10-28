@@ -1,13 +1,21 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iniciar Sesión - APR de Illapel</title>
-    {%load static%}
-    <link rel="stylesheet" href="{% static 'css/login.css' %}">
-</head>
-<body>
+</html>
+
+{%extends 'inicio/base.html'  %}
+{%block title%}
+    <title>Iniciar Sesión - Sistema APR</title>
+{%endblock%}
+
+{%load static%}
+
+{% block js%}
+{%endblock%}
+
+{% block css%}
+    <link rel="stylesheet" href="{% static 'login/css/login.css' %}">
+{%endblock%}
+
+
+{% block contenido%}
     <div class="login-container">
         <h1>Bienvenido a APR de Illapel</h1>
         <p>Inicia sesión para acceder a tu cuenta.</p>
@@ -35,5 +43,4 @@
             <p>¿No tienes cuenta? Contacta al administrador de APR de Illapel.</p>
         </div>
     </div>
-</body>
-</html>
+{%endblock%}

@@ -1,16 +1,20 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro - APR de Illapel</title>
-        {%load static%}
-    <link rel="stylesheet" href="{% static 'css/registro.css' %}">
-</head>
-<body>
-    </header>
-    
-    <main>
+{%extends 'inicio/base.html'  %}
+{%block title%}
+    <title>Registro - Sistema APR</title>
+{%endblock%}
+
+{%load static%}
+
+{% block js%}
+{%endblock%}
+
+{% block css%}
+    <link rel="stylesheet" href="{% static 'registro/css/registro.css' %}">
+{%endblock%}
+
+
+{% block contenido%}
+<main>
         <section>
             <h2>Crear Cuenta</h2>
             <p>Regístrate para acceder a todas las funciones.</p>
@@ -43,9 +47,5 @@
             </div>
         </section>
     </main>
-    
-    <footer>
-        <p>&copy; 2023 APR de Illapel. Todos los derechos reservados.</p>
-    </footer>
-</body>
-</html>
+{%endblock%}
+
