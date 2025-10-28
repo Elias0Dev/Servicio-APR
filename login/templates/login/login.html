@@ -18,7 +18,7 @@
             </div>
         {% endif %}
         
-        <form method="post">
+        <form method="post" action="{% url 'userpanel' %}">
             {% csrf_token %}
             <label for="id_username">Usuario:</label>
             <input type="text" id="id_username" name="username" required>
@@ -27,9 +27,7 @@
             <input type="password" id="id_password" name="password" required>
             
             <button type="submit" class="button-primary">Iniciar Sesión</button>
-        <div class="login-section">
-           <a href="{% url 'registro' %}" class="register-btn">Registrarse</a>
-        </div>
+            <a href="{% url 'registro' %}" class="register-btn">Registrarse</a>
         </form>
         
         <div class="footer">

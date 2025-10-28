@@ -19,12 +19,13 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('inicio.urls')),       # páginas públicas: home, FAQ, contacto
+    path('inicio/', include('inicio.urls')),       # páginas públicas: home, FAQ, contacto
     path('pagos/', include('pagos.urls')),  # pagos públicos y privados
     path('boletas/', include('boletas.urls')), # ver información de boleta
     path('usuarios/', include('usuarios.urls')), # dashboard según rol
     path('aviso/', include('avisos.urls')),  # avisos y notificaciones
     path('login/', include('login.urls')),
     path('registro/', include('registro.urls')),
+    path('userpanel/', include('userpanel.urls')),
     path('',include('pwa.urls')),
 ]

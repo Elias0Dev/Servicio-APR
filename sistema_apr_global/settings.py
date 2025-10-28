@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'avisos',
     'login',
     'registro',
+    'userpanel',
     'pwa'
     
 ]
