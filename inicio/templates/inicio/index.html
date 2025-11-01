@@ -1,0 +1,102 @@
+<!-- se recibe el contenido de base.html -->
+{%extends 'inicio/base.html'  %}
+
+{%block title%}
+<!-- Se envia el titulo de la page -->
+ <title>Inicio - Servicio APR</title>
+
+{%endblock%}
+
+{%load static%} <!--Carga la carpeta static de la app -->
+
+{% block js%}
+<!-- Se envia la referencias al js -->
+{%endblock%}
+
+{% block css%}
+<!-- Se envia la referencias al css -->
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .hero { background-color: #f8f9fa; padding: 50px 0; }
+        .service-card { transition: transform 0.3s; }
+        .service-card:hover { transform: scale(1.05); }
+    </style>
+{%endblock%}
+
+<!-- Codigo que envia el service worker a la web(PWA) -->
+{% load pwa %}
+{% progressive_web_app_meta %}
+
+
+{% block contenido%}
+<!-- Se envia codigo a la etiqueta <body> -->
+    
+
+    <!-- Sección Hero / Información Básica de la Empresa -->
+    <section id="empresa" class="hero">
+        <div class="container text-center">
+            <img src="{% static 'inicio/img/logo.png' %}" alt="Logo" class="mb-4" style="max-width: 200px;">
+            <h1>Bienvenido a Servicios Agua Potable Rural(APR)</h1>
+            <p class="lead">
+                El comite APR de las cañas 1, trabaja cada día para garantizar el suministro de agua potable a nuestra comunidad. Además de velar por el servicio y atender incidencias, estamos dando un paso hacia la digitalización con nuestra nueva plataforma web, pensada para facilitar las consultas, mejorar la comunicación y mantener la disponibilidad de los servicios, incluso en zonas con baja señal o cortes de energía
+            </p>
+        </div>
+    </section>
+
+    <!-- Sección de Servicios -->
+    <section id="servicios" class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-4">Nuestros Servicios Básicos</h2>
+            <div class="row">
+                <!-- Tarjeta para Ver Boleta -->
+                <div class="col-md-6 mb-4">
+                    <div class="card service-card h-100">
+                        <div class="card-body text-center">
+                            <img src="{% static 'inicio/img/boleta-icon.png'%}" alt="Ver Boleta" class="mb-3" style="width: 80px;">
+                            <h5 class="card-title">Ver Boleta</h5>
+                            <p class="card-text">Accede fácilmente a tus boletas en línea. Consulta tus facturas pendientes y descarga documentos de forma segura.</p>
+                            <a href="#" class="btn btn-primary">Acceder Ahora</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Tarjeta para Hacer Pagos en Línea -->
+                <div class="col-md-6 mb-4">
+                    <div class="card service-card h-100">
+                        <div class="card-body text-center">
+                            <img src="{% static 'inicio/img/pago-icon.png'%}" alt="Pagos en Línea" class="mb-3" style="width: 80px;">
+                            <h5 class="card-title">Hacer Pagos en Línea</h5>
+                            <p class="card-text">Realiza pagos seguros con tarjeta de crédito o débito desde donde sea y en cualquier momento. </p>
+                            <a href="#" class="btn btn-primary">Pagar Ahora</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de Contacto -->
+    <section id="contacto" class="bg-light py-5">
+        <div class="container">
+            <h2 class="text-center mb-4">Información de Contacto</h2>
+            <div class="row justify-content-md-left">
+                <div class="col-lg-4">
+                    <p><strong>Dirección:</strong> las cañas 1 de illapel, region de coquimbo, chile</p>
+                    <p><strong>Teléfono Oficina:</strong> +569</p>
+                    <p><strong>Emergencia:</strong> +569</p>
+                    <p><strong>Email:</strong> contacto@miempresa.com</p>
+                    <p><strong>Horario:</strong> Lunes a Viernes, 9:00 AM - 5:00 PM</p>
+                </div>
+                <div class="col-lg-auto">
+                    <iframe width="700" height="550" style="border:0" cargando="lazy" allowfullscreen src="https://www.google.com/maps/embed/v1/place?q=place_id:ChIJaQInYwAriZYRqOVsV9bR080&key=AIzaSyDTueRkimd4yN7jtMlA2XifHgbNhjQa2r4"></iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+
+    
+    
+    
+{%endblock%}
+
+
