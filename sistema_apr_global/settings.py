@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-#wo)q)zsfuzd5gjg%ha9zs(ps^k_1oi!nacn5gbvysfn1pb_pe
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.0.14']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -77,8 +77,12 @@ WSGI_APPLICATION = 'sistema_apr_global.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'sistema_apr',
+        'USER': 'webuser',
+        'PASSWORD': 'Web1234!',
+        'HOST': 'localhost',
+        'PORT': '3306',
     }
 }
 

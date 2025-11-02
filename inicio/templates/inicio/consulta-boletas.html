@@ -1,0 +1,52 @@
+<!-- se recibe el contenido de base.html -->
+{%extends 'inicio/base.html'  %}
+
+{%block title%}
+<!-- Se envia el titulo de la page -->
+ <title>Detalle Boletas - Servicio APR</title>
+{%endblock%}
+
+{%load static%} <!--Carga la carpeta static de la app -->
+
+{% block js%}
+<!-- Se envia la referencias al js -->
+ <script src="{%static 'inicio/js/script.js'%}"></script>
+{%endblock%}
+
+{% block css%}
+<!-- Se envia la referencias al css -->
+ <link rel="stylesheet" href="{%static 'inicio/css/style.css'%}">
+{%endblock%}
+
+<!-- Codigo que envia el service worker a la web(PWA) -->
+{% load pwa %}
+{% progressive_web_app_meta %}
+
+
+{% block contenido%}
+<!-- Se envia codigo a la etiqueta <body> -->
+        <div class="container-fluid" style="padding-top: 50px;">
+        <h1>Detalle de Boleta</h1>
+        <div class="search-section">
+            <label for="cliente">Número de Cliente:</label>
+            <input type="text" id="cliente" placeholder="Ingresa tu número de cliente">
+            <button id="buscar">Buscar</button>
+        </div>
+        <div id="resultados" class="hidden">
+            <table id="tabla-boletas">
+                <thead>
+                    <tr>
+                        <th>Lo Consumido</th>
+                        <th>Fecha de Consumo</th>
+                        <th>Valor de la Boleta</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody id="cuerpo-tabla">
+                    <!-- Las filas se agregarán aquí dinámicamente -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+{%endblock%}
+
