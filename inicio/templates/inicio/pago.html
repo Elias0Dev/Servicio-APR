@@ -1,0 +1,53 @@
+<!-- se recibe el contenido de base.html -->
+{%extends 'inicio/base.html'  %}
+
+{%block title%}
+<!-- Se envia el titulo de la page -->
+ <title>Pago en Linea - Sistema APR</title>
+{%endblock%}
+
+{%load static%} <!--Carga la carpeta static de la app -->
+
+{% block js%}
+<!-- Se envia la referencias al js -->
+{%endblock%}
+
+{% block css%}
+<!-- Se envia la referencias al css -->
+{%endblock%}
+
+
+{% block contenido%}
+<!-- Se envia codigo a la etiqueta <body> -->
+    <h2>Pago en Línea</h2>
+
+    <form method="GET" action="{% url 'buscar_facturas_rut' %}">
+        <label for="rut">Ingrese su RUT:</label>
+        <input type="text" name="rut" id="rut" required>
+        <button type="submit">Buscar Facturas</button>
+    </form>
+
+    {% if facturas %}
+        <h3>Facturas Pendientes de {{ cliente.nombre }}</h3>
+        <form method="POST" action="{% url 'procesar_pago' %}">
+            {% csrf_token %}
+            <table>
+                {% for factura in facturas %}
+                    <tr>
+                        <td>
+                            <input type="checkbox" name="facturas" value="{{ factura.id_factura }}">
+                        </td>
+                        <td>
+                            Factura {{ factura.id_factura }} - Total: ${{ factura.total_pagar }} - Vence: {{ factura.fecha_vencimiento }}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+            <button type="submit">Pagar Seleccionadas</button>
+        </form>
+    {% endif %}
+
+
+
+{%endblock%}
+
