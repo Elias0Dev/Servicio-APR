@@ -17,7 +17,6 @@ class Cliente(models.Model):
     def __str__(self):
         return f"{self.nombre} ({self.rut}-{self.dv})"
     
-from django.db import models
 
 class Factura(models.Model):
     id_factura = models.AutoField(primary_key=True)
@@ -46,8 +45,6 @@ class Factura(models.Model):
     def __str__(self):
         return f"Factura {self.id_factura} - Cliente {self.id_cliente}"
 
-
-from django.db import models
 
 class Tarifas(models.Model):
     TIPO_CHOICES = [
