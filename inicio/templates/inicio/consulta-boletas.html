@@ -25,7 +25,7 @@
 
 {% block contenido%}
 <!-- Se envia codigo a la etiqueta <body> -->
-        <div class="container-fluid" style="padding-top: 50px;">
+        <div class="container" ">
         <h1>Detalle de Boleta</h1>
         <div class="search-section">
             <label for="cliente">Número de Cliente:</label>
@@ -33,13 +33,12 @@
             <button id="buscar">Buscar</button>
         </div>
         <div id="resultados" class="hidden">
-            <table id="tabla-boletas">
-                <thead>
+            <table id="tabla-boletas" class="table table-hover"  border="2">
+                <thead class="table-dark">
                     <tr>
-                        <th>Fecha de Emisión</th>
-                        <th>Consumo (m3)</th>
-                        <th>Total a Pagar($)</th>
-                        <th>Acción</th>
+                        <th scope="col">Fecha de Emisión</th>
+                        <th scope="col">Consumo (m3)</th>
+                        <th scope="col">Total a Pagar($)</th>
                     </tr>
                 </thead>
                 <tbody id="cuerpo-tabla">

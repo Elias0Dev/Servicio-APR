@@ -14,9 +14,13 @@ main {
 }
 
 .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     max-width: 800px;
     margin: 0 auto;
-    background: white;
+    background: rgb(236, 236, 236);
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
@@ -71,9 +75,22 @@ th {
 
 /* consulta_boleta */
 
-#cliente,#rut::-webkit-outer-spin-button,
-#cliente,#rut::-webkit-inner-spin-button {
+#cliente::-webkit-outer-spin-button,
+#cliente::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
 
+/*pago */
+#rut::-webkit-outer-spin-button,
+#rut::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+
+form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

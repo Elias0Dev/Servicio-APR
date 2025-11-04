@@ -42,3 +42,13 @@ document.getElementById("buscar").addEventListener("click", function () {
       alert("Ocurrió un error al buscar las facturas.");
     });
 });
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    const boton = document.getElementById('btn_buscar');
+    const seccion = document.getElementById('buscar_rut');
+
+    boton.addEventListener('click', function() {
+      seccion.style.display.none();
+    });
+  });
