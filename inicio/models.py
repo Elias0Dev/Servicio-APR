@@ -2,7 +2,7 @@ from django.db import models
 
 # Create your models here.
 class Cliente(models.Model):
-    id_cliente = models.AutoField(primary_key=True)
+    id_cliente = models.IntegerField(primary_key=True)
     rut = models.IntegerField()
     dv = models.CharField(max_length=1)
     nombre = models.CharField(max_length=100)

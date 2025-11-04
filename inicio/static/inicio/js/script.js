@@ -5,7 +5,7 @@ document.getElementById('buscar').addEventListener('click', function() {
         return;
     }
 
-    fetch(`/inicio/api/facturas/?numero_cliente=${numeroCliente}`)
+    fetch(`/api/facturas/?numero_cliente=${numeroCliente}`)
         .then(response => response.json())
         .then(data => {
             if (data.error) {
