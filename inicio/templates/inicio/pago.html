@@ -1,53 +1,76 @@
 <!-- se recibe el contenido de base.html -->
-{%extends 'inicio/base.html'  %}
+{%extends 'inicio/base.html' %}
 
 {%block title%}
 <!-- Se envia el titulo de la page -->
- <title>Pago en Linea - Sistema APR</title>
-{%endblock%}
+<title>Pago en Linea - Sistema APR</title>
+{%endblock%} 
 
-{%load static%} <!--Carga la carpeta static de la app -->
+{%load static%}
+<!--Carga la carpeta static de la app -->
 
 {% block js%}
 <!-- Se envia la referencias al js -->
-{%endblock%}
+{%endblock%} 
 
 {% block css%}
 <!-- Se envia la referencias al css -->
-{%endblock%}
+{%endblock%} 
 
-
+{% load humanize %}
 {% block contenido%}
 <!-- Se envia codigo a la etiqueta <body> -->
-    <h2>Pago en Línea</h2>
+     <h2>Pago en Línea</h2>
 
     <form method="GET" action="{% url 'buscar_facturas_rut' %}">
-        <label for="rut">Ingrese su RUT:</label>
-        <input type="text" name="rut" id="rut" required>
-        <button type="submit">Buscar Facturas</button>
+    <label for="rut">Ingrese su RUT (sin DV):</label>
+    <input type="number" name="rut" id="rut" value="{{ request.GET.rut }}" required />
+    <button type="submit">Buscar Facturas</button>
     </form>
 
-    {% if facturas %}
-        <h3>Facturas Pendientes de {{ cliente.nombre }}</h3>
-        <form method="POST" action="{% url 'procesar_pago' %}">
-            {% csrf_token %}
-            <table>
-                {% for factura in facturas %}
-                    <tr>
-                        <td>
-                            <input type="checkbox" name="facturas" value="{{ factura.id_factura }}">
-                        </td>
-                        <td>
-                            Factura {{ factura.id_factura }} - Total: ${{ factura.total_pagar }} - Vence: {{ factura.fecha_vencimiento }}
-                        </td>
-                    </tr>
-                {% endfor %}
-            </table>
-            <button type="submit">Pagar Seleccionadas</button>
-        </form>
+    <hr />
+
+    {% if error %}
+    <p class="error">{{ error }}</p>
+    {% elif mensaje %}
+    <p class="mensaje">{{ mensaje }}</p>
+    {% elif cliente %}
+    <h3>Cliente: {{ cliente.nombre }} ({{ cliente.rut }}-{{ cliente.dv }})</h3>
+
+    <form method="POST" action="#">
+        {% csrf_token %}
+        <table>
+        <thead>
+            <tr>
+            <th>Seleccionar</th>
+            <th>ID Factura</th>
+            <th>Fecha Emisión</th>
+            <th>Vencimiento</th>
+            <th>Consumo (m³)</th>
+            <th>Total a Pagar</th>
+            <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for factura in facturas %}
+            <tr>
+            <td><input type="checkbox" name="facturas" value="{{ factura.id_factura }}"></td>
+            <td>{{ factura.id_factura }}</td>
+            <td>{{ factura.fecha_emision|date:"d/m/Y" }}</td>
+            <td>{{ factura.fecha_vencimiento|date:"d/m/Y" }}</td>
+            <td>{{ factura.consumo }}</td>
+            <td>${{ factura.total_pagar|floatformat:0|intcomma }}</td>
+            <td>{% if factura.estado %}Pagada{% else %}Pendiente{% endif %}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        </table>
+
+        <button type="submit">Pagar Seleccionadas</button>
+    </form>
     {% endif %}
 
 
 
-{%endblock%}
 
+{%endblock%}

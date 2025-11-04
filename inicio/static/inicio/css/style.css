@@ -69,3 +69,11 @@ th {
     background-color: #f2f2f2;
 }
 
+/* consulta_boleta */
+
+#cliente,#rut::-webkit-outer-spin-button,
+#cliente,#rut::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
