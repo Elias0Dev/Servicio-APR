@@ -26,13 +26,29 @@ document.getElementById("buscar").addEventListener("click", function () {
 
       facturas.forEach((boleta, index) => {
         const fila = document.createElement("tr");
+
+        // Crear fila con datos y botón PDF
         fila.innerHTML = `
-                    <td>${boleta.fecha}</td>
-                    <td>${boleta.consumido}</td>
-                    <td>${boleta.valor}</td>
-                    
-                `;
+          <td>${boleta.fecha}</td>
+          <td>${boleta.consumido}</td>
+          <td>${boleta.valor}</td>
+          <td>
+            <button class="btn-pdf" data-id="${boleta.id}">
+              PDF
+            </button>
+          </td>
+        `;
+
         cuerpoTabla.appendChild(fila);
+      });
+
+      // Agregar evento a los botones PDF
+      document.querySelectorAll(".btn-pdf").forEach((btn) => {
+        btn.addEventListener("click", function () {
+          const idFactura = this.getAttribute("data-id");
+          // Abrir PDF en otra pestaña
+          window.open(`/generar_boleta/${idFactura}/pdf/`, "_blank");
+        });
       });
 
       resultadosDiv.classList.remove("hidden");
@@ -42,7 +58,6 @@ document.getElementById("buscar").addEventListener("click", function () {
       alert("Ocurrió un error al buscar las facturas.");
     });
 });
-
 
 document.addEventListener('DOMContentLoaded', function() {
     const boton = document.getElementById('btn_buscar');

@@ -1,15 +1,9 @@
-from django.shortcuts import render, redirect
-from django.urls import reverse
+import pdfkit
+from django.shortcuts import render
 from django.conf import settings
-from django.http import JsonResponse
-from transbank.webpay.webpay_plus.transaction import Transaction
-from transbank.common.integration_type import IntegrationType
-from transbank.common.options import WebpayOptions
-from transbank.error.transaction_create_error import TransactionCreateError
-
-from .models import Factura, Cliente
-from decimal import Decimal
-
+from django.http import JsonResponse,  HttpResponse
+from django.template.loader import render_to_string
+from .models import Factura, Cliente, Tarifas
 
 def page_index(request):
     context = {}
@@ -39,7 +33,8 @@ def buscar_facturas(request):
         data.append({
             'consumido': f.consumo,
             'fecha': f.fecha_emision.strftime('%Y-%m-%d'),
-            'valor': f"${format(int(f.total_pagar), ',d').replace(',', '.')}"
+            'valor': f"${format(int(f.total_pagar), ',d').replace(',', '.')}",
+            'id': f.id_factura
         })
 
     return JsonResponse({'facturas': data})
@@ -70,3 +65,41 @@ def buscar_facturas_rut(request):
     # Renderizamos en pago.html
     return render(request, "inicio/pago.html", context)
 
+def generar_boleta_pdf(request, id_factura):
+    # Obtener factura y datos relacionados
+    factura = Factura.objects.get(id_factura=id_factura)
+    cliente = factura.id_cliente
+    tarifas_aplicadas = Tarifas.objects.filter(
+        fecha_inicio__lte=factura.fecha_emision,
+        fecha_fin__gte=factura.fecha_emision
+    ).order_by('rango_desde')
+
+    # Renderizar el HTML como string
+    html = render_to_string('inicio/boleta.html', {
+        'factura': factura,
+        'cliente': cliente,
+        'tarifas_aplicadas': tarifas_aplicadas
+    })
+
+    # Opciones de PDF
+    options = {
+        'page-size': 'A4',
+        'encoding': 'UTF-8',
+        'margin-top': '0.75in',
+        'margin-bottom': '0.75in',
+        'margin-left': '0.75in',
+        'margin-right': '0.75in',
+    }
+
+    # Configuración de pdfkit para Windows
+    path_wkhtmltopdf = r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe'
+    config = pdfkit.configuration(wkhtmltopdf=path_wkhtmltopdf)
+
+    # Generar PDF en memoria
+    pdf = pdfkit.from_string(html, False, options=options, configuration=config)
+
+    # Devolver PDF como respuesta
+    response = HttpResponse(pdf, content_type='application/pdf')
+    response['Content-Disposition'] = f'inline; filename=boleta_N°{factura.id_factura}.pdf'
+
+    return response
