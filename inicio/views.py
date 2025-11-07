@@ -1,9 +1,11 @@
 import pdfkit
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib import messages
 from django.conf import settings
 from django.http import JsonResponse,  HttpResponse
 from django.template.loader import render_to_string
 from .models import Factura, Cliente, Tarifas
+from .forms import ContactForm
 
 def page_index(request):
     context = {}
@@ -18,6 +20,18 @@ def page_consultaBoletas(request):
 def page_pago_en_linea(request):
     context = {}
     return render(request, 'inicio/pago.html', context)
+
+def page_contact(request):
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            form.save()  # Guarda en la base de datos
+            messages.success(request, 'Mensaje enviado exitosamente.')
+            return redirect('page_contacto')  # Redirige a la misma página
+    else:
+        form = ContactForm()
+    return render(request, 'inicio/contacto.html', {'form': form})
+
 
 
 def buscar_facturas(request):
@@ -103,3 +117,7 @@ def generar_boleta_pdf(request, id_factura):
     response['Content-Disposition'] = f'inline; filename=boleta_N°{factura.id_factura}.pdf'
 
     return response
+
+
+
+

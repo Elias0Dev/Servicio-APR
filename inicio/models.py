@@ -65,3 +65,19 @@ class Tarifas(models.Model):
 
     def __str__(self):
         return f"Tarifa {self.tipo}: {self.rango_desde}-{self.rango_hasta} -> {self.cargo}"
+
+
+
+
+class Contacto(models.Model):
+    nombre = models.CharField(max_length=100)
+    email = models.EmailField()
+    asunto = models.CharField(max_length=200)
+    mensaje = models.TextField()
+    creado_el = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'contactos'
+
+    def __str__(self):
+        return f"{self.nombre} - {self.asunto}"
