@@ -88,6 +88,8 @@ DATABASES = {
     }
 }
 
+#transbank seccion de configuracion
+
 
 
 
