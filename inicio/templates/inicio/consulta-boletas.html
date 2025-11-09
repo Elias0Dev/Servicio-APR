@@ -1,51 +1,143 @@
-<!-- se recibe el contenido de base.html -->
-{%extends 'inicio/base.html'  %}
+{% extends 'inicio/base.html' %}
+{% load static %}
+{# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ESTO FUE AÑADIDO PARA RESOLVER EL ERROR #}
 
-{%block title%}
-<!-- Se envia el titulo de la page -->
- <title>Detalle Boletas - Servicio APR</title>
-{%endblock%}
+{% block title %}
+    Consulta de Boletas - Sistema APR
+{% endblock %}
 
-{%load static%} <!--Carga la carpeta static de la app -->
+{% block css %}
+    <!-- Estilos CSS específicos para esta página -->
+    <link rel="stylesheet" href="{% static 'inicio/css/consulta-boletas.css' %}">
+    <style>
+        .boleta-item {
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .boleta-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+        }
+    </style>
+{% endblock %}
 
-{% block js%}
-<!-- Se envia la referencias al js -->
- <script src="{%static 'inicio/js/script.js'%}"></script>
-{%endblock%}
+{% block contenido %}
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card p-4 shadow-lg mb-5 border-primary">
+                    <h2 class="card-title text-center mb-4 text-primary">Detalle de Boletas y Pagos</h2>
+                    
+                    <!-- Formulario de Consulta -->
+                    <form id="formConsultaBoleta" method="POST" action="{% url 'page_consultaBoletas' %}">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="numeroCliente" class="form-label fw-bold">Número de Cliente (NUC)</label>
+                            <!-- El valor se mantiene si se realiza un POST y Django lo retorna en la vista -->
+                            <input type="text" class="form-control" id="numeroCliente" name="numero_cliente" required 
+                                   placeholder="Ej: 123456" value="{{ numero_cliente|default:'' }}">
+                            {% if messages and not boletas %}
+                                <!-- Mostrar el mensaje de error o éxito de la consulta -->
+                            {% endif %}
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100" id="btnConsultar">
+                            <i class="bi bi-search me-2"></i> Consultar Boletas
+                        </button>
+                    </form>
+                </div> 
 
-{% block css%}
-<!-- Se envia la referencias al css -->
- <link rel="stylesheet" href="{%static 'inicio/css/style.css'%}">
-{%endblock%}
+                <!-- Sección de Resultados -->
+                {% if cliente_encontrado %}
+                    <h3 class="mb-4 text-success">Boletas Encontradas para Cliente: <span class="badge bg-success">{{ numero_cliente }}</span></h3>
 
-<!-- Codigo que envia el service worker a la web(PWA) -->
-{% load pwa %}
-{% progressive_web_app_meta %}
+                    <!-- Título del Cliente, si está disponible -->
+                    {% if nombre_cliente %}
+                        <div class="alert alert-info border-0 shadow-sm">
+                            <i class="bi bi-person-circle me-2"></i> Cliente: **{{ nombre_cliente }}**
+                        </div>
+                    {% endif %}
 
+                    {% if boletas %}
+                        <div class="row row-cols-1 row-cols-md-2 g-4">
+                            {% for boleta in boletas %}
+                                <div class="col">
+                                    <div class="card boleta-item shadow-sm h-100" data-bs-toggle="modal" data-bs-target="#modalBoleta{{ forloop.counter }}">
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-between align-items-start">
+                                                <h5 class="card-title text-truncate">Boleta #{{ boleta.numero }}</h5>
+                                                {% if boleta.estado == 'Pendiente' %}
+                                                    <span class="badge bg-danger">Pendiente</span>
+                                                {% else %}
+                                                    <span class="badge bg-success">Pagada</span>
+                                                {% endif %}
+                                            </div>
+                                            <p class="card-text mb-1">Período: <small class="text-muted">{{ boleta.periodo }}</small></p>
+                                            <p class="card-text mb-1 fw-bold">Monto: ${{ boleta.monto|floatformat:0 }}</p>
+                                            
+                                            {% if boleta.estado == 'Pendiente' %}
+                                                <p class="card-text text-danger small">Vence: {{ boleta.fecha_vencimiento }}</p>
+                                            {% else %}
+                                                <p class="card-text text-success small">Pagado el: {{ boleta.fecha_pago|date:"d M Y" }}</p>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Modal para detalles -->
+                                <div class="modal fade" id="modalBoleta{{ forloop.counter }}" tabindex="-1" aria-labelledby="modalBoletaLabel{{ forloop.counter }}" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header bg-primary text-white">
+                                                <h5 class="modal-title" id="modalBoletaLabel{{ forloop.counter }}">Detalles de Boleta #{{ boleta.numero }}</h5>
+                                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p><strong>Número de Boleta:</strong> {{ boleta.numero }}</p>
+                                                <p><strong>Período:</strong> {{ boleta.periodo }}</p>
+                                                <p><strong>Monto Total:</strong> ${{ boleta.monto|floatformat:0 }}</p>
+                                                <p><strong>Consumo (m³):</strong> {{ boleta.consumo }} m³</p>
+                                                <p><strong>Fecha de Vencimiento:</strong> {{ boleta.fecha_vencimiento }}</p>
 
-{% block contenido%}
-<!-- Se envia codigo a la etiqueta <body> -->
-        <div class="container" ">
-        <h1>Detalle de Boleta</h1>
-        <div class="search-section">
-            <label for="cliente">Número de Cliente:</label>
-            <input type="number" id="cliente" placeholder="Ingresa tu número de cliente">
-            <button id="buscar">Buscar</button>
-        </div>
-        <div id="resultados" class="hidden">
-            <table id="tabla-boletas" class="table table-hover"  border="2">
-                <thead class="table-dark">
-                    <tr>
-                        <th scope="col">Fecha de Emisión</th>
-                        <th scope="col">Consumo (m3)</th>
-                        <th scope="col">Total a Pagar($)</th>
-                    </tr>
-                </thead>
-                <tbody id="cuerpo-tabla">
-                    <!-- Las filas se agregarán aquí dinámicamente -->
-                </tbody>
-            </table>
+                                                {% if boleta.estado == 'Pagada' %}
+                                                    <p class="text-success"><strong>Estado:</strong> Pagada</p>
+                                                    <p class="text-success"><strong>Fecha de Pago:</strong> {{ boleta.fecha_pago|date:"d M Y" }}</p>
+                                                {% else %}
+                                                    <p class="text-danger"><strong>Estado:</strong> Pendiente</p>
+                                                {% endif %}
+                                            </div>
+                                            <div class="modal-footer justify-content-between">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+
+                                                {% if boleta.estado == 'Pendiente' %}
+                                                    <a href="{% url 'page_pago_en_linea' %}?boleta_id={{ boleta.id }}" class="btn btn-success">
+                                                        <i class="bi bi-credit-card me-2"></i> Pagar en Línea
+                                                    </a>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="alert alert-warning">
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i> El cliente **{{ numero_cliente }}** no tiene boletas asociadas o no se pudo establecer la conexión.
+                        </div>
+                    {% endif %}
+                {% elif form_submitted %}
+                    <div class="alert alert-danger">
+                        <i class="bi bi-x-circle-fill me-2"></i> No se encontró al cliente con el número **{{ numero_cliente }}** o no se pudo establecer la conexión.
+                    </div>
+                {% endif %}
+
+                <!-- Espacio para mensajes (si se usa el sistema de messages de Django) -->
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} mt-4" role="alert">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
         </div>
     </div>
-{%endblock%}
-
+{% endblock %}

@@ -6,16 +6,20 @@ class Cliente(models.Model):
     rut = models.IntegerField()
     dv = models.CharField(max_length=1)
     nombre = models.CharField(max_length=100)
+    # ASUMIDO: Agregué el campo 'apellido' que se intentó usar en el Admin.
+    apellido = models.CharField(max_length=100) 
     direccion = models.CharField(max_length=200, blank=True, null=True)
     telefono = models.IntegerField(blank=True, null=True)
     email = models.CharField(max_length=100, blank=True, null=True)
     numero_medidor = models.IntegerField(blank=True, null=True)
+    # CORREGIDO: Campo 'es_vigente' renombrado a 'vigente' y añadido.
+    vigente = models.BooleanField(default=True)
 
     class Meta:
         db_table = 'cliente'
 
     def __str__(self):
-        return f"{self.nombre} ({self.rut}-{self.dv})"
+        return f"{self.nombre} {self.apellido} ({self.rut}-{self.dv})"
     
 
 class Factura(models.Model):
@@ -26,10 +30,12 @@ class Factura(models.Model):
         db_column='id_cliente',
         related_name='facturas'
     )
+    # ASUMIDO: Para que la Factura sepa qué tarifa aplicó, se recomienda un FK o un campo de texto.
+    tarifa_aplicada = models.CharField(max_length=50, blank=True, null=True) 
     total_pagar = models.DecimalField(max_digits=10, decimal_places=2)
     fecha_emision = models.DateField()
     fecha_vencimiento = models.DateField()
-    estado = models.BooleanField()  # tinyint se suele mapear a Boolean si es 0/1, o SmallIntegerField si hay más estados
+    estado = models.BooleanField()
     lectura_anterior = models.IntegerField()
     lectura_actual = models.IntegerField()
     fecha_actual = models.DateField()
@@ -56,7 +62,8 @@ class Tarifas(models.Model):
     tipo = models.CharField(max_length=2, choices=TIPO_CHOICES)
     rango_desde = models.IntegerField()
     rango_hasta = models.IntegerField()
-    cargo = models.DecimalField(max_digits=10, decimal_places=2)
+    # CORREGIDO: 'cargo' en el modelo se mapea a 'valor_m3' que buscabas en Admin.
+    cargo = models.DecimalField(max_digits=10, decimal_places=2) 
     fecha_inicio = models.DateField()
     fecha_fin = models.DateField(null=True, blank=True)
 
@@ -67,14 +74,16 @@ class Tarifas(models.Model):
         return f"Tarifa {self.tipo}: {self.rango_desde}-{self.rango_hasta} -> {self.cargo}"
 
 
-
-
 class Contacto(models.Model):
     nombre = models.CharField(max_length=100)
-    email = models.EmailField()
+    # CORREGIDO: El campo es 'email', no 'correo'.
+    email = models.EmailField() 
     asunto = models.CharField(max_length=200)
     mensaje = models.TextField()
-    creado_el = models.DateTimeField(auto_now_add=True)
+    # CORREGIDO: El campo es 'creado_el', no 'fecha_envio'.
+    creado_el = models.DateTimeField(auto_now_add=True) 
+    # CORREGIDO: Campo 'revisado' añadido.
+    revisado = models.BooleanField(default=False)
 
     class Meta:
         db_table = 'contactos'

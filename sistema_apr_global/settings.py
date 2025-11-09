@@ -11,7 +11,9 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
-
+import os
+# Recommended: For production, consider using a library like 'python-decouple'
+# or 'django-environ' to handle environment variables robustly.
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,13 +22,26 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-#wo)q)zsfuzd5gjg%ha9zs(ps^k_1oi!nacn5gbvysfn1pb_pe'
+# --- SECURITY CRITICAL SETTINGS ---
+# 1. SECRET_KEY: Loaded from environment variable (REQUIRED for production)
+# The second argument is a default for local development only.
+SECRET_KEY = os.environ.get(
+    'SECRET_KEY',
+    'default-django-insecure-#wo)q)zsfuzd5gjg%ha9zs(ps^k_1oi!nacn5gbvysfn1pb_pe'
+)
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# 2. DEBUG: Loaded from environment variable
+# Check if the environment variable is explicitly 'True' or '1'
+DEBUG = os.environ.get('DEBUG', 'True').lower() in ('true', '1')
 
-ALLOWED_HOSTS = ['*']
+# 3. ALLOWED_HOSTS: Loaded from environment variable (REQUIRED for production)
+if not DEBUG:
+    # In production, specify your domain names (e.g., 'www.tudominio.cl')
+    ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(',')
+else:
+    # Allow all for local development
+    ALLOWED_HOSTS = ['*']
+# --- END SECURITY CRITICAL SETTINGS ---
 
 
 # Application definition
@@ -39,8 +54,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
-    'inicio',
-    'pwa',
+    'inicio', # Your app
+    'pwa',    # Progressive Web App
     
 ]
 
@@ -59,7 +74,9 @@ ROOT_URLCONF = 'sistema_apr_global.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        # It's a good practice to define DIRS for project-level templates, e.g.:
+        # 'DIRS': [BASE_DIR / 'templates'],
+        'DIRS': [], 
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -77,18 +94,19 @@ WSGI_APPLICATION = 'sistema_apr_global.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+# --- DATABASE CONFIGURATION (Refactored for environment variables) ---
+# NOTE: Ensure you have 'mysqlclient' installed for MySQL (pip install mysqlclient)
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'sistema_apr',
-        'USER': 'webuser',
-        'PASSWORD': 'Web1234!',
-        'HOST': 'localhost',
-        'PORT': '3306',
+        'NAME': os.environ.get('DB_NAME', 'sistema_apr'),
+        'USER': os.environ.get('DB_USER', 'webuser'),
+        'PASSWORD': os.environ.get('DB_PASSWORD', 'Web1234!'),
+        'HOST': os.environ.get('DB_HOST', 'localhost'),
+        'PORT': os.environ.get('DB_PORT', '3306'),
     }
 }
-
-
+# --- END DATABASE CONFIGURATION ---
 
 
 # Password validation
@@ -115,27 +133,33 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'es-es'
 
-TIME_ZONE = 'UTC'
+# Consider changing this to a local time zone like 'America/Santiago' if your users are local
+TIME_ZONE = 'UTC' 
 
 USE_I18N = True
 
-USE_TZ = True
+USE_TZ = True # Should be True to correctly handle time zones and localization
 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = 'static/'
+# STATIC_ROOT is essential for collecting static files in production (python manage.py collectstatic)
+# STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-import os
+
+# MEDIA Configuration (for user-uploaded files)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
+
+# PWA Configuration
 PWA_APP_NAME = "Servicios APR"
 PWA_APP_DESCRIPTION = "Consultas del Servicio APR"
 PWA_APP_THEME_COLOR = "#2563eb"
@@ -157,3 +181,11 @@ PWA_APP_ICONS_APPLE = [
     }
 ]
 
+# Optional PWA addition: Service Worker scope
+# PWA_SERVICE_WORKER_PATH = os.path.join(BASE_DIR, 'inicio/static/inicio', 'serviceworker.js')
+
+# Optional PWA addition: Offline page (create this in templates/inicio/offline.html)
+# PWA_APP_FETCH_URL_WHITELIST = ['/admin/'] # Example: Allow admin access offline, or leave blank
+PWA_APP_OFFLINE_PAGE = 'inicio/offline.html'
+# Note: Ensure you create the offline.html template for offline support.
+# END PWA Configuration

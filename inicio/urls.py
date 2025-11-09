@@ -10,6 +10,6 @@ urlpatterns = [
     path('buscar_facturas_rut/', views.buscar_facturas_rut, name='buscar_facturas_rut'),
     path('generar_boleta/<int:id_factura>/pdf/', views.generar_boleta_pdf, name='generar_boleta_pdf'),
     path('contacto/', views.page_contact, name='page_contacto'),
-
-
+    # 🔑 NUEVA URL DE REGISTRO
+    path('registro/', views.registro_usuario, name='registro'),
 ]
