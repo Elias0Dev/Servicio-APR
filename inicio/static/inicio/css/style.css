@@ -94,3 +94,30 @@ form{
     flex-direction: column;
     align-items: center;
 }
+  .search-section { margin-bottom: 2rem; }
+  .hidden { display: none; }
+  
+  .consumo-card {
+    border: 1px solid #e9ecef;
+    border-radius: .75rem;
+    padding: 1.5rem;
+    background-color: #fff;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, .075);
+    margin-bottom: 2rem;
+  }
+  .consumo-card .consumo-valor {
+    font-size: 2.75rem;
+    font-weight: 500;
+    color: #0d6efd;
+  }
+  .consumo-card .consumo-limite {
+    color: #6c757d;
+    font-size: 1rem;
+  }
+  .consumo-card .progress-label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: .25rem;
+    font-size: 0.9rem;
+  }
+  .progress { height: 12px; border-radius: 6px; }

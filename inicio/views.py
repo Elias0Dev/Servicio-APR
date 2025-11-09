@@ -43,6 +43,10 @@ def buscar_facturas(request):
 
     if not numero_cliente:
         return JsonResponse({'error': 'No se proporcionó número de cliente'}, status=400)
+    try:
+        cliente = Cliente.objects.get(id_cliente=numero_cliente)
+    except Cliente.DoesNotExist:
+        return JsonResponse({'error': 'Número de cliente no encontrado'}, status=404)
 
     facturas = Factura.objects.filter(id_cliente=numero_cliente).order_by('-fecha_emision')
 
@@ -54,8 +58,32 @@ def buscar_facturas(request):
             'valor': f"${format(int(f.total_pagar), ',d').replace(',', '.')}",
             'id': f.id_factura
         })
+    # --- NUEVO: Preparar datos para el gráfico de progreso ---
+    consumo_reciente_data = None
+    factura_reciente = facturas.first() # Obtiene la factura más reciente
 
-    return JsonResponse({'facturas': data})
+    if factura_reciente:
+        # Límite de referencia. Puedes hacerlo dinámico (ej. un campo en el modelo Cliente)
+        LIMITE_MENSUAL = 35  
+        consumo_actual = factura_reciente.consumo
+        
+        porcentaje = 0
+        if LIMITE_MENSUAL > 0:
+            # Se calcula el porcentaje y se redondea
+            porcentaje = round((consumo_actual / LIMITE_MENSUAL) * 100)
+
+        consumo_reciente_data = {
+            'consumo': consumo_actual,
+            'limite': LIMITE_MENSUAL,
+            'porcentaje': porcentaje,
+            # Se usa el formato de fecha que prefieras
+            'periodo': factura_reciente.fecha_emision.strftime('%B %Y').capitalize()
+        }
+    return JsonResponse({
+        'nombre_cliente': cliente.nombre,
+        'facturas': data,
+        'consumo_reciente': consumo_reciente_data  # Se añaden los datos del gráfico
+    })
 
 
 def buscar_facturas_rut(request):
@@ -133,7 +161,7 @@ def generar_boleta_pdf(request, id_factura):
         elif consumo_actual > 0:
             mensaje_variacion = "El mes pasado no registraste consumo."
 
-    # --- GRÁFICO 2: DESGLOSE DE CONSUMO POR TRAMO (TORTA) ---
+    # --- GRÁFICO 2: DESGLOSE DE CONSUMO POR TRAMO NO TOMAR EN CUENTA NO SUPE SACARLO SIN CAGAR EL CODIGO XD ---
     tarifas_aplicadas = Tarifas.objects.filter(
         fecha_inicio__lte=factura.fecha_emision,
         fecha_fin__gte=factura.fecha_emision
@@ -154,7 +182,7 @@ def generar_boleta_pdf(request, id_factura):
             consumo_por_tramo.append(usado)
         
         restante -= usado
-
+    
     if restante > 0: # Si queda consumo fuera de los tramos definidos
         labels_tramos.append("Otros Tramos")
         consumo_por_tramo.append(restante)
