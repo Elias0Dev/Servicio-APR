@@ -7,6 +7,8 @@ from django.template.loader import render_to_string
 from .models import Factura, Cliente, Tarifas
 from .forms import ContactForm
 # --- Nuevas importaciones para gráficos ---
+import matplotlib
+matplotlib.use('Agg')  # Usa un backend sin interfaz gráfica
 import matplotlib.pyplot as plt
 import base64
 from io import BytesIO
@@ -15,11 +17,9 @@ def page_index(request):
     context = {}
     return render(request, 'inicio/index.html', context)
 
-
 def page_consultaBoletas(request):
     context = {}
-    return render(request, 'inicio/consulta-boletas.html', context)
-
+    return render(request, 'inicio/consulta_boletas.html', context)
 
 def page_pago_en_linea(request):
     context = {}
@@ -84,7 +84,6 @@ def buscar_facturas(request):
         'facturas': data,
         'consumo_reciente': consumo_reciente_data  # Se añaden los datos del gráfico
     })
-
 
 def buscar_facturas_rut(request):
     rut = request.GET.get("rut", "").strip()
