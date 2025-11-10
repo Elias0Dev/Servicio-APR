@@ -15,6 +15,14 @@
       rel="stylesheet"
     />
     <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;  /* ocupa toda la ventana */
+      }
+      main {
+        flex: 1;  /* ocupa todo el espacio disponible entre header y footer */
+      }
       /* Estilos para el navbar fijo y oculto */
       .navbar {
         position: fixed;
@@ -92,6 +100,40 @@
                       >Pago en linea</a
                     >
                   </li>
+                </ul>
+              </li>
+
+              <li class="nav-item dropdown">
+                <a
+                  class="nav-link dropdown-toggle"
+                  href="#"
+                  id="serviciosDropdown"
+                  role="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  Procesos
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="serviciosDropdown">
+                  
+                  <li>
+                    <a class="dropdown-item" href="{%url 'listar_cli'%}"
+                      >Cliente</a
+                    >
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="{%url 'listar_fact'%}"
+                      >Factura</a
+                    >
+                  </li>
+
+                  <li>
+                    <a class="dropdown-item" href="{%url 'listar_tari'%}"
+                      >Tarifa</a
+                    >
+                  </li>
+                
+                  
                 </ul>
               </li>
               <li class="nav-item">

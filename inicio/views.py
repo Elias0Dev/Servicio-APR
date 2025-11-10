@@ -1,11 +1,11 @@
 import pdfkit
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,get_object_or_404
 from django.contrib import messages
 from django.conf import settings
 from django.http import JsonResponse,  HttpResponse
 from django.template.loader import render_to_string
 from .models import Factura, Cliente, Tarifas
-from .forms import ContactForm
+from .forms import ContactForm, ClienteForm, FacturaForm, TarifasForm
 # --- Nuevas importaciones para gráficos ---
 import matplotlib
 matplotlib.use('Agg')  # Usa un backend sin interfaz gráfica
@@ -13,6 +13,8 @@ import matplotlib.pyplot as plt
 import base64
 from io import BytesIO
 
+
+#renderizado de vistas publicas
 def page_index(request):
     context = {}
     return render(request, 'inicio/index.html', context)
@@ -26,18 +28,170 @@ def page_pago_en_linea(request):
     return render(request, 'inicio/pago.html', context)
 
 def page_contact(request):
+    data = {
+            'form': ContactForm()
+        }
     if request.method == 'POST':
-        form = ContactForm(request.POST)
-        if form.is_valid():
-            form.save()  # Guarda en la base de datos
-            messages.success(request, 'Mensaje enviado exitosamente.')
-            return redirect('page_contacto')  # Redirige a la misma página
-    else:
-        form = ContactForm()
-    return render(request, 'inicio/contacto.html', {'form': form})
+        formulario = ContactForm(data=request.POST)
+        if formulario.is_valid():
+            formulario.save()
+            data["mensaje"] = "Guardado correctamente"
+        else:
+            data["form"] = formulario
+    return render(request, 'inicio/contacto.html', data)
+
+#renderizado por modulos
+#cliente
+def agregar_cliente(request):
+
+    data = {
+        'form': ClienteForm()
+    }
+    if request.method == 'POST':
+        formulario = ClienteForm(data=request.POST)
+        if formulario.is_valid():
+            formulario.save()
+            data["mensaje"] = "Guardado correctamente"
+        else:
+            data["form"] = formulario
+
+    return render(request, 'cliente/agregar.html', data)
+
+def listar_cliente(request):
+    clientes= Cliente.objects.all()
+    data = {
+        'clientes':clientes
+    }
+    return render(request, 'cliente/listar.html', data)
+
+def modificar_cliente(request, id):
+
+    cliente = get_object_or_404(Cliente, id_cliente=id)
+    data = {
+        'form': ClienteForm(instance=cliente)
+    }
+    #Deshabilitar el campo id_cliente
+    data['form'].fields['id_cliente'].disabled = True
+    
+    if request.method == 'POST':
+        formulario = ClienteForm(data=request.POST, instance=cliente)
+        # Deshabilitar otra vez en el POST
+        formulario.fields['id_cliente'].disabled = True
+        if formulario.is_valid():
+            formulario.save()
+            return redirect(to="listar_cli")   
+        data["form"] = formulario
+
+    
 
 
+    return render(request, 'cliente/modificar.html',data)
 
+def eliminar_cliente(request, id):
+
+    cliente = get_object_or_404(Cliente, id_cliente=id)
+    cliente.delete()
+    return redirect(to="listar_cli")
+   
+
+#factura
+
+def agregar_factura(request):
+
+    data = {
+        'form': FacturaForm()
+    }
+    if request.method == 'POST':
+        formulario = FacturaForm(data=request.POST)
+        if formulario.is_valid():
+            formulario.save()
+            data["mensaje"] = "Guardado correctamente"
+        else:
+            data["form"] = formulario
+
+    return render(request, 'factura/agregar.html', data)
+
+def listar_factura(request):
+    factura= Factura.objects.all()
+    data = {
+        'factura': factura
+    }
+    return render(request, 'factura/listar.html', data)
+
+def modificar_factura(request, id):
+
+    factura = get_object_or_404(Factura, id_factura=id)
+    data = {
+        'form': FacturaForm(instance=factura)
+    }
+    #Deshabilitar el campo id_cliente
+    data['form'].fields['id_cliente'].disabled = True
+     
+    if request.method == 'POST':
+        formulario = FacturaForm(data=request.POST, instance=factura)
+        # Deshabilitar otra vez en el POST
+        formulario.fields['id_cliente'].disabled = True
+        if formulario.is_valid():
+            formulario.save()
+            return redirect(to="listar_fac")   
+        data["form"] = formulario
+
+    return render(request, 'factura/modificar.html',data)
+
+def eliminar_factura(request, id):
+
+    factura = get_object_or_404(Factura, id_factura=id)
+    factura.delete()
+    return redirect(to="listar_fac")
+   
+#tarifa
+def agregar_tarifa(request):
+
+    data = {
+        'form': TarifasForm()
+    }
+    if request.method == 'POST':
+        formulario = TarifasForm(data=request.POST)
+        if formulario.is_valid():
+            formulario.save()
+            data["mensaje"] = "Guardado correctamente"
+        else:
+            data["form"] = formulario
+
+    return render(request, 'tarifa/agregar.html', data)
+
+def listar_tarifa(request):
+    tarifa= Tarifas.objects.all()
+    data = {
+        'tarifa': tarifa
+    }
+    return render(request, 'tarifa/listar.html', data)
+
+def modificar_tarifa(request, id):
+
+    tarifa = get_object_or_404(Tarifas, idtarifas=id)
+    data = {
+        'form': TarifasForm(instance=tarifa)
+    }
+     
+    if request.method == 'POST':
+        formulario = TarifasForm(data=request.POST, instance=tarifa)
+        
+        if formulario.is_valid():
+            formulario.save()
+            return redirect(to="listar_tari")   
+        data["form"] = formulario
+
+    return render(request, 'tarifa/modificar.html',data)
+
+def eliminar_tarifa(request, id):
+
+    tarifa = get_object_or_404(Tarifas, idtarifas=id)
+    tarifa.delete()
+    return redirect(to="listar_tari")
+
+
+#funciones
 def buscar_facturas(request):
     numero_cliente = request.GET.get('numero_cliente')
 
