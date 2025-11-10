@@ -8,6 +8,9 @@ from django.template.loader import render_to_string
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login 
 from django.contrib.auth.decorators import login_required 
+from django.contrib.auth import logout
+
+
 
 # Asegúrate de que estas importaciones son correctas para tu proyecto
 from .models import Factura, Cliente, Tarifas
@@ -207,14 +210,34 @@ def perfil(request):
 
 # 🔑 VISTA DE REGISTRO
 def registro_usuario(request):
+    """
+    Vista para manejar el registro de un nuevo usuario.
+    Si es un GET, muestra el formulario vacío.
+    Si es un POST, valida el formulario y crea el usuario, luego inicia sesión automáticamente y redirige.
+    """
     if request.method == 'POST':
+        # Instancia el formulario con los datos enviados por el usuario
         form = UserCreationForm(request.POST)
         if form.is_valid():
-            user = form.save() 
-            login(request, user) 
-            # Redirige a /accounts/profile/ (o lo que LOGIN_REDIRECT_URL defina)
-            return redirect(settings.LOGIN_REDIRECT_URL) 
+            # Guarda el nuevo usuario en la base
+            user = form.save()
+            # Inicia sesión automáticamente al usuario registrado
+            login(request, user)
+            # Redirige a la URL definida en settings.LOGIN_REDIRECT_URL (ejemplo: página principal)
+            return redirect(settings.LOGIN_REDIRECT_URL)
     else:
+        # Si la petición es GET, crea un formulario vacío para mostrar
         form = UserCreationForm()
-        
+    
+    # Renderiza la plantilla de registro con el formulario (vacío o con errores)
     return render(request, 'registration/registro.html', {'form': form})
+def cerrar_sesion(request):
+    """
+    Vista para cerrar la sesión del usuario.
+    - Llama a logout() para finalizar la sesión.
+    - Envía un mensaje de éxito.
+    - Redirige a la página principal (o la que configures).
+    """
+    logout(request)
+    messages.success(request, "Has cerrado sesión correctamente.")
+    return redirect('page_index')  # Cambia 'page_index' por la URL a la que quieres redirigir.

@@ -1,0 +1,59 @@
+{# Extiende la plantilla base del proyecto #}
+{% extends 'inicio/base.html' %}
+{% load static %}
+
+{% block title %}
+    Registro - Sistema APR
+{% endblock %}
+
+{% block contenido %}
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-5">
+
+                {# Tarjeta que contiene el formulario #}
+                <div class="card p-4 shadow-lg border-primary">
+                    <div class="card-body">
+
+                        <h2 class="card-title text-center mb-4 text-primary">Crear Cuenta</h2>
+                        <hr>
+
+                        {# Formulario básico sin funcionalidad backend por ahora #}
+                        <form method="post" action="#">
+                            {% csrf_token %}
+
+                            {# Campo para nombre de usuario #}
+                            <div class="mb-3">
+                                <label for="id_username" class="form-label fw-bold">Nombre de Usuario</label>
+                                <input type="text" name="username" id="id_username" class="form-control" required>
+                            </div>
+
+                            {# Campo para correo electrónico #}
+                            <div class="mb-3">
+                                <label for="id_email" class="form-label fw-bold">Correo Electrónico</label>
+                                <input type="email" name="email" id="id_email" class="form-control" required>
+                            </div>
+
+                            {# Campos para contraseña y confirmación #}
+                            <div class="mb-3">
+                                <label for="id_password1" class="form-label fw-bold">Contraseña</label>
+                                <input type="password" name="password1" id="id_password1" class="form-control" required>
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="id_password2" class="form-label fw-bold">Confirmar Contraseña</label>
+                                <input type="password" name="password2" id="id_password2" class="form-control" required>
+                            </div>
+
+                            {# Botón para enviar el formulario #}
+                            <button type="submit" class="btn btn-primary w-100 py-2">
+                                <i class="bi bi-person-plus me-2"></i> Registrarse
+                            </button>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

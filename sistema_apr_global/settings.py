@@ -189,3 +189,7 @@ PWA_APP_ICONS_APPLE = [
 PWA_APP_OFFLINE_PAGE = 'inicio/offline.html'
 # Note: Ensure you create the offline.html template for offline support.
 # END PWA Configuration
+# Agregar estas líneas en settings.py si no existen aún
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+

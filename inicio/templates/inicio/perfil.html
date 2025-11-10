@@ -31,7 +31,7 @@
                             <i class="bi bi-graph-up-arrow me-2"></i> Ver Reportes
                         </a>
                         
-                        {# 🔑 CORRECCIÓN: Usamos un formulario POST con {% csrf_token %} para evitar el error 405 en el logout. #}
+                        {# CORRECCIÓN: Usamos un formulario POST con {% csrf_token %} para evitar el error 405 en el logout. #}
                         <form method="post" action="{% url 'logout' %}" style="display: inline;">
                             {% csrf_token %}
                             <button type="submit" class="btn btn-danger btn-lg">
