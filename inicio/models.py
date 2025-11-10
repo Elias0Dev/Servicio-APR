@@ -69,6 +69,22 @@ class Tarifas(models.Model):
         return f"Tarifa {self.tipo}: {self.rango_desde}-{self.rango_hasta} -> {self.cargo}"
 
 
+class Tarifas_fijas(models.Model):
+    TIPO_CHOICES = [
+        ('AP', 'AP'),
+        ('AS', 'AS'),
+    ]
+
+    id_tarifa = models.AutoField(primary_key=True)
+    tipo = models.CharField(max_length=2, choices=TIPO_CHOICES)
+    cargo_fijo = models.DecimalField(max_digits=10, decimal_places=2)
+
+    class Meta:
+        db_table = 'tarifas_fija'
+
+    def __str__(self):
+        return {self.tipo}
+
 
 
 class Contacto(models.Model):

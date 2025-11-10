@@ -27,5 +27,10 @@ urlpatterns = [
     path("tarifa/modificar_tarifas/<id>/", views.modificar_tarifa, name="modificar_tari"),
     path("tarifa/eliminar_tarifas/<id>/", views.eliminar_tarifa, name="eliminar_tari"),
 
+    path("fija/agregar_tarifa_fija/", views.agregar_tarifa_fija, name="agregar_fija"),
+    path("fija/listar_tarifas_fija/", views.listar_tarifa_fija, name="listar_fija"),
+    path("fija/modificar_tarifas_fija/<id>/", views.modificar_tarifa_fija, name="modificar_fija"),
+    path("fija/eliminar_tarifas_fija/<id>/", views.eliminar_tarifa_fija, name="eliminar_fija"),
+
 
 ]

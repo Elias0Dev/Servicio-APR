@@ -4,8 +4,8 @@ from django.contrib import messages
 from django.conf import settings
 from django.http import JsonResponse,  HttpResponse
 from django.template.loader import render_to_string
-from .models import Factura, Cliente, Tarifas
-from .forms import ContactForm, ClienteForm, FacturaForm, TarifasForm
+from .models import Factura, Cliente, Tarifas, Tarifas_fijas
+from .forms import ContactForm, ClienteForm, FacturaForm, TarifasForm, TarifasFijasForm
 # --- Nuevas importaciones para gráficos ---
 import matplotlib
 matplotlib.use('Agg')  # Usa un backend sin interfaz gráfica
@@ -133,7 +133,7 @@ def modificar_factura(request, id):
         formulario.fields['id_cliente'].disabled = True
         if formulario.is_valid():
             formulario.save()
-            return redirect(to="listar_fac")   
+            return redirect(to="listar_fact")   
         data["form"] = formulario
 
     return render(request, 'factura/modificar.html',data)
@@ -189,6 +189,52 @@ def eliminar_tarifa(request, id):
     tarifa = get_object_or_404(Tarifas, idtarifas=id)
     tarifa.delete()
     return redirect(to="listar_tari")
+
+#Tarifas fijas
+def agregar_tarifa_fija(request):
+
+    data = {
+        'form': TarifasFijasForm()
+    }
+    if request.method == 'POST':
+        formulario = TarifasFijasForm(data=request.POST)
+        if formulario.is_valid():
+            formulario.save()
+            data["mensaje"] = "Guardado correctamente"
+        else:
+            data["form"] = formulario
+
+    return render(request, 'fija/agregar.html', data)
+
+def listar_tarifa_fija(request):
+    tarifa_fija= Tarifas_fijas.objects.all()
+    data = {
+        'tarifa_fija': tarifa_fija
+    }
+    return render(request, 'fija/listar.html', data)
+
+def modificar_tarifa_fija(request, id):
+
+    tarifa_fija = get_object_or_404(Tarifas_fijas, id_tarifa=id)
+    data = {
+        'form': TarifasFijasForm(instance=tarifa_fija)
+    }
+     
+    if request.method == 'POST':
+        formulario = TarifasForm(data=request.POST, instance=tarifa_fija)
+        
+        if formulario.is_valid():
+            formulario.save()
+            return redirect(to="listar_fija")   
+        data["form"] = formulario
+
+    return render(request, 'fija/modificar.html',data)
+
+def eliminar_tarifa_fija(request, id):
+
+    tarifa = get_object_or_404(Tarifas_fijas, id_tarifa=id)
+    tarifa.delete()
+    return redirect(to="listar_fija")
 
 
 #funciones
@@ -268,10 +314,27 @@ def generar_boleta_pdf(request, id_factura):
     # Obtener factura y datos relacionados
     factura = Factura.objects.get(id_factura=id_factura)
     cliente = factura.id_cliente
-    tarifas_aplicadas = Tarifas.objects.filter(
-        fecha_inicio__lte=factura.fecha_emision,
-        fecha_fin__gte=factura.fecha_emision
-    ).order_by('rango_desde')
+    tarifa_fija=Tarifas_fijas.objects.all()
+
+
+
+    tarifas_as = Tarifas.objects.filter(tipo='AS',rango_desde__lte=factura.consumo,rango_hasta__gte=factura.consumo).order_by('rango_desde')
+    tarifas_ap = Tarifas.objects.filter(tipo='AP',rango_desde__lte=factura.consumo,rango_hasta__gte=factura.consumo).order_by('rango_desde')
+
+   
+    if tarifas_as.exists():  # Verifica que haya al menos un registro
+        tarifa_as = tarifas_as.first()  # Toma el primer objeto
+        
+    if tarifas_ap.exists():  # Verifica que haya al menos un registro
+        tarifa_ap = tarifas_ap.first()  # Toma el primer objeto
+
+
+        
+
+    valor_as= tarifa_as.cargo * factura.consumo      
+    valor_ap= tarifa_ap.cargo * factura.consumo  
+    
+    
     # --- GRÁFICO 1: HISTORIAL DE CONSUMO (ÚLTIMOS 6 MESES) ---
     facturas_historial = Factura.objects.filter(id_cliente=cliente).order_by('-fecha_emision')[:6]
     meses = [f.fecha_emision.strftime('%b %Y') for f in reversed(facturas_historial)]
@@ -359,10 +422,14 @@ def generar_boleta_pdf(request, id_factura):
     contexto = {
         'factura': factura,
         'cliente': cliente,
-        'tarifas_aplicadas': tarifas_aplicadas,
         'chart_historico_b64': chart_historico_b64,
         'chart_desglose_b64': chart_desglose_b64,
         'mensaje_variacion': mensaje_variacion,
+        'tarifa_fija': tarifa_fija,
+        'tarifa_as' : tarifas_as,
+        'tarifa_ap' : tarifas_ap,
+        'valor_ap' : valor_ap,
+        'valor_as' : valor_as,
     }
     # Renderizar el HTML como string
     html = render_to_string('inicio/boleta.html', contexto)

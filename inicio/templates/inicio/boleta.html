@@ -199,24 +199,49 @@
     <!-- Desglose de Tarifas Aplicadas (sin multiplicaciones) -->
     <div class="seccion">
         <h2>Desglose de Tarifas Aplicadas</h2>
+       <table>
+          <tr>
+            <th class="row">Cargo fijo</th>
+         
+            <td> 
+              {% for tf in tarifa_fija %}
+              
+                cargo fijo por {{tf.tipo}}  ${{tf.cargo_fijo|floatformat:0|intcomma}} <br>
+              
+              {%endfor%}
+            </td>
+          </tr>
+       </table>
         <table>
             <thead>
                 <tr>
                     <th>Tipo</th>
-                    <th>Rango (kWh)</th>
+                    <th>Rango (m3)</th>
                     <th>Cargo por Unidad</th>
+                    <th>Valor</th>
                 </tr>
             </thead>
             <tbody>
-                {% for tarifa in tarifas_aplicadas %}
+                {% for tarifa in tarifa_ap %}
                 <tr>
                     <td>{{ tarifa.tipo }}</td>
                     <td>{{tarifa.rango_desde}} - {{tarifa.rango_hasta}}</td>
-                    <td>${{tarifa.cargo }}</td>
+                    <td>${{tarifa.cargo |floatformat:0|intcomma }}</td>
+                    <td>${{valor_ap|floatformat:0|intcomma}}</td>
+                </tr>
+                {% endfor %}
+                {% for tarifa in tarifa_as %}
+                <tr>
+                    <td>{{ tarifa.tipo }}</td>
+                    <td>{{tarifa.rango_desde}} - {{tarifa.rango_hasta}}</td>
+                    <td>${{tarifa.cargo |floatformat:0|intcomma }}</td>
+                    <td>${{valor_as|floatformat:0|intcomma}}</td>
                 </tr>
                 {% endfor %}
             </tbody>
+
         </table>
+       
     </div>
     <!-- Total a Pagar -->
     <div class="total">

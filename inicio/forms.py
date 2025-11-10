@@ -1,7 +1,7 @@
 from django import forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Row, Column, Submit
-from .models import Contacto, Cliente, Factura, Tarifas
+from .models import Contacto, Cliente, Factura, Tarifas, Tarifas_fijas
 
 class ContactForm(forms.ModelForm):
     class Meta:
@@ -50,4 +50,11 @@ class TarifasForm(forms.ModelForm):
 
     class Meta:
         model=Tarifas
+        fields='__all__'
+
+
+class TarifasFijasForm(forms.ModelForm):
+
+    class Meta:
+        model=Tarifas_fijas
         fields='__all__'
