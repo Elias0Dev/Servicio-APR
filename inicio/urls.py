@@ -32,5 +32,7 @@ urlpatterns = [
     path("fija/modificar_tarifas_fija/<id>/", views.modificar_tarifa_fija, name="modificar_fija"),
     path("fija/eliminar_tarifas_fija/<id>/", views.eliminar_tarifa_fija, name="eliminar_fija"),
 
-
+    path('perplexity/', views.mostrar_chatbot, name='mostrar_chatbot'),
+    path('perplexity/api/', views.api_chatbot, name='api_chatbot'),
+    
 ]

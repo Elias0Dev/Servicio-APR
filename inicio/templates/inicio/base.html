@@ -3,14 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- la idea es que base.html sea aquella base donde se encuentre el navbar y footer
-     para el resto de page, con eso tenemos menos codigo duplicado en el resto de las pages -->
-    {%block title%}
-    <!-- Aqui va el titulo de la page para mostrar en el navegador -->
-    {%endblock%} {%load static%}
-    <!--Carga la carpeta static-->
-
-        <link
+    {% block title %}
+    {% endblock %}
+    {% load static %}
+    <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
@@ -18,47 +14,73 @@
       body {
         display: flex;
         flex-direction: column;
-        min-height: 100vh;  /* ocupa toda la ventana */
+        min-height: 100vh;
+        padding-top: 70px;
       }
       main {
-        flex: 1;  /* ocupa todo el espacio disponible entre header y footer */
+        flex: 1;
       }
-      /* Estilos para el navbar fijo y oculto */
       .navbar {
         position: fixed;
         top: 0;
         width: 100%;
         z-index: 1000;
         transition: transform 0.3s ease;
-        /* Animación suave */
       }
-
       .navbar.hidden {
         transform: translateY(-100%);
-        /* Oculta el navbar moviéndolo hacia arriba */
       }
-
-      /* Ajuste para el contenido debajo del navbar fijo */
-      body {
-        padding-top: 70px;
-        /* Altura aproximada del navbar */
+      /* --- BURBUJA CHATBOT --- */
+      #chat-bubble {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 60px;
+        height: 60px;
+        background-color: #2563eb;
+        border-radius: 50%;
+        cursor: pointer;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        transition: opacity 0.3s;
+      }
+      #chat-window {
+        display: none;
+        position: fixed;
+        bottom: 90px;
+        right: 20px;
+        width: 350px;
+        height: 420px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 8px 24px rgba(0,0,0,.2);
+        overflow: hidden;
+        z-index: 1001;
+        flex-direction: column;
+      }
+      #chat-close {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        border: none;
+        background: transparent;
+        font-size: 18px;
+        cursor: pointer;
       }
     </style>
-    {%block css%}
-    <!-- aqui se recibe los codigos de referencia al css -->
-
-    {%endblock%}
+    {% block css %}
+    {% endblock %}
   </head>
-
   <body>
     <!-- Barra de navegación -->
-
     <header>
       <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
           <!-- Logo o nombre del sitio -->
-          <a class="navbar-brand" href="{%url 'page_index'%}">Sistema APR</a>
-
+          <a class="navbar-brand" href="{% url 'page_index' %}">Sistema APR</a>
           <!-- Botón para colapsar en móviles -->
           <button
             class="navbar-toggler"
@@ -89,20 +111,13 @@
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="serviciosDropdown">
                   <li>
-                    <a
-                      class="dropdown-item"
-                      href="{% url 'page_consultaBoletas' %}"
-                      >Detalle de Boleta</a
-                    >
+                    <a class="dropdown-item" href="{% url 'page_consultaBoletas' %}">Detalle de Boleta</a>
                   </li>
                   <li>
-                    <a class="dropdown-item" href="{%url 'page_pago_en_linea'%}"
-                      >Pago en linea</a
-                    >
+                    <a class="dropdown-item" href="{% url 'page_pago_en_linea' %}">Pago en linea</a>
                   </li>
                 </ul>
               </li>
-
               <li class="nav-item dropdown">
                 <a
                   class="nav-link dropdown-toggle"
@@ -115,38 +130,24 @@
                   Procesos
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="serviciosDropdown">
-                  
                   <li>
-                    <a class="dropdown-item" href="{%url 'listar_cli'%}"
-                      >Cliente</a
-                    >
+                    <a class="dropdown-item" href="{% url 'listar_cli' %}">Cliente</a>
                   </li>
                   <li>
-                    <a class="dropdown-item" href="{%url 'listar_fact'%}"
-                      >Factura</a
-                    >
+                    <a class="dropdown-item" href="{% url 'listar_fact' %}">Factura</a>
                   </li>
-
                   <li>
-                    <a class="dropdown-item" href="{%url 'listar_tari'%}"
-                      >Tarifa</a
-                    >
+                    <a class="dropdown-item" href="{% url 'listar_tari' %}">Tarifa</a>
                   </li>
-
                   <li>
-                    <a class="dropdown-item" href="{%url 'listar_fija'%}"
-                      >Tarifa Fija</a
-                    >
+                    <a class="dropdown-item" href="{% url 'listar_fija' %}">Tarifa Fija</a>
                   </li>
-                
-                  
                 </ul>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{%url 'page_contacto'%}">Contacto</a>
+                <a class="nav-link" href="{% url 'page_contacto' %}">Contacto</a>
               </li>
             </ul>
-            <!-- Inicio de sesión a la derecha -->
             <ul class="navbar-nav">
               <li class="nav-item">
                 <a class="nav-link" href="#inicio-sesion">Inicio de sesión</a>
@@ -156,48 +157,65 @@
         </div>
       </nav>
     </header>
-
     <main>
-      {% block contenido%}
-      <!-- aqui se recibe los codigos del body -->
-      {%endblock%}
+      {% block contenido %}
+      {% endblock %}
     </main>
-
     <!-- Footer -->
     <footer class="bg-dark text-white text-center py-3">
       <p>&copy; 2025 Mi Empresa. Todos los derechos reservados.</p>
     </footer>
-
     <script
       src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
-      integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
       crossorigin="anonymous"
     ></script>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
-      integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
       crossorigin="anonymous"
     ></script>
     <script>
       let lastScrollTop = 0;
       const navbar = document.querySelector(".navbar");
-
       window.addEventListener("scroll", function () {
-        const scrollTop =
-          window.pageYOffset || document.documentElement.scrollTop;
-
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
         if (scrollTop > lastScrollTop) {
-          // Scrollear hacia abajo: ocultar navbar
           navbar.classList.add("hidden");
         } else {
-          // Scrollear hacia arriba: mostrar navbar
           navbar.classList.remove("hidden");
         }
         lastScrollTop = scrollTop;
       });
     </script>
-    {% block js%}
-    <!-- aqui se recibe los codigos de referencia al js -->
-    {%endblock%}
+    {% block js %}
+    {% endblock %}
+    <!-- Chatbot burbuja y ventana -->
+    <div id="chat-bubble">
+      <img src="{% static 'inicio/img/pregunta.png' %}" alt="Chatbot" style="width:32px;">
+    </div>
+    <div id="chat-window">
+      <iframe src="{% url 'mostrar_chatbot' %}" style="width:100%;height:100%;border:none;" allowtransparency="true"></iframe>
+      <button id="chat-close">&times;</button>
+    </div>
+    <script>
+      const chatBubble = document.getElementById('chat-bubble');
+      const chatWindow = document.getElementById('chat-window');
+      const chatClose = document.getElementById('chat-close');
+      let chatAbierto = false;
+
+      if (chatBubble && chatWindow && chatClose) {
+          chatBubble.addEventListener('click', () => {
+              if (chatAbierto) return; // Bloquea si ya está abierto
+              chatWindow.style.display = 'flex';
+              chatBubble.style.display = 'none';
+              chatAbierto = true;
+          });
+
+          chatClose.addEventListener('click', () => {
+              chatWindow.style.display = 'none';
+              chatBubble.style.display = 'flex';
+              chatAbierto = false;
+          });
+      }
+    </script>
   </body>
 </html>

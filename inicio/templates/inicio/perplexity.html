@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chatbot Perplexity - Servicio APR</title>
+    {% load static %}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            padding-top: 70px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        main {
+            flex: 1;
+        }
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            transition: transform 0.3s ease;
+        }
+        .navbar.hidden {
+            transform: translateY(-100%);
+        }
+        .chat-container {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        #respuesta {
+            background: #fff;
+            min-height: 60px;
+            margin-top: 12px;
+            padding: 10px;
+            border-radius: 6px;
+            color: #2563eb;
+            border: 1px solid #e1e1e1;
+            font-size: 1.1em;
+            overflow-y: auto;
+            max-height: 280px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="{% url 'page_index' %}">Sistema APR</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="serviciosDropdown" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                Servicios
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="serviciosDropdown">
+                                <li><a class="dropdown-item" href="{% url 'page_consultaBoletas' %}">Detalle de Boleta</a></li>
+                                <li><a class="dropdown-item" href="{% url 'page_pago_en_linea' %}">Pago en linea</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="procesosDropdown" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                Procesos
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="procesosDropdown">
+                                <li><a class="dropdown-item" href="{% url 'listar_cli' %}">Cliente</a></li>
+                                <li><a class="dropdown-item" href="{% url 'listar_fact' %}">Factura</a></li>
+                                <li><a class="dropdown-item" href="{% url 'listar_tari' %}">Tarifa</a></li>
+                                <li><a class="dropdown-item" href="{% url 'listar_fija' %}">Tarifa Fija</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'page_contacto' %}">Contacto</a></li>
+                    </ul>
+                    <ul class="navbar-nav">
+                        <li class="nav-item"><a class="nav-link" href="#inicio-sesion">Inicio de sesión</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="chat-container shadow">
+            <h4 class="text-center mb-3">Asistente Virtual APR</h4>
+            <img src="{% static 'inicio/img/logo.png' %}" alt="Logo" style="max-width: 140px;" class="mb-4 d-block mx-auto">
+            <div class="mb-3">
+                <input type="text" id="pregunta" class="form-control" placeholder="Escribe tu pregunta aquí"
+                    autocomplete="off" />
+            </div>
+            <div class="text-center">
+                <button onclick="enviarPregunta()" class="btn btn-primary">Enviar Pregunta</button>
+            </div>
+            <div id="respuesta" class="mt-3"></div>
+        </div>
+    </main>
+
+    <footer class="bg-dark text-white text-center py-3">
+        <p>&copy; 2025 Mi Empresa. Todos los derechos reservados.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+      crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
+      crossorigin="anonymous"></script>
+    <script>
+        let lastScrollTop = 0;
+        const navbar = document.querySelector(".navbar");
+        window.addEventListener("scroll", function () {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            if (scrollTop > lastScrollTop) {
+                navbar.classList.add("hidden");
+            } else {
+                navbar.classList.remove("hidden");
+            }
+            lastScrollTop = scrollTop;
+        });
+
+        async function enviarPregunta() {
+            const pregunta = document.getElementById("pregunta").value;
+            const respuestaDiv = document.getElementById("respuesta");
+            respuestaDiv.textContent = "Cargando...";
+
+            const data = new FormData();
+            data.append("message", pregunta);
+
+            const r = await fetch("/perplexity/api/", {
+                method: "POST",
+                body: data,
+                headers: { "X-CSRFToken": "{{ csrf_token }}" },
+            });
+            const resp = await r.json();
+            respuestaDiv.innerHTML = resp.response || resp.error;
+        }
+    </script>
+</body>
+</html>

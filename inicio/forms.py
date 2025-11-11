@@ -51,6 +51,16 @@ class TarifasForm(forms.ModelForm):
     class Meta:
         model=Tarifas
         fields='__all__'
+        widgets = {
+            'fecha_inicio': forms.DateInput(
+                attrs={'type': 'date', 'class': 'form-control'},
+                format='%Y-%m-%d'
+            ),
+            'fecha_fin': forms.DateInput(
+                attrs={'type': 'date', 'class': 'form-control'},
+                format='%Y-%m-%d'
+            ),
+        }
 
 
 class TarifasFijasForm(forms.ModelForm):

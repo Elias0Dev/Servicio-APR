@@ -142,7 +142,7 @@ def eliminar_factura(request, id):
 
     factura = get_object_or_404(Factura, id_factura=id)
     factura.delete()
-    return redirect(to="listar_fac")
+    return redirect(to="listar_fact")
    
 #tarifa
 def agregar_tarifa(request):
@@ -459,6 +459,43 @@ def generar_boleta_pdf(request, id_factura):
 
     return response
 
+#####CHATBOTT
+
+from django.shortcuts import render
+from django.http import JsonResponse
+from .perplexity import get_contextual_perplexity_response
+
+def mostrar_chatbot(request):
+    return render(request, "inicio/perplexity.html")
+
+def api_chatbot(request):
+    if request.method == "POST":
+        pregunta = request.POST.get("message", "").lower()
+        if "mi número es" in pregunta:
+            try:
+                indice = pregunta.index("mi número es")
+                numero_cliente = int(pregunta[indice+12:].strip().split()[0])
+            except (ValueError, IndexError):
+                return JsonResponse({"response": "No pude identificar tu número de cliente, por favor ingrésalo correctamente."})
+
+            try:
+                cliente = Cliente.objects.get(id_cliente=numero_cliente)
+            except Cliente.DoesNotExist:
+                return JsonResponse({"response": "No existe un cliente con ese número."})
+            factura = Factura.objects.filter(id_cliente=cliente, estado=True).order_by('-fecha_emision').first()
+            if factura:
+                respuesta = (
+                    f"Hola {cliente.nombre}, tu última factura fue emitida el {factura.fecha_emision} con un total a pagar de ${factura.total_pagar}. "
+                    f"Puedes descargarla aquí: <a href='{factura.get_archivo_url()}'>Descargar Factura</a>."
+                )
+            else:
+                respuesta = "No se encontraron facturas activas para tu cliente."
+
+            return JsonResponse({"response": respuesta})
+        respuesta = get_contextual_perplexity_response(pregunta)
+        return JsonResponse({"response": respuesta})
+
+    return JsonResponse({"error": "Método no permitido"}, status=405)
 
 
 
