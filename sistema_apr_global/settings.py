@@ -190,6 +190,6 @@ PWA_APP_OFFLINE_PAGE = 'inicio/offline.html'
 # Note: Ensure you create the offline.html template for offline support.
 # END PWA Configuration
 # Agregar estas líneas en settings.py si no existen aún
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/perfil/'  # O la URL que corresponda a tu perfil
 LOGOUT_REDIRECT_URL = '/'
 

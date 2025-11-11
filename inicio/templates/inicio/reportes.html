@@ -1,0 +1,220 @@
+{% extends 'inicio/base.html' %}
+{% load static %}
+
+{% block title %}
+Dashboard | Reportes de Consumo APR
+{% endblock %}
+
+{% block contenido %}
+<div class="container-fluid py-4">
+    <!-- Título -->
+    <div class="mb-4">
+        <h1>Panel Principal y Reportes</h1>
+    </div>
+
+    <!-- Tarjetas de KPIs con datos simulados -->
+    <div class="row mb-4">
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h5 class="card-title">Consumo Promedio (m³)</h5>
+                    <p class="fs-2">55.6</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h5 class="card-title">Total Clientes Activos</h5>
+                    <p class="fs-2">857</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h5 class="card-title">Facturas Pendientes</h5>
+                    <p class="fs-2">142</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h5 class="card-title">Incidencias Resueltas</h5>
+                    <p class="fs-2">98%</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gráficos lado a lado en desktop, apilados en móvil -->
+    <div class="row">
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow">
+                <div class="card-header">
+                    <h5>Consumo Total de Agua (m³) Últimos 6 Meses</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="graficoLineas"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow">
+                <div class="card-header">
+                    <h5>Comparativa de Consumo por Categoría</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="graficoBarras"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sección Tabla Últimas Lecturas -->
+    <div class="card shadow mt-4">
+        <div class="card-header">
+            <h5>Últimas Lecturas</h5>
+            <!-- Selector filtro cantidad de filas para mostrar -->
+            <div class="mt-2">
+                <label for="filtrarCantidad" class="form-label">Mostrar últimas lecturas:</label>
+                <select id="filtrarCantidad" class="form-select w-auto d-inline-block ms-2">
+                    <option value="5">5</option>
+                    <option value="10" selected>10</option>
+                    <option value="20">20</option>
+                </select>
+
+                <button id="btnExportarPDF" class="btn btn-primary btn-sm ms-3">Exportar a PDF</button>
+            </div>
+        </div>
+        <div class="card-body">
+            <div id="tablaLecturasContenedor">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Cliente</th>
+                            <th>Medidor</th>
+                            <th>Fecha Lectura</th>
+                            <th>Consumo (m³)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaLecturasBody">
+                        <!-- Filas se cargan con JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Cargas de librerías necesarias -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Datos simulados para gráficos y tabla
+
+    // --- Gráfico líneas ---
+    const ctxLineas = document.getElementById('graficoLineas').getContext('2d');
+    new Chart(ctxLineas, {
+        type: 'line',
+        data: {
+            labels: ['Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre'],
+            datasets: [{
+                label: 'Consumo (m³)',
+                data: [1800, 2200, 2500, 2100, 2700, 3000],
+                borderColor: 'rgba(255, 193, 7, 1)',
+                backgroundColor: 'rgba(255, 193, 7, 0.4)',
+                fill: true,
+                tension: 0.4,
+                borderWidth: 2,
+                pointRadius: 4,
+                pointBackgroundColor: 'rgba(255, 193, 7, 1)'
+            }]
+        },
+        options: { responsive: true, scales: { y: { beginAtZero: true, title: { display: true, text: 'Metros Cúbicos (m³)' } } } }
+    });
+
+    // --- Gráfico barras ---
+    const ctxBarras = document.getElementById('graficoBarras').getContext('2d');
+    new Chart(ctxBarras, {
+        type: 'bar',
+        data: {
+            labels: ['Residencial', 'Comercial', 'Industrial'],
+            datasets: [{
+                label: 'Consumo Promedio (m³)',
+                data: [45, 80, 120],
+                backgroundColor: [ 'rgba(13, 110, 253, 0.8)', 'rgba(40, 167, 69, 0.8)', 'rgba(255, 69, 96, 0.8)'],
+                borderColor: [ 'rgb(13, 110, 253)', 'rgb(40, 167, 69)', 'rgb(255, 69, 96)'],
+                borderWidth: 1
+            }]
+        },
+        options: { responsive: true, scales: { y: { beginAtZero: true } }, plugins: { legend: { display: false } } }
+    });
+
+    // --- Datos simulados para tabla últimas lecturas ---
+    const datosLecturas = [
+        { cliente: 'Juan Pérez', medidor: 'M-101', fecha: '2025-10-01', consumo: 15 },
+        { cliente: 'María López', medidor: 'M-102', fecha: '2025-09-28', consumo: 20 },
+        { cliente: 'Carlos Ruiz', medidor: 'M-103', fecha: '2025-09-27', consumo: 18 },
+        { cliente: 'Ana García', medidor: 'M-104', fecha: '2025-09-25', consumo: 22 },
+        { cliente: 'Luis Torres', medidor: 'M-105', fecha: '2025-09-20', consumo: 17 },
+        { cliente: 'Sofía Martínez', medidor: 'M-106', fecha: '2025-09-18', consumo: 19 },
+        { cliente: 'Miguel Díaz', medidor: 'M-107', fecha: '2025-09-15', consumo: 21 },
+        { cliente: 'Laura Gómez', medidor: 'M-108', fecha: '2025-09-12', consumo: 16 },
+        { cliente: 'Pedro Sánchez', medidor: 'M-109', fecha: '2025-09-10', consumo: 23 },
+        { cliente: 'Elena Fernández', medidor: 'M-110', fecha: '2025-09-08', consumo: 20 },
+        // Puedes añadir más registros para simular
+    ];
+
+    // Función para renderizar la tabla según cantidad
+    function renderizarTabla(cantidad) {
+        const tbody = document.getElementById('tablaLecturasBody');
+        tbody.innerHTML = '';
+        const mostrar = datosLecturas.slice(0, cantidad);
+        mostrar.forEach(row => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${row.cliente}</td>
+                <td>${row.medidor}</td>
+                <td>${row.fecha}</td>
+                <td>${row.consumo}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+
+    // Al iniciar muestra 10 registros
+    renderizarTabla(10);
+
+    // Manejar cambio de filtro cantidad
+    document.getElementById('filtrarCantidad').addEventListener('change', function() {
+        const val = parseInt(this.value);
+        renderizarTabla(val);
+    });
+
+    // Exportar tabla a PDF
+    document.getElementById('btnExportarPDF').addEventListener('click', () => {
+        const { jsPDF } = window.jspdf;
+
+        // Usamos html2canvas para capturar la tabla visible
+        const tabla = document.getElementById('tablaLecturasContenedor');
+
+        html2canvas(tabla).then(canvas => {
+            const imgData = canvas.toDataURL('image/png');
+            const pdf = new jsPDF('p', 'mm', 'a4');
+            const pdfAncho = pdf.internal.pageSize.getWidth();
+            const pdfAlto = (canvas.height * pdfAncho) / canvas.width;
+
+            pdf.addImage(imgData, 'PNG', 0, 0, pdfAncho, pdfAlto);
+            pdf.save('ultimas_lecturas.pdf');
+        });
+    });
+
+});
+</script>
+{% endblock %}

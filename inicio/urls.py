@@ -13,5 +13,8 @@ urlpatterns = [
     #  NUEVA URL DE REGISTRO
     path('registro/', views.registro_usuario, name='registro'),
     path('logout/', views.cerrar_sesion, name='logout'),
-
+    path('perfil/', views.perfil, name='perfil'),
+    path('reportes/', views.reportes, name='reportes'),
 ]
+
+

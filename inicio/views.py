@@ -241,3 +241,10 @@ def cerrar_sesion(request):
     logout(request)
     messages.success(request, "Has cerrado sesión correctamente.")
     return redirect('page_index')  # Cambia 'page_index' por la URL a la que quieres redirigir.
+@login_required
+def reportes(request):
+    """
+    Vista protegida que renderiza la plantilla de reportes con gráficos.
+    Se puede extender para enviar datos dinámicos al template.
+    """
+    return render(request, 'inicio/reportes.html')
