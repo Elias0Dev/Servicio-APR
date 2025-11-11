@@ -142,7 +142,7 @@ def eliminar_factura(request, id):
 
     factura = get_object_or_404(Factura, id_factura=id)
     factura.delete()
-    return redirect(to="listar_fac")
+    return redirect(to="listar_fact")
    
 #tarifa
 def agregar_tarifa(request):
