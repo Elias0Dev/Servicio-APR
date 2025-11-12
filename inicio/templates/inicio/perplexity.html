@@ -11,7 +11,6 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
-            padding-top: 70px;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         main {
@@ -50,47 +49,7 @@
     </style>
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="{% url 'page_index' %}">Sistema APR</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav me-auto">
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="serviciosDropdown" role="button"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                Servicios
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="serviciosDropdown">
-                                <li><a class="dropdown-item" href="{% url 'page_consultaBoletas' %}">Detalle de Boleta</a></li>
-                                <li><a class="dropdown-item" href="{% url 'page_pago_en_linea' %}">Pago en linea</a></li>
-                            </ul>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="procesosDropdown" role="button"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                Procesos
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="procesosDropdown">
-                                <li><a class="dropdown-item" href="{% url 'listar_cli' %}">Cliente</a></li>
-                                <li><a class="dropdown-item" href="{% url 'listar_fact' %}">Factura</a></li>
-                                <li><a class="dropdown-item" href="{% url 'listar_tari' %}">Tarifa</a></li>
-                                <li><a class="dropdown-item" href="{% url 'listar_fija' %}">Tarifa Fija</a></li>
-                            </ul>
-                        </li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'page_contacto' %}">Contacto</a></li>
-                    </ul>
-                    <ul class="navbar-nav">
-                        <li class="nav-item"><a class="nav-link" href="#inicio-sesion">Inicio de sesión</a></li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
+
 
     <main>
         <div class="chat-container shadow">
@@ -107,9 +66,7 @@
         </div>
     </main>
 
-    <footer class="bg-dark text-white text-center py-3">
-        <p>&copy; 2025 Mi Empresa. Todos los derechos reservados.</p>
-    </footer>
+    
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
       crossorigin="anonymous"></script>

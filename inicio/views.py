@@ -11,7 +11,7 @@ import matplotlib
 matplotlib.use('Agg')  # Usa un backend sin interfaz gráfica
 import matplotlib.pyplot as plt
 import base64
-from io import BytesIO
+from io import BytesIO 
 
 
 #renderizado de vistas publicas
