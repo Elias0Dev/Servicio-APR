@@ -195,36 +195,57 @@
         </table>
     </div>
 
-    <!-- Desglose de Tarifas Aplicadas (sin multiplicaciones) -->
+    <!-- Desglose del total a pagar -->
     <div class="seccion">
-        <h2>Desglose de Tarifas Aplicadas</h2>
+        <h2>Desglose del total a pagar</h2>
 
         <table>
             <thead>
                 <tr>
                     <th>Tipo</th>
-                    <th>Rango (m3)</th>
-                    <th>Cargo por Unidad</th>
                     <th>Valor</th>
                 </tr>
             </thead>
             <tbody>
-                {% for tarifa in tarifa_ap %}
                 <tr>
-                    <td>{{ tarifa.tipo }}</td>
-                    <td>{{tarifa.rango_desde}} - {{tarifa.rango_hasta}}</td>
-                    <td>${{tarifa.cargo |floatformat:0|intcomma }}</td>
+                    <th>Cargo fijo por de agua potable</th>
+                    <td>{{cargo_ap.valor|floatformat:0|intcomma}}</td>
+                </tr>
+                <tr>
+                    <th>Valor de agua potable por m3</th>
                     <td>${{valor_ap|floatformat:0|intcomma}}</td>
                 </tr>
-                {% endfor %}
-                {% for tarifa in tarifa_as %}
                 <tr>
-                    <td>{{ tarifa.tipo }}</td>
-                    <td>{{tarifa.rango_desde}} - {{tarifa.rango_hasta}}</td>
-                    <td>${{tarifa.cargo |floatformat:0|intcomma }}</td>
+                    <th>Cargo fijo de alcantarillado</th>
+                    <td>{{cargo_as.valor|floatformat:0|intcomma}}</td>
+                </tr>
+
+                <tr>
+                    <th>Valor de alcantarillado por m3</th>
                     <td>${{valor_as|floatformat:0|intcomma}}</td>
                 </tr>
-                {% endfor %}
+                
+
+                
+                
+                
+
+                {% if corte > 0 %}
+                <tr>
+                  <th>Pago por Corte de agua</th>
+                  <td>${{ corte|floatformat:0|intcomma }}</td>
+                </tr>
+                {% endif %}
+
+                {% if subsidio > 0 %}
+                <tr>
+                  <th>descuento por subsidio</th>
+                  <td>-${{ subsidio|floatformat:0|intcomma }}</td>
+                </tr>
+                {% endif %}
+
+
+
             </tbody>
 
         </table>

@@ -374,8 +374,23 @@ def generar_boleta_pdf(request, id_factura):
     # Obtener factura y datos relacionados
     factura = Factura.objects.get(id_factura=id_factura)
     cliente = factura.id_cliente
-    tarifa_fija=Cargo.objects.all()
+    estado_cliente = cliente.estado
+    cargo_AP=Cargo.objects.get(id_cargo=1)
+    cargo_AS=Cargo.objects.get(id_cargo=2)
+    subsidio = Subsidio.objects.filter(cliente=cliente).first()
 
+    if subsidio:
+        subsidio = subsidio.monto
+    else:
+        subsidio = 0
+
+
+    if estado_cliente == "corte":
+        corte= Cargo.objects.get(id_cargo=3).valor
+        print(corte)
+    else:
+        corte=0
+        print(corte)
 
 
     tarifas_as = Tarifa.objects.filter(tipo='AS',rango_desde__lte=factura.consumo,rango_hasta__gte=factura.consumo).order_by('rango_desde')
@@ -439,8 +454,7 @@ def generar_boleta_pdf(request, id_factura):
 
     # --- GRÁFICO 2: DESGLOSE DE CONSUMO POR TRAMO NO TOMAR EN CUENTA NO SUPE SACARLO SIN CAGAR EL CODIGO XD ---
     tarifas_aplicadas = Tarifa.objects.filter(
-        fecha_inicio__lte=factura.fecha_emision,
-        fecha_fin__gte=factura.fecha_emision
+        fecha_inicio__lte=factura.fecha_emision
     ).order_by('rango_desde')
     
     consumo_total = int(factura.consumo)
@@ -485,11 +499,14 @@ def generar_boleta_pdf(request, id_factura):
         'chart_historico_b64': chart_historico_b64,
         'chart_desglose_b64': chart_desglose_b64,
         'mensaje_variacion': mensaje_variacion,
-        'tarifa_fija': tarifa_fija,
+        'cargo_ap': cargo_AP,
+        'cargo_as': cargo_AS,
+        'corte': corte,
         'tarifa_as' : tarifas_as,
         'tarifa_ap' : tarifas_ap,
         'valor_ap' : valor_ap,
         'valor_as' : valor_as,
+        'subsidio' : subsidio,
     }
     # Renderizar el HTML como string
     html = render_to_string('inicio/boleta.html', contexto)

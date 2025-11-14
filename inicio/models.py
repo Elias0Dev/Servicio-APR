@@ -23,7 +23,7 @@ class Cliente(models.Model):
         default="persona"       # valor por defecto (opcional)
     )
 
-    esatdo = models.CharField(
+    estado = models.CharField(
         max_length=10,        # debe ser suficientemente largo para la opción más larga
         choices=TIPO_CHOICES_2, # opciones disponibles
         default="normal"       # valor por defecto (opcional)
