@@ -73,17 +73,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
       crossorigin="anonymous"></script>
     <script>
-        let lastScrollTop = 0;
-        const navbar = document.querySelector(".navbar");
-        window.addEventListener("scroll", function () {
-            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-            if (scrollTop > lastScrollTop) {
-                navbar.classList.add("hidden");
-            } else {
-                navbar.classList.remove("hidden");
-            }
-            lastScrollTop = scrollTop;
-        });
+
 
         async function enviarPregunta() {
             const pregunta = document.getElementById("pregunta").value;

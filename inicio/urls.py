@@ -27,10 +27,15 @@ urlpatterns = [
     path("tarifa/modificar_tarifas/<id>/", views.modificar_tarifa, name="modificar_tari"),
     path("tarifa/eliminar_tarifas/<id>/", views.eliminar_tarifa, name="eliminar_tari"),
 
-    path("fija/agregar_tarifa_fija/", views.agregar_tarifa_fija, name="agregar_fija"),
-    path("fija/listar_tarifas_fija/", views.listar_tarifa_fija, name="listar_fija"),
-    path("fija/modificar_tarifas_fija/<id>/", views.modificar_tarifa_fija, name="modificar_fija"),
-    path("fija/eliminar_tarifas_fija/<id>/", views.eliminar_tarifa_fija, name="eliminar_fija"),
+    path("cargo/agregar_cargo/", views.agregar_cargo, name="agregar_cargo"),
+    path("cargo/listar_cargo/", views.listar_cargo, name="listar_cargo"),
+    path("cargo/modificar_cargo/<id>/", views.modificar_cargo, name="modificar_cargo"),
+    path("cargo/eliminar_cargo/<id>/", views.eliminar_cargo, name="eliminar_cargo"),
+
+    path("subsidio/agregar_subsidio/", views.agregar_subsidio, name="agregar_subsidio"),
+    path("subsidio/listar_subsidio/", views.listar_subsidio, name="listar_subsidio"),
+    path("subsidio/modificar_subsidio/<id>/", views.modificar_subsidio, name="modificar_subsidio"),
+    path("subsidio/eliminar_subsidio/<id>/", views.eliminar_subsidio, name="eliminar_subsidio"),
 
     path('perplexity/', views.mostrar_chatbot, name='mostrar_chatbot'),
     path('perplexity/api/', views.api_chatbot, name='api_chatbot'),

@@ -47,19 +47,43 @@
         z-index: 1000;
         transition: opacity 0.3s;
       }
-      #chat-window {
-        display: none;
+      /* Fondo oscuro (overlay) */
+      #chat-overlay {
+        display: none; /* Se muestra junto al chat */
         position: fixed;
-        bottom: 90px;
-        right: 20px;
-        width: 350px;
-        height: 420px;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6); /* oscurece el fondo */
+        z-index: 1000;
+      }
+
+      /* Ventana del chat */
+      #chat-window {
+        display: none; /* se mostrará dinámicamente */
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%); /* centrado exacto */
+        width: 450px;
+        height: auto;
+        min-height: 300px;
+        max-height: 80vh;
         background: white;
         border-radius: 10px;
-        box-shadow: 0 8px 24px rgba(0,0,0,.2);
-        overflow: hidden;
+        box-shadow: 0 8px 24px rgba(0,0,0,.3);
+        overflow: visible;
         z-index: 1001;
         flex-direction: column;
+      }
+
+      #chat-window iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+        min-height: 300px;
+        max-height: 80vh;
       }
       #chat-close {
         position: absolute;
@@ -140,7 +164,10 @@
                     <a class="dropdown-item" href="{% url 'listar_tari' %}">Tarifa</a>
                   </li>
                   <li>
-                    <a class="dropdown-item" href="{% url 'listar_fija' %}">Tarifa Fija</a>
+                    <a class="dropdown-item" href="{% url 'listar_cargo' %}">Cargo</a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="{% url 'listar_subsidio' %}">Subsidio</a>
                   </li>
                 </ul>
               </li>
@@ -163,7 +190,7 @@
     </main>
     <!-- Footer -->
     <footer class="bg-dark text-white text-center py-3">
-      <p>&copy; 2025 Mi Empresa. Todos los derechos reservados.</p>
+      <p>&copy; 2025 Comite APR de las cañas uno. Todos los derechos reservados.</p>
     </footer>
     <script
       src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
@@ -188,6 +215,7 @@
     </script>
     {% block js %}
     {% endblock %}
+    <div id="chat-overlay"></div>
     <!-- Chatbot burbuja y ventana -->
     <div id="chat-bubble">
       <img src="{% static 'inicio/img/pregunta.png' %}" alt="Chatbot" style="width:32px;">
@@ -199,23 +227,32 @@
     <script>
       const chatBubble = document.getElementById('chat-bubble');
       const chatWindow = document.getElementById('chat-window');
+      const chatOverlay = document.getElementById('chat-overlay');
       const chatClose = document.getElementById('chat-close');
       let chatAbierto = false;
 
-      if (chatBubble && chatWindow && chatClose) {
-          chatBubble.addEventListener('click', () => {
-              if (chatAbierto) return; // Bloquea si ya está abierto
-              chatWindow.style.display = 'flex';
-              chatBubble.style.display = 'none';
-              chatAbierto = true;
-          });
-
-          chatClose.addEventListener('click', () => {
-              chatWindow.style.display = 'none';
-              chatBubble.style.display = 'flex';
-              chatAbierto = false;
-          });
+      function abrirChat() {
+        chatOverlay.style.display = 'block';
+        chatWindow.style.display = 'flex';
+        chatBubble.style.display = 'none';
+        chatAbierto = true;
       }
+
+      function cerrarChat() {
+        chatOverlay.style.display = 'none';
+        chatWindow.style.display = 'none';
+        chatBubble.style.display = 'flex';
+        chatAbierto = false;
+      }
+
+      chatBubble.addEventListener('click', () => {
+        if (!chatAbierto) abrirChat();
+      });
+
+      chatClose.addEventListener('click', cerrarChat);
+      chatOverlay.addEventListener('click', cerrarChat);
+
+      
     </script>
   </body>
 </html>

@@ -15,9 +15,11 @@ class FacturaAdmin(admin.ModelAdmin):
 
 
 # Register your models here.
-from .models import Cliente, Factura, Tarifas, Contacto
+from .models import Cliente, Factura, Tarifa, Contacto,Cargo,Subsidio
 
 admin.site.register(Cliente, ClienteAdmin)
 admin.site.register(Factura, FacturaAdmin)
-admin.site.register(Tarifas)
+admin.site.register(Tarifa)
+admin.site.register(Cargo)
+admin.site.register(Subsidio)
 admin.site.register(Contacto)

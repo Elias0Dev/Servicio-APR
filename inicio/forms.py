@@ -1,7 +1,7 @@
 from django import forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Row, Column, Submit
-from .models import Contacto, Cliente, Factura, Tarifas, Tarifas_fijas
+from .models import Contacto, Cliente, Factura, Tarifa, Cargo,Subsidio
 
 class ContactForm(forms.ModelForm):
     class Meta:
@@ -46,10 +46,10 @@ class FacturaForm(forms.ModelForm):
         for field in ['fecha_emision', 'fecha_vencimiento', 'fecha_actual', 'fecha_anterior']:
             self.fields[field].input_formats = ['%Y-%m-%d']
 
-class TarifasForm(forms.ModelForm):
+class TarifaForm(forms.ModelForm):
 
     class Meta:
-        model=Tarifas
+        model=Tarifa
         fields='__all__'
         widgets = {
             'fecha_inicio': forms.DateInput(
@@ -63,8 +63,14 @@ class TarifasForm(forms.ModelForm):
         }
 
 
-class TarifasFijasForm(forms.ModelForm):
+class CargoForm(forms.ModelForm):
 
     class Meta:
-        model=Tarifas_fijas
+        model=Cargo
+        fields='__all__'
+
+class SubsidioForm(forms.ModelForm):
+
+    class Meta:
+        model=Subsidio
         fields='__all__'

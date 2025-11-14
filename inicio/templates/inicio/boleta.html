@@ -198,19 +198,7 @@
     <!-- Desglose de Tarifas Aplicadas (sin multiplicaciones) -->
     <div class="seccion">
         <h2>Desglose de Tarifas Aplicadas</h2>
-       <table>
-          <tr>
-            <th class="row">Cargo fijo</th>
-         
-            <td> 
-              {% for tf in tarifa_fija %}
-              
-                cargo fijo por {{tf.tipo}}  ${{tf.cargo_fijo|floatformat:0|intcomma}} <br>
-              
-              {%endfor%}
-            </td>
-          </tr>
-       </table>
+
         <table>
             <thead>
                 <tr>

@@ -4,8 +4,8 @@ from django.contrib import messages
 from django.conf import settings
 from django.http import JsonResponse,  HttpResponse
 from django.template.loader import render_to_string
-from .models import Factura, Cliente, Tarifas, Tarifas_fijas
-from .forms import ContactForm, ClienteForm, FacturaForm, TarifasForm, TarifasFijasForm
+from .models import Factura, Cliente, Tarifa, Cargo, Subsidio
+from .forms import ContactForm, ClienteForm, FacturaForm, TarifaForm, CargoForm, SubsidioForm
 # --- Nuevas importaciones para gráficos ---
 import matplotlib
 matplotlib.use('Agg')  # Usa un backend sin interfaz gráfica
@@ -97,19 +97,31 @@ def eliminar_cliente(request, id):
 #factura
 
 def agregar_factura(request):
-
     data = {
         'form': FacturaForm()
     }
+
     if request.method == 'POST':
-        formulario = FacturaForm(data=request.POST)
+        formulario = FacturaForm(request.POST)
         if formulario.is_valid():
-            formulario.save()
-            data["mensaje"] = "Guardado correctamente"
+            # Guardamos la factura, pero no la confirmamos aún
+            factura = formulario.save(commit=False)
+            
+            # Buscar subsidio activo del cliente (por ejemplo, el último registrado)
+            subsidio = factura.id_cliente.subsidios.last()
+            if subsidio:
+                # Aplicar subsidio al total a pagar
+                factura.total_pagar = max(factura.total_pagar - subsidio.monto, 0)
+
+            # Guardar la factura finalmente
+            factura.save()
+
+            data["mensaje"] = "Factura guardada correctamente con subsidio aplicado"
         else:
             data["form"] = formulario
 
     return render(request, 'factura/agregar.html', data)
+
 
 def listar_factura(request):
     factura= Factura.objects.all()
@@ -148,10 +160,10 @@ def eliminar_factura(request, id):
 def agregar_tarifa(request):
 
     data = {
-        'form': TarifasForm()
+        'form': TarifaForm()
     }
     if request.method == 'POST':
-        formulario = TarifasForm(data=request.POST)
+        formulario = TarifaForm(data=request.POST)
         if formulario.is_valid():
             formulario.save()
             data["mensaje"] = "Guardado correctamente"
@@ -161,7 +173,7 @@ def agregar_tarifa(request):
     return render(request, 'tarifa/agregar.html', data)
 
 def listar_tarifa(request):
-    tarifa= Tarifas.objects.all()
+    tarifa= Tarifa.objects.all()
     data = {
         'tarifa': tarifa
     }
@@ -169,13 +181,13 @@ def listar_tarifa(request):
 
 def modificar_tarifa(request, id):
 
-    tarifa = get_object_or_404(Tarifas, idtarifas=id)
+    tarifa = get_object_or_404(Tarifa, id_tarifa=id)
     data = {
-        'form': TarifasForm(instance=tarifa)
+        'form': TarifaForm(instance=tarifa)
     }
      
     if request.method == 'POST':
-        formulario = TarifasForm(data=request.POST, instance=tarifa)
+        formulario = TarifaForm(data=request.POST, instance=tarifa)
         
         if formulario.is_valid():
             formulario.save()
@@ -186,55 +198,103 @@ def modificar_tarifa(request, id):
 
 def eliminar_tarifa(request, id):
 
-    tarifa = get_object_or_404(Tarifas, idtarifas=id)
+    tarifa = get_object_or_404(Tarifa, idtarifas=id)
     tarifa.delete()
     return redirect(to="listar_tari")
 
-#Tarifas fijas
-def agregar_tarifa_fija(request):
+#cargo
+def agregar_cargo(request):
 
     data = {
-        'form': TarifasFijasForm()
+        'form': CargoForm()
     }
     if request.method == 'POST':
-        formulario = TarifasFijasForm(data=request.POST)
+        formulario = CargoForm(data=request.POST)
         if formulario.is_valid():
             formulario.save()
             data["mensaje"] = "Guardado correctamente"
         else:
             data["form"] = formulario
 
-    return render(request, 'fija/agregar.html', data)
+    return render(request, 'cargo/agregar.html', data)
 
-def listar_tarifa_fija(request):
-    tarifa_fija= Tarifas_fijas.objects.all()
+def listar_cargo(request):
+    cargo= Cargo.objects.all()
     data = {
-        'tarifa_fija': tarifa_fija
+        'cargo': cargo
     }
-    return render(request, 'fija/listar.html', data)
+    return render(request, 'cargo/listar.html', data)
 
-def modificar_tarifa_fija(request, id):
+def modificar_cargo(request, id):
 
-    tarifa_fija = get_object_or_404(Tarifas_fijas, id_tarifa=id)
+    cargo = get_object_or_404(Cargo, id_cargo=id)
     data = {
-        'form': TarifasFijasForm(instance=tarifa_fija)
+        'form': CargoForm(instance=cargo)
     }
      
     if request.method == 'POST':
-        formulario = TarifasForm(data=request.POST, instance=tarifa_fija)
+        formulario = CargoForm(data=request.POST, instance=cargo)
         
         if formulario.is_valid():
             formulario.save()
-            return redirect(to="listar_fija")   
+            return redirect(to="listar_cargo")   
         data["form"] = formulario
 
-    return render(request, 'fija/modificar.html',data)
+    return render(request, 'cargo/modificar.html',data)
 
-def eliminar_tarifa_fija(request, id):
+def eliminar_cargo(request, id):
 
-    tarifa = get_object_or_404(Tarifas_fijas, id_tarifa=id)
-    tarifa.delete()
-    return redirect(to="listar_fija")
+    cargo = get_object_or_404(cargo, id_cargo=id)
+    cargo.delete()
+    return redirect(to="listar_cargo")
+
+#Subsidio:
+
+def agregar_subsidio(request):
+
+    data = {
+        'form': SubsidioForm()
+    }
+    if request.method == 'POST':
+        formulario = SubsidioForm(data=request.POST)
+        if formulario.is_valid():
+            formulario.save()
+            data["mensaje"] = "Guardado correctamente"
+        else:
+            data["form"] = formulario
+
+    return render(request, 'subsidio/agregar.html', data)
+
+def listar_subsidio(request):
+    subsidio= Subsidio.objects.all()
+    data = {
+        'subsidio': subsidio
+    }
+    return render(request, 'subsidio/listar.html', data)
+
+def modificar_subsidio(request, id):
+
+    subsidio = get_object_or_404(Subsidio, id_subsidio=id)
+    data = {
+        'form': SubsidioForm(instance=subsidio)
+    }
+     
+    if request.method == 'POST':
+        formulario = SubsidioForm(data=request.POST, instance=subsidio)
+        
+        if formulario.is_valid():
+            formulario.save()
+            return redirect(to="listar_subsidio")   
+        data["form"] = formulario
+
+    return render(request, 'subsidio/modificar.html',data)
+
+def eliminar_subsidio(request, id):
+
+    subsidio = get_object_or_404(Subsidio, id_subsidio=id)
+    subsidio.delete()
+    return redirect(to="listar_subsidio")
+
 
 
 #funciones
@@ -314,12 +374,12 @@ def generar_boleta_pdf(request, id_factura):
     # Obtener factura y datos relacionados
     factura = Factura.objects.get(id_factura=id_factura)
     cliente = factura.id_cliente
-    tarifa_fija=Tarifas_fijas.objects.all()
+    tarifa_fija=Cargo.objects.all()
 
 
 
-    tarifas_as = Tarifas.objects.filter(tipo='AS',rango_desde__lte=factura.consumo,rango_hasta__gte=factura.consumo).order_by('rango_desde')
-    tarifas_ap = Tarifas.objects.filter(tipo='AP',rango_desde__lte=factura.consumo,rango_hasta__gte=factura.consumo).order_by('rango_desde')
+    tarifas_as = Tarifa.objects.filter(tipo='AS',rango_desde__lte=factura.consumo,rango_hasta__gte=factura.consumo).order_by('rango_desde')
+    tarifas_ap = Tarifa.objects.filter(tipo='AP',rango_desde__lte=factura.consumo,rango_hasta__gte=factura.consumo).order_by('rango_desde')
 
    
     if tarifas_as.exists():  # Verifica que haya al menos un registro
@@ -378,7 +438,7 @@ def generar_boleta_pdf(request, id_factura):
             mensaje_variacion = "El mes pasado no registraste consumo."
 
     # --- GRÁFICO 2: DESGLOSE DE CONSUMO POR TRAMO NO TOMAR EN CUENTA NO SUPE SACARLO SIN CAGAR EL CODIGO XD ---
-    tarifas_aplicadas = Tarifas.objects.filter(
+    tarifas_aplicadas = Tarifa.objects.filter(
         fecha_inicio__lte=factura.fecha_emision,
         fecha_fin__gte=factura.fecha_emision
     ).order_by('rango_desde')
