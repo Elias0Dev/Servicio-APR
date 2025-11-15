@@ -20,31 +20,9 @@ class ClienteForm(forms.ModelForm):
 class FacturaForm(forms.ModelForm):
     class Meta:
         model = Factura
-        fields = '__all__'
-        widgets = {
-            'fecha_emision': forms.DateInput(
-                attrs={'type': 'date', 'class': 'form-control'},
-                format='%Y-%m-%d'
-            ),
-            'fecha_vencimiento': forms.DateInput(
-                attrs={'type': 'date', 'class': 'form-control'},
-                format='%Y-%m-%d'
-            ),
-            'fecha_actual': forms.DateInput(
-                attrs={'type': 'date', 'class': 'form-control'},
-                format='%Y-%m-%d'
-            ),
-            'fecha_anterior': forms.DateInput(
-                attrs={'type': 'date', 'class': 'form-control'},
-                format='%Y-%m-%d'
-            ),
-        }
+        fields = ['id_cliente', 'lectura_actual']  
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        # Necesario para que Django use el formato correcto al mostrar fechas existentes
-        for field in ['fecha_emision', 'fecha_vencimiento', 'fecha_actual', 'fecha_anterior']:
-            self.fields[field].input_formats = ['%Y-%m-%d']
+
 
 class TarifaForm(forms.ModelForm):
 

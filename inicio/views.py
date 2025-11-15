@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.conf import settings
 from django.http import JsonResponse,  HttpResponse
 from django.template.loader import render_to_string
+from datetime import date, timedelta
 from .models import Factura, Cliente, Tarifa, Cargo, Subsidio
 from .forms import ContactForm, ClienteForm, FacturaForm, TarifaForm, CargoForm, SubsidioForm
 # --- Nuevas importaciones para gráficos ---
@@ -103,20 +104,88 @@ def agregar_factura(request):
 
     if request.method == 'POST':
         formulario = FacturaForm(request.POST)
-        if formulario.is_valid():
-            # Guardamos la factura, pero no la confirmamos aún
-            factura = formulario.save(commit=False)
-            
-            # Buscar subsidio activo del cliente (por ejemplo, el último registrado)
-            subsidio = factura.id_cliente.subsidios.last()
-            if subsidio:
-                # Aplicar subsidio al total a pagar
-                factura.total_pagar = max(factura.total_pagar - subsidio.monto, 0)
 
-            # Guardar la factura finalmente
+
+        if formulario.is_valid():
+            factura = formulario.save(commit=False)
+
+            hoy = date.today()
+
+            # --- Buscar última factura del cliente ---
+            ultima_factura = Factura.objects.filter(id_cliente=factura.id_cliente).order_by('-id_factura').first()
+
+            if ultima_factura:
+                factura.lectura_anterior = ultima_factura.lectura_actual
+                factura.fecha_anterior = ultima_factura.fecha_actual
+            else:
+                factura.lectura_anterior = 0
+                factura.fecha_anterior = hoy
+
+            # --- Calcular consumo ---
+            factura.consumo = factura.lectura_actual - factura.lectura_anterior
+
+            # --- Fecha emisión / actual ---
+            factura.fecha_emision = hoy
+            factura.fecha_actual = hoy
+
+            # --- Fecha de vencimiento ---
+            factura.fecha_vencimiento = hoy + timedelta(days=21)
+
+            # --- Calcular total a pagar ---
+            # Ejemplo: 100 pesos por m³ — cámbialo según tu regla
+            cliente = factura.id_cliente
+            estado_cliente = cliente.estado
+
+            cargo_fijo_ap = Cargo.objects.get(id_cargo=1).valor
+            cargo_fijo_as = Cargo.objects.get(id_cargo=2).valor
+            subsidio = Subsidio.objects.filter(cliente=factura.id_cliente).first()
+
+            if subsidio:
+                subsidio = subsidio.monto
+            else:
+                subsidio = 0
+
+
+            if estado_cliente == "corte":
+                corte= Cargo.objects.get(id_cargo=3).valor
+                print(corte)
+            else:
+                corte=0
+                print(corte)
+
+            tarifa_ap = Tarifa.objects.filter(
+                tipo='AP',
+                rango_desde__lte=factura.consumo,
+                rango_hasta__gte=factura.consumo
+            ).first()
+
+            valor_ap = tarifa_ap.cargo if tarifa_ap else 0
+            tarifas_ap = factura.consumo * valor_ap
+
+            tarifa_as = Tarifa.objects.filter(
+                tipo='AS',
+                rango_desde__lte=factura.consumo,
+                rango_hasta__gte=factura.consumo
+            ).first()
+
+            valor_as = tarifa_as.cargo if tarifa_as else 0
+            tarifas_as = factura.consumo * valor_as
+
+
+            total=int(cargo_fijo_ap) + int(tarifas_ap) + int(cargo_fijo_as) +  int(tarifas_as) + int(corte) - int(subsidio)
+
+
+
+            factura.total_pagar = total
+
+            
+
+            # --- Estado inicial ---
+            factura.estado = False  # o False según tu lógica
+
             factura.save()
 
-            data["mensaje"] = "Factura guardada correctamente con subsidio aplicado"
+            data["mensaje"] = "Factura guardada correctamente"
         else:
             data["form"] = formulario
 
