@@ -111,7 +111,7 @@ class Cargo(models.Model):
         db_table = 'cargo'
 
     def __str__(self):
-        return {self.tipo}
+        return self.tipo
 
 class Subsidio(models.Model):
     id_subsidio = models.AutoField(primary_key=True)
