@@ -659,7 +659,7 @@ def api_chatbot(request):
 # ----------------------------------------------------------------------
 
 # 🔑 VISTA DE PERFIL (Protegida)
-@login_required(login_url='/cuentas/login/')
+@login_required(login_url='/registration/login/')
 def perfil(request):
     """
     Renderiza la página de perfil del usuario, accesible después del login.
