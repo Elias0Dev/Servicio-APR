@@ -40,4 +40,6 @@ urlpatterns = [
     path('perplexity/', views.mostrar_chatbot, name='mostrar_chatbot'),
     path('perplexity/api/', views.api_chatbot, name='api_chatbot'),
     
+    # 🔑 NUEVA URL DE REGISTRO
+    path('registro/', views.registro_usuario, name='registro'),
 ]

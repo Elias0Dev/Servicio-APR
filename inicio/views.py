@@ -2,8 +2,9 @@ import pdfkit
 from django.shortcuts import render, redirect,get_object_or_404
 from django.contrib import messages
 from django.conf import settings
-from django.http import JsonResponse,  HttpResponse
+from django.http import JsonResponse, HttpResponse
 from django.template.loader import render_to_string
+
 from datetime import date, timedelta
 from .models import Factura, Cliente, Tarifa, Cargo, Subsidio
 from .forms import ContactForm, ClienteForm, FacturaForm, TarifaForm, CargoForm, SubsidioForm
@@ -13,6 +14,13 @@ matplotlib.use('Agg')  # Usa un backend sin interfaz gráfica
 import matplotlib.pyplot as plt
 import base64
 from io import BytesIO 
+
+# 🔑 IMPORTACIONES NECESARIAS PARA AUTENTICACIÓN
+# from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import login 
+from django.contrib.auth.decorators import login_required 
+
+
 
 
 #renderizado de vistas publicas
@@ -26,6 +34,11 @@ def page_consultaBoletas(request):
 
 def page_pago_en_linea(request):
     context = {}
+    
+    boleta_id = request.GET.get('boleta_id')
+    if boleta_id:
+        messages.info(request, f'Preparando pago para la boleta N° {boleta_id}.')
+        
     return render(request, 'inicio/pago.html', context)
 
 def page_contact(request):
@@ -377,14 +390,19 @@ def buscar_facturas(request):
     except Cliente.DoesNotExist:
         return JsonResponse({'error': 'Número de cliente no encontrado'}, status=404)
 
-    facturas = Factura.objects.filter(id_cliente=numero_cliente).order_by('-fecha_emision')
+    try:
+        cliente_obj = Cliente.objects.get(id=numero_cliente)
+    except Cliente.DoesNotExist:
+        return JsonResponse({'error': 'Cliente no encontrado'}, status=404)
+
+    facturas = Factura.objects.filter(id_cliente=cliente_obj).order_by('-fecha_emision')
 
     data = []
     for f in facturas:
         data.append({
             'consumido': f.consumo,
             'fecha': f.fecha_emision.strftime('%Y-%m-%d'),
-            'valor': f"${format(int(f.total_pagar), ',d').replace(',', '.')}",
+            'valor': f"${format(int(f.total_pagar), ',d').replace(',', '.')}", 
             'id': f.id_factura
         })
     # --- NUEVO: Preparar datos para el gráfico de progreso ---
@@ -420,10 +438,8 @@ def buscar_facturas_rut(request):
 
     if rut:
         try:
-            # Buscamos el cliente por RUT (sin DV)
             cliente = Cliente.objects.get(rut=rut)
 
-            # Facturas con estado=False → pendientes
             facturas_pendientes = Factura.objects.filter(id_cliente=cliente, estado=False)
 
             context["cliente"] = cliente
@@ -436,11 +452,9 @@ def buscar_facturas_rut(request):
     else:
         context["error"] = "Debe ingresar un RUT para realizar la búsqueda."
 
-    # Renderizamos en pago.html
     return render(request, "inicio/pago.html", context)
 
 def generar_boleta_pdf(request, id_factura):
-    # Obtener factura y datos relacionados
     factura = Factura.objects.get(id_factura=id_factura)
     cliente = factura.id_cliente
     estado_cliente = cliente.estado
@@ -594,12 +608,10 @@ def generar_boleta_pdf(request, id_factura):
 
     # Configuración de pdfkit para Windows
     path_wkhtmltopdf = r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe'
-    config = pdfkit.configuration(wkhtmltopdf=path_wkhtmltopdf)
+    config = pdfkit.configuration(wkhtmltopdf=path_wkhtmltopdf) 
 
-    # Generar PDF en memoria
     pdf = pdfkit.from_string(html, False, options=options, configuration=config)
 
-    # Devolver PDF como respuesta
     response = HttpResponse(pdf, content_type='application/pdf')
     response['Content-Disposition'] = f'inline; filename=boleta_N°{factura.id_factura}.pdf'
 
@@ -642,6 +654,36 @@ def api_chatbot(request):
         return JsonResponse({"response": respuesta})
 
     return JsonResponse({"error": "Método no permitido"}, status=405)
+# ----------------------------------------------------------------------
+# VISTAS DE AUTENTICACIÓN Y PERFIL
+# ----------------------------------------------------------------------
+
+# 🔑 VISTA DE PERFIL (Protegida)
+@login_required(login_url='/cuentas/login/')
+def perfil(request):
+    """
+    Renderiza la página de perfil del usuario, accesible después del login.
+    """
+    
+    nombre_usuario = request.user.username 
+
+    context = {
+        'nombre_usuario': nombre_usuario,
+    }
+    
+    # Renderiza la plantilla: inicio/templates/inicio/perfil.html
+    return render(request, 'inicio/perfil.html', context)
 
 
-
+# 🔑 VISTA DE REGISTRO
+# def registro_usuario(request):
+#     if request.method == 'POST':
+#         form = UserCreationForm(request.POST)
+#         if form.is_valid():
+#             user = form.save() 
+#             login(request, user) 
+#             # Redirige a /accounts/profile/ (o lo que LOGIN_REDIRECT_URL defina)
+#             return redirect(settings.LOGIN_REDIRECT_URL) 
+#     else:
+#         form = UserCreationForm()    
+#     return render(request, 'registration/registro.html', {'form': form})

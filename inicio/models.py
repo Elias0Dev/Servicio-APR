@@ -71,10 +71,12 @@ class Factura(models.Model):
         db_column='id_cliente',
         related_name='facturas'
     )
+    # ASUMIDO: Para que la Factura sepa qué tarifa aplicó, se recomienda un FK o un campo de texto.
+    tarifa_aplicada = models.CharField(max_length=50, blank=True, null=True) 
     total_pagar = models.DecimalField(max_digits=10, decimal_places=2)
     fecha_emision = models.DateField()
     fecha_vencimiento = models.DateField()
-    estado = models.BooleanField()  # tinyint se suele mapear a Boolean si es 0/1, o SmallIntegerField si hay más estados
+    estado = models.BooleanField()
     lectura_anterior = models.IntegerField()
     lectura_actual = models.IntegerField()
     fecha_actual = models.DateField()
@@ -103,7 +105,8 @@ class Tarifa(models.Model):
     tipo = models.CharField(max_length=2, choices=TIPO_CHOICES)
     rango_desde = models.IntegerField()
     rango_hasta = models.IntegerField()
-    cargo = models.DecimalField(max_digits=10, decimal_places=2)
+    # CORREGIDO: 'cargo' en el modelo se mapea a 'valor_m3' que buscabas en Admin.
+    cargo = models.DecimalField(max_digits=10, decimal_places=2) 
     fecha_inicio = models.DateField()
 
     class Meta:
@@ -153,10 +156,14 @@ class Subsidio(models.Model):
 
 class Contacto(models.Model):
     nombre = models.CharField(max_length=100)
-    email = models.EmailField()
+    # CORREGIDO: El campo es 'email', no 'correo'.
+    email = models.EmailField() 
     asunto = models.CharField(max_length=200)
     mensaje = models.TextField()
-    creado_el = models.DateTimeField(auto_now_add=True)
+    # CORREGIDO: El campo es 'creado_el', no 'fecha_envio'.
+    creado_el = models.DateTimeField(auto_now_add=True) 
+    # CORREGIDO: Campo 'revisado' añadido.
+    revisado = models.BooleanField(default=False)
 
     class Meta:
         db_table = 'contacto'
