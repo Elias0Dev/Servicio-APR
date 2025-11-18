@@ -685,5 +685,5 @@ def registro_usuario(request):
             # Redirige a /accounts/profile/ (o lo que LOGIN_REDIRECT_URL defina)
             return redirect(settings.LOGIN_REDIRECT_URL) 
     else:
-         form = UserCreationForm()    
+        form = UserCreationForm()    
     return render(request, 'registration/registro.html', {'form': form})
