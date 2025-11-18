@@ -1,6 +1,6 @@
 from django.contrib import admin
 # Asegúrate de que todos los modelos que registras están importados
-from .models import Cliente, Factura, Contacto, Tarifas
+from .models import Cliente, Factura, Contacto, Tarifa
 
 class ClienteAdmin(admin.ModelAdmin):
     list_display=['id_cliente', 'rut', 'dv', 'nombre', 'direccion', 'telefono', 'email', 'numero_medidor']

@@ -42,4 +42,5 @@ urlpatterns = [
     
     # 🔑 NUEVA URL DE REGISTRO
     path('registro/', views.registro_usuario, name='registro'),
+    path('accounts/profile/', views.perfil, name='perfil'),
 ]
