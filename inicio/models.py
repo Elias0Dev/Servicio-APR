@@ -17,6 +17,11 @@ class Cliente(models.Model):
 
 
     id_cliente = models.IntegerField(primary_key=True)
+    
+
+    nombre = models.CharField(max_length=80)
+    rut = models.IntegerField()
+    dv = models.CharField(max_length=1)
     tipo = models.CharField(
         max_length=10,        # debe ser suficientemente largo para la opción más larga
         choices=TIPO_CHOICES_1, # opciones disponibles
@@ -28,20 +33,34 @@ class Cliente(models.Model):
         choices=TIPO_CHOICES_2, # opciones disponibles
         default="normal"       # valor por defecto (opcional)
     )
-    rut = models.IntegerField()
-    dv = models.CharField(max_length=1)
-    nombre = models.CharField(max_length=80)
-    direccion = models.CharField(max_length=200, blank=True, null=True)
-    sector = models.CharField(max_length=200, blank=True, null=True)
-    telefono = models.IntegerField(blank=True, null=True)
-    email = models.CharField(max_length=100, blank=True, null=True)
-    numero_medidor = models.IntegerField(blank=True, null=True)
+    razon_social=models.CharField(max_length=200,blank=True) 
+    sector = models.CharField(max_length=200, blank=True)    
+    direccion = models.CharField(max_length=200, blank=True)
+    telefono = models.IntegerField(blank=True)
+    email = models.CharField(max_length=100, blank=True )
+    numero_medidor = models.CharField(max_length=100)
 
     class Meta:
         db_table = 'cliente'
 
     def __str__(self):
-        return f"{self.nombre} ({self.rut}-{self.dv})"
+        return f"Medidor: {self.numero_medidor} | Cliente: {self.nombre} ({self.rut}-{self.dv})"
+    
+    def save(self, *args, **kwargs):
+        # para todos los campos que permiten blank=True
+        for field in self._meta.fields:
+            if getattr(field, "blank", False):  # si el campo permite blank=True
+                valor = getattr(self, field.name)
+
+                if valor in (None, ""):
+                    # si el campo es numérico → poner 0
+                    if isinstance(field, (models.IntegerField, models.FloatField, models.DecimalField)):
+                        setattr(self, field.name, 0)
+                    else:
+                        # caso general: texto
+                        setattr(self, field.name, "No Aplica")
+
+        super().save(*args, **kwargs)
     
 
 class Factura(models.Model):
@@ -144,3 +163,5 @@ class Contacto(models.Model):
 
     def __str__(self):
         return f"{self.nombre} - {self.asunto}"
+    
+
