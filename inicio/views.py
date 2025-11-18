@@ -16,7 +16,7 @@ import base64
 from io import BytesIO 
 
 # 🔑 IMPORTACIONES NECESARIAS PARA AUTENTICACIÓN
-# from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login 
 from django.contrib.auth.decorators import login_required 
 
@@ -659,7 +659,7 @@ def api_chatbot(request):
 # ----------------------------------------------------------------------
 
 # 🔑 VISTA DE PERFIL (Protegida)
-@login_required(login_url='/cuentas/login/')
+@login_required(login_url='/registration/login/')
 def perfil(request):
     """
     Renderiza la página de perfil del usuario, accesible después del login.
@@ -676,14 +676,14 @@ def perfil(request):
 
 
 # 🔑 VISTA DE REGISTRO
-# def registro_usuario(request):
-#     if request.method == 'POST':
-#         form = UserCreationForm(request.POST)
-#         if form.is_valid():
-#             user = form.save() 
-#             login(request, user) 
-#             # Redirige a /accounts/profile/ (o lo que LOGIN_REDIRECT_URL defina)
-#             return redirect(settings.LOGIN_REDIRECT_URL) 
-#     else:
-#         form = UserCreationForm()    
-#     return render(request, 'registration/registro.html', {'form': form})
+def registro_usuario(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save() 
+            login(request, user) 
+            # Redirige a /accounts/profile/ (o lo que LOGIN_REDIRECT_URL defina)
+            return redirect(settings.LOGIN_REDIRECT_URL) 
+    else:
+         form = UserCreationForm()    
+    return render(request, 'registration/registro.html', {'form': form})
