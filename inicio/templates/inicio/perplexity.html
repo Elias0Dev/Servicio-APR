@@ -73,8 +73,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
       crossorigin="anonymous"></script>
     <script>
-
-
         async function enviarPregunta() {
             const pregunta = document.getElementById("pregunta").value;
             const respuestaDiv = document.getElementById("respuesta");
@@ -88,8 +86,18 @@
                 body: data,
                 headers: { "X-CSRFToken": "{{ csrf_token }}" },
             });
-            const resp = await r.json();
-            respuestaDiv.innerHTML = resp.response || resp.error;
+
+            const contentType = r.headers.get("content-type");
+
+            if (contentType && contentType.includes("application/pdf")) {
+                const blob = await r.blob();
+                const url = URL.createObjectURL(blob);
+                window.open(url, "_blank"); 
+                respuestaDiv.textContent = "La boleta ha sido abierta en una nueva pestaña para descarga.";
+            } else {
+                const resp = await r.json();
+                respuestaDiv.innerHTML = resp.response || resp.error;
+            }
         }
     </script>
 </body>

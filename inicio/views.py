@@ -20,6 +20,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login 
 from django.contrib.auth.decorators import login_required 
 
+from .perplexity import get_contextual_perplexity_response
 
 
 
@@ -626,32 +627,120 @@ from .perplexity import get_contextual_perplexity_response
 def mostrar_chatbot(request):
     return render(request, "inicio/perplexity.html")
 
+import re
+
+def extraer_numero_cliente(pregunta):
+    # Buscar patrón que contenga alguna variante cercana a "mi número es" seguida de un número
+    patron = r"mi\s*(n[uú]mero|num(?:ero)?)\s*es\s*(\d+)"
+    match = re.search(patron, pregunta, re.IGNORECASE)
+    if match:
+        numero = match.group(2)
+        return int(numero)
+    return None
+
 def api_chatbot(request):
     if request.method == "POST":
-        pregunta = request.POST.get("message", "").lower()
-        if "mi número es" in pregunta:
-            try:
-                indice = pregunta.index("mi número es")
-                numero_cliente = int(pregunta[indice+12:].strip().split()[0])
-            except (ValueError, IndexError):
-                return JsonResponse({"response": "No pude identificar tu número de cliente, por favor ingrésalo correctamente."})
+        pregunta = request.POST.get("message", "")
+        numero_cliente = extraer_numero_cliente(pregunta.lower())
 
+        pregunta_lower = pregunta.lower()
+        descargar_boleta = (
+            ('descargar' in pregunta_lower and 'boleta' in pregunta_lower) or
+            'boleta pdf' in pregunta_lower or
+            'descarga boleta' in pregunta_lower or
+            'quiero boleta pdf' in pregunta_lower or
+            ('descargar' in pregunta_lower and 'factura' in pregunta_lower) or
+            'factura pdf' in pregunta_lower or
+            'descarga factura' in pregunta_lower or
+            'quiero factura pdf' in pregunta_lower
+        )
+
+        if numero_cliente:
             try:
                 cliente = Cliente.objects.get(id_cliente=numero_cliente)
             except Cliente.DoesNotExist:
                 return JsonResponse({"response": "No existe un cliente con ese número."})
-            factura = Factura.objects.filter(id_cliente=cliente, estado=True).order_by('-fecha_emision').first()
-            if factura:
-                respuesta = (
-                    f"Hola {cliente.nombre}, tu última factura fue emitida el {factura.fecha_emision} con un total a pagar de ${factura.total_pagar}. "
-                    f"Puedes descargarla aquí: <a href='{factura.get_archivo_url()}'>Descargar Factura</a>."
-                )
-            else:
-                respuesta = "No se encontraron facturas activas para tu cliente."
 
+            factura = Factura.objects.filter(id_cliente=cliente, estado=False).order_by('-fecha_emision').first()
+            if not factura:
+                return JsonResponse({"response": "No se encontraron facturas activas para tu cliente."})
+
+            if descargar_boleta:
+                # Aquí va toda la lógica para generar el PDF igual que antes
+                cargo_AP = Cargo.objects.get(id_cargo=1)
+                cargo_AS = Cargo.objects.get(id_cargo=2)
+                subsidio = Subsidio.objects.filter(cliente=cliente).first()
+                monto_subsidio = subsidio.monto if subsidio else 0
+                estado_cliente = cliente.estado
+                corte = Cargo.objects.get(id_cargo=3).valor if estado_cliente == "corte" else 0
+
+                tarifas_as = Tarifa.objects.filter(tipo='AS', rango_desde__lte=factura.consumo, rango_hasta__gte=factura.consumo).order_by('rango_desde')
+                tarifas_ap = Tarifa.objects.filter(tipo='AP', rango_desde__lte=factura.consumo, rango_hasta__gte=factura.consumo).order_by('rango_desde')
+
+                tarifa_as = tarifas_as.first() if tarifas_as.exists() else None
+                tarifa_ap = tarifas_ap.first() if tarifas_ap.exists() else None
+
+                valor_as = tarifa_as.cargo * factura.consumo if tarifa_as else 0
+                valor_ap = tarifa_ap.cargo * factura.consumo if tarifa_ap else 0
+
+                facturas_historial = Factura.objects.filter(id_cliente=cliente).order_by('-fecha_emision')[:6]
+                meses = [f.fecha_emision.strftime('%b %Y') for f in reversed(facturas_historial)]
+                consumos = [f.consumo for f in reversed(facturas_historial)]
+                fig, ax = plt.subplots(figsize=(8, 3))
+                ax.bar(meses, consumos, color='#007bff')
+                ax.set_ylabel('Consumo (m³)')
+                ax.set_title('Historial de Consumo', fontsize=10)
+                plt.xticks(rotation=45, ha="right", fontsize=8)
+                plt.yticks(fontsize=8)
+                plt.tight_layout()
+                buffer = BytesIO()
+                plt.savefig(buffer, format='png')
+                buffer.seek(0)
+                chart_historico_b64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
+                plt.close(fig)
+
+                contexto = {
+                    'factura': factura,
+                    'cliente': cliente,
+                    'cargo_ap': cargo_AP,
+                    'cargo_as': cargo_AS,
+                    'subsidio': monto_subsidio,
+                    'corte': corte,
+                    'tarifa_as': tarifas_as,
+                    'tarifa_ap': tarifas_ap,
+                    'valor_ap': valor_ap,
+                    'valor_as': valor_as,
+                    'chart_historico_b64': chart_historico_b64,
+                }
+
+                html = render_to_string('inicio/boleta.html', contexto)
+                path_wkhtmltopdf = r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe'
+                config = pdfkit.configuration(wkhtmltopdf=path_wkhtmltopdf)
+                options = {
+                    'page-size': 'A4',
+                    'encoding': 'UTF-8',
+                    'margin-top': '0.75in',
+                    'margin-bottom': '0.75in',
+                    'margin-left': '0.75in',
+                    'margin-right': '0.75in',
+                }
+                pdf = pdfkit.from_string(html, False, options=options, configuration=config)
+
+                response = HttpResponse(pdf, content_type='application/pdf')
+                response['Content-Disposition'] = f'inline; filename=boleta_N°{factura.id_factura}.pdf'
+                return response
+
+            else:
+                respuesta = (
+                    f"Hola {cliente.nombre}, tu última factura fue emitida el "
+                    f"{factura.fecha_emision.strftime('%d-%m-%Y')} con un total a pagar de ${factura.total_pagar}. "
+                    f"Si deseas descargar la boleta en PDF, por favor indícalo."
+                )
+                return JsonResponse({"response": respuesta})
+
+        else:
+            respuesta = get_contextual_perplexity_response(pregunta)
             return JsonResponse({"response": respuesta})
-        respuesta = get_contextual_perplexity_response(pregunta)
-        return JsonResponse({"response": respuesta})
 
     return JsonResponse({"error": "Método no permitido"}, status=405)
 # ----------------------------------------------------------------------
@@ -659,7 +748,7 @@ def api_chatbot(request):
 # ----------------------------------------------------------------------
 
 # 🔑 VISTA DE PERFIL (Protegida)
-@login_required(login_url='/registration/login/')
+@login_required(login_url='/cuentas/login/')
 def perfil(request):
     """
     Renderiza la página de perfil del usuario, accesible después del login.

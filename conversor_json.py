@@ -2,6 +2,7 @@
 #Solucion: este archivo convierte el json a uno legible y permite cargar los datos a las tablas correspondientes
 #python manage.py dumpdata inicio.Cargo inicio.Tarifa --indent 4 > datos.json #exportar
 #python manage.py loaddata datos_limpios.json #importar
+#python manage.py dumpdata admin_interface.Theme --indent 4 > theme.json 
 
 
 import json
