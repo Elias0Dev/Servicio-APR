@@ -197,7 +197,7 @@ PWA_APP_ICONS_APPLE = [
 ]
 
 # Optional PWA addition: Service Worker scope
-# PWA_SERVICE_WORKER_PATH = os.path.join(BASE_DIR, 'inicio/static/inicio', 'serviceworker.js')
+PWA_SERVICE_WORKER_PATH = os.path.join(BASE_DIR, 'serviceworker.js')
 
 # Optional PWA addition: Offline page (create this in templates/inicio/offline.html)
 # PWA_APP_FETCH_URL_WHITELIST = ['/admin/'] # Example: Allow admin access offline, or leave blank

@@ -391,7 +391,7 @@ def buscar_facturas(request):
         return JsonResponse({'error': 'Número de cliente no encontrado'}, status=404)
 
     try:
-        cliente_obj = Cliente.objects.get(id=numero_cliente)
+        cliente_obj = Cliente.objects.get(id_cliente=numero_cliente)
     except Cliente.DoesNotExist:
         return JsonResponse({'error': 'Cliente no encontrado'}, status=404)
 
