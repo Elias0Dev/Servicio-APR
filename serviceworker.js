@@ -2,8 +2,28 @@
 
 var staticCacheName = "django-pwa-v" + new Date().getTime();
 var filesToCache = [
+    
     '/offline/',
+    '/',
+    '/detalle_boletas/',
+    '/pago/',
+    '/buscar_facturas_rut/',
+    '/contacto/',
+    '/cliente/agregar_cliente/',
+    '/cliente/listar_cliente/',
+    '/factura/agregar_factura/',
+    '/factura/listar_factura/',
+    '/tarifa/agregar_tarifa/',
+    '/tarifa/listar_tarifas/',
+    '/cargo/agregar_cargo/',
+    '/cargo/listar_cargo/',
+    '/subsidio/agregar_subsidio/',
+    '/subsidio/listar_subsidio/',
+    '/perplexity/',
     '/static/inicio/css/style.css',
+    '/static/inicio/css/bootstrap.min.css',
+    '/static/inicio/css/bootstrap.min.css.map',
+    '/static/inicio/js/bootstrap.bundle.min.js',
     '/static/inicio/img/boleta-icon.png',
     '/static/inicio/img/pago-icon.png',
     '/static/inicio/img/logo.png',
