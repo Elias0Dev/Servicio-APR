@@ -43,6 +43,7 @@ else:
     ALLOWED_HOSTS = ['*']
 # --- END SECURITY CRITICAL SETTINGS ---
 
+LOGOUT_REDIRECT_URL = '/'
 
 # Application definition
 
