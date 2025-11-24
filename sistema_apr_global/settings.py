@@ -16,7 +16,11 @@ import os
 # or 'django-environ' to handle environment variables robustly.
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+
+
 
 
 # Quick-start development settings - unsuitable for production
@@ -32,12 +36,12 @@ SECRET_KEY = os.environ.get(
 
 # 2. DEBUG: Loaded from environment variable
 # Check if the environment variable is explicitly 'True' or '1'
-DEBUG = os.environ.get('DEBUG', 'True').lower() in ('true', '1')
+DEBUG = 1
 
 # 3. ALLOWED_HOSTS: Loaded from environment variable (REQUIRED for production)
 if not DEBUG:
     # In production, specify your domain names (e.g., 'www.tudominio.cl')
-    ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(',')
+    ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '*').split(',')
 else:
     # Allow all for local development
     ALLOWED_HOSTS = ['*']
@@ -61,6 +65,7 @@ INSTALLED_APPS = [
     'colorfield',
     'crispy_forms',
     'crispy_bootstrap5',
+    'rest_framework',
     
 ]
 
@@ -88,7 +93,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         # It's a good practice to define DIRS for project-level templates, e.g.:
         # 'DIRS': [BASE_DIR / 'templates'],
-        'DIRS': [], 
+        'DIRS': [ BASE_DIR / 'templates'], 
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

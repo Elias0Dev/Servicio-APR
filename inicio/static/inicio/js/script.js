@@ -1,5 +1,5 @@
 function descargarBoleta(idFactura) {
-    window.open(`/api/facturas/pdf/${idFactura}/`, '_blank');
+    window.open(`/detalle_boletas/facturas/pdf/${idFactura}/`, '_blank');
 }
 
 

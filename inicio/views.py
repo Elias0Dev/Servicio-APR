@@ -25,6 +25,12 @@ from .perplexity import get_contextual_perplexity_response
 
 
 #renderizado de vistas publicas
+
+
+def page_404(request, exception=None):
+    # exception=None para poder usarlo con DEBUG=True
+    return render(request, '404.html', status=404)
+
 def page_index(request):
     context = {}
     return render(request, 'inicio/index.html', context)
@@ -127,7 +133,7 @@ def agregar_factura(request):
 
             # --- Buscar última factura del cliente ---
             ultima_factura = Factura.objects.filter(id_cliente=factura.id_cliente).order_by('-id_factura').first()
-
+            # --- Rellenar factura anterior y fecha anterior ---
             if ultima_factura:
                 factura.lectura_anterior = ultima_factura.lectura_actual
                 factura.fecha_anterior = ultima_factura.fecha_actual
@@ -146,33 +152,14 @@ def agregar_factura(request):
             factura.fecha_vencimiento = hoy + timedelta(days=21)
 
             # --- Calcular total a pagar ---
-            # Ejemplo: 100 pesos por m³ — cámbialo según tu regla
-            cliente = factura.id_cliente
-            estado_cliente = cliente.estado
-
             cargo_fijo_ap = Cargo.objects.get(id_cargo=1).valor
             cargo_fijo_as = Cargo.objects.get(id_cargo=2).valor
-            subsidio = Subsidio.objects.filter(cliente=factura.id_cliente).first()
-
-            if subsidio:
-                subsidio = subsidio.monto
-            else:
-                subsidio = 0
-
-
-            if estado_cliente == "corte":
-                corte= Cargo.objects.get(id_cargo=3).valor
-                print(corte)
-            else:
-                corte=0
-                print(corte)
 
             tarifa_ap = Tarifa.objects.filter(
                 tipo='AP',
                 rango_desde__lte=factura.consumo,
                 rango_hasta__gte=factura.consumo
             ).first()
-
             valor_ap = tarifa_ap.cargo if tarifa_ap else 0
             tarifas_ap = factura.consumo * valor_ap
 
@@ -181,12 +168,27 @@ def agregar_factura(request):
                 rango_desde__lte=factura.consumo,
                 rango_hasta__gte=factura.consumo
             ).first()
-
             valor_as = tarifa_as.cargo if tarifa_as else 0
             tarifas_as = factura.consumo * valor_as
 
+            subsidio = Subsidio.objects.filter(cliente=factura.id_cliente).first()
+            if subsidio:
+                subsidio = subsidio.monto
+                factura.subsidio=True
+            else:
+                subsidio = 0
+                factura.subsidio=False
 
-            total=int(cargo_fijo_ap) + int(tarifas_ap) + int(cargo_fijo_as) +  int(tarifas_as) + int(corte) - int(subsidio)
+            pendiente = Factura.objects.filter(id_cliente=factura.id_cliente,estado_pago=False).count()
+            
+            if pendiente >= 2:
+                factura.corte = True
+                valor_corte= Cargo.objects.get(id_cargo=3).valor
+            else:
+                factura.corte = False
+                valor_corte=0
+
+            total=int(cargo_fijo_ap) + int(tarifas_ap) + int(cargo_fijo_as) +  int(tarifas_as) + int(valor_corte) - int(subsidio)
 
 
 
@@ -195,7 +197,7 @@ def agregar_factura(request):
             
 
             # --- Estado inicial ---
-            factura.estado = False  # o False según tu lógica
+            factura.estado_pago = False  # o False según tu lógica
 
             factura.save()
 
@@ -458,29 +460,36 @@ def buscar_facturas_rut(request):
 def generar_boleta_pdf(request, id_factura):
     factura = Factura.objects.get(id_factura=id_factura)
     cliente = factura.id_cliente
-    estado_cliente = cliente.estado
+    corte = factura.corte
     cargo_AP=Cargo.objects.get(id_cargo=1)
     cargo_AS=Cargo.objects.get(id_cargo=2)
+    subsidio_habil=factura.subsidio
     subsidio = Subsidio.objects.filter(cliente=cliente).first()
 
-    if subsidio:
+    if subsidio_habil:
         subsidio = subsidio.monto
+        
+        
+        
+        
     else:
         subsidio = 0
+        
+        
 
 
-    if estado_cliente == "corte":
+    if corte:
         corte= Cargo.objects.get(id_cargo=3).valor
-        print(corte)
+       
     else:
         corte=0
-        print(corte)
+        
 
 
     tarifas_as = Tarifa.objects.filter(tipo='AS',rango_desde__lte=factura.consumo,rango_hasta__gte=factura.consumo).order_by('rango_desde')
     tarifas_ap = Tarifa.objects.filter(tipo='AP',rango_desde__lte=factura.consumo,rango_hasta__gte=factura.consumo).order_by('rango_desde')
 
-   
+    
     if tarifas_as.exists():  # Verifica que haya al menos un registro
         tarifa_as = tarifas_as.first()  # Toma el primer objeto
         
@@ -586,8 +595,8 @@ def generar_boleta_pdf(request, id_factura):
         'cargo_ap': cargo_AP,
         'cargo_as': cargo_AS,
         'corte': corte,
-        'tarifa_as' : tarifas_as,
-        'tarifa_ap' : tarifas_ap,
+        'tarifa_as' : tarifa_as.cargo,
+        'tarifa_ap' : tarifa_ap.cargo,
         'valor_ap' : valor_ap,
         'valor_as' : valor_as,
         'subsidio' : subsidio,
@@ -764,15 +773,3 @@ def perfil(request):
     return render(request, 'inicio/perfil.html', context)
 
 
-# 🔑 VISTA DE REGISTRO
-def registro_usuario(request):
-    if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            user = form.save() 
-            login(request, user) 
-            # Redirige a /accounts/profile/ (o lo que LOGIN_REDIRECT_URL defina)
-            return redirect(settings.LOGIN_REDIRECT_URL) 
-    else:
-        form = UserCreationForm()    
-    return render(request, 'registration/registro.html', {'form': form})

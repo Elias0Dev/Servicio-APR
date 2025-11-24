@@ -10,9 +10,9 @@ class ClienteAdmin(admin.ModelAdmin):
 
 
 class FacturaAdmin(admin.ModelAdmin):
-    list_display = ['id_factura', 'id_cliente', 'consumo', 'estado']
-    list_editable = ['consumo', 'estado']
-    list_filter = ['estado']
+    list_display = ['id_factura', 'id_cliente', 'consumo', 'estado_pago']
+    list_editable = ['consumo', 'estado_pago']
+    list_filter = ['estado_pago']
     list_per_page = 5
 
 

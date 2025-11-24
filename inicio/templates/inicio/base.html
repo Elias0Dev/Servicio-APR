@@ -101,6 +101,7 @@
     </style>
     {% block css %}
     {% endblock %}
+
     {% load pwa %}
     {% progressive_web_app_meta %}
   </head>
@@ -241,6 +242,12 @@
     ></script>
     <script src="{% static 'inicio/js/bootstrap.bundle.min.js' %}"></script>
 
+    <script>
+    window.addEventListener("online", async () => {
+        const reg = await navigator.serviceWorker.ready;
+        reg.sync.register("sync-cliente");
+    });
+    </script>
     <script defer>
       let lastScrollTop = 0;
       const navbar = document.querySelector(".navbar");
@@ -267,6 +274,7 @@
         lastScrollTop = scrollTop;
       });
     </script>
+
     {% block js %}
     {% endblock %}
     <div id="chat-overlay"></div>

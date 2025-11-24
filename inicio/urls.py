@@ -3,15 +3,16 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
+    
     path("", views.page_index, name="page_index"),
     path("detalle_boletas/", views.page_consultaBoletas, name="page_consultaBoletas"),
-    path('api/facturas/', views.buscar_facturas, name='buscar_facturas'),
+    path('detalle_boletas/facturas/', views.buscar_facturas, name='buscar_facturas'),
     path('pago/', views.page_pago_en_linea, name='page_pago_en_linea'),
     path('buscar_facturas_rut/', views.buscar_facturas_rut, name='buscar_facturas_rut'),
     path('generar_boleta/<int:id_factura>/pdf/', views.generar_boleta_pdf, name='generar_boleta_pdf'),
     path('contacto/', views.page_contact, name='page_contacto'),
     path('buscar_facturas/', views.buscar_facturas, name='buscar_facturas_api'),
-
+    #CRUD
     path("cliente/agregar_cliente/", views.agregar_cliente, name="agregar_cli"),
     path("cliente/listar_cliente/", views.listar_cliente, name="listar_cli"),
     path("cliente/modificar_cliente/<id>/", views.modificar_cliente, name="modificar_cli"),
@@ -40,7 +41,6 @@ urlpatterns = [
     path('perplexity/', views.mostrar_chatbot, name='mostrar_chatbot'),
     path('perplexity/api/', views.api_chatbot, name='api_chatbot'),
     
-    # 🔑 NUEVA URL DE REGISTRO
-    path('registro/', views.registro_usuario, name='registro'),
+    # Usuario
     path('accounts/profile/', views.perfil, name='perfil'),
 ]

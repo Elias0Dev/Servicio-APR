@@ -6,6 +6,10 @@
 
 {% block js%}
 <!-- Se envia la referencias al js -->
+<script src="{% static 'js/db.js' %}"></script>
+<script src="{% static 'js/cliente_offline.js' %}"></script>
+
+
 {%endblock%} {% block css%}
 <!-- Se envia la referencias al css -->
 {%endblock%} {% block contenido%} {%load crispy_forms_tags%}
@@ -18,7 +22,8 @@
     <div class="col-12 col-md-6 offset-md-3">
       <div class="card">
         <div class="card-body">
-          <form action="" method="post">
+          <form  id="form-cliente" action="" method="post">
+
             {%csrf_token%} {{mensaje}} {{ form|crispy }}
 
             <div class="d-flex justify-content-center">

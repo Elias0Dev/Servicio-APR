@@ -8,10 +8,7 @@ class Cliente(models.Model):
         ("persona", "Persona"),
         ("empresa", "Empresa"),
     ]
-    TIPO_CHOICES_2 = [
-        ("normal", "Normal"),
-        ("corte", "Corte"),
-    ]
+    
 
 
 
@@ -26,12 +23,6 @@ class Cliente(models.Model):
         max_length=10,        # debe ser suficientemente largo para la opción más larga
         choices=TIPO_CHOICES_1, # opciones disponibles
         default="persona"       # valor por defecto (opcional)
-    )
-
-    estado = models.CharField(
-        max_length=10,        # debe ser suficientemente largo para la opción más larga
-        choices=TIPO_CHOICES_2, # opciones disponibles
-        default="normal"       # valor por defecto (opcional)
     )
     razon_social=models.CharField(max_length=200,blank=True) 
     sector = models.CharField(max_length=200, blank=True)    
@@ -64,19 +55,20 @@ class Cliente(models.Model):
     
 
 class Factura(models.Model):
+
     id_factura = models.AutoField(primary_key=True)
     id_cliente = models.ForeignKey(
         'Cliente',  # Suponiendo que tienes un modelo Cliente definido
         on_delete=models.CASCADE,
         db_column='id_cliente',
         related_name='facturas'
-    )
-    # ASUMIDO: Para que la Factura sepa qué tarifa aplicó, se recomienda un FK o un campo de texto.
-    tarifa_aplicada = models.CharField(max_length=50, blank=True, null=True) 
+    )    
     total_pagar = models.DecimalField(max_digits=10, decimal_places=2)
     fecha_emision = models.DateField()
     fecha_vencimiento = models.DateField()
-    estado = models.BooleanField()
+    estado_pago = models.BooleanField()
+    corte = models.BooleanField()
+    subsidio = models.BooleanField()
     lectura_anterior = models.IntegerField()
     lectura_actual = models.IntegerField()
     fecha_actual = models.DateField()
@@ -155,6 +147,7 @@ class Subsidio(models.Model):
 
 
 class Contacto(models.Model):
+    id_contacto = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=100)
     # CORREGIDO: El campo es 'email', no 'correo'.
     email = models.EmailField() 

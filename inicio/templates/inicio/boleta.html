@@ -209,19 +209,19 @@
             <tbody>
                 <tr>
                     <th>Cargo fijo por de agua potable</th>
-                    <td>{{cargo_ap.valor|floatformat:0|intcomma}}</td>
+                    <td>${{cargo_ap.valor|floatformat:0|intcomma}}</td>
                 </tr>
                 <tr>
-                    <th>Valor de agua potable por m3</th>
+                    <th>Valor de agua potable por m3 ( ${{tarifa_ap|floatformat:0|intcomma}} x {{factura.consumo}})</th>
                     <td>${{valor_ap|floatformat:0|intcomma}}</td>
                 </tr>
                 <tr>
                     <th>Cargo fijo de alcantarillado</th>
-                    <td>{{cargo_as.valor|floatformat:0|intcomma}}</td>
+                    <td>${{cargo_as.valor|floatformat:0|intcomma}}</td>
                 </tr>
 
                 <tr>
-                    <th>Valor de alcantarillado por m3</th>
+                    <th>Valor de alcantarillado  por m3 ( ${{tarifa_as|floatformat:0|intcomma}} x {{factura.consumo}})</th>
                     <td>${{valor_as|floatformat:0|intcomma}}</td>
                 </tr>
                 

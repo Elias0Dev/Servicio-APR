@@ -1,28 +1,94 @@
 {% extends 'inicio/base.html' %}
 {% load static %}
 
-{% block title %}
-    Mi Perfil - Sistema APR
-{% endblock %}
+{%block title%}
+<title>Mi Perfil - Sistema APR</title>  
+{%endblock%} 
+{% block css%}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+
+    .container {
+        text-align: center;
+        max-width: 800px;
+        width: 100%;
+    }
+    h1 {
+        color: #333;
+        margin-bottom: 20px;
+    }
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 20px;
+        justify-items: center;
+    }
+    .button {
+        width: 150px; /* Ancho fijo para cuadrados */
+        height: 150px; /* Alto igual al ancho */
+        font-size: 18px;
+        font-weight: bold;
+        color: white;
+        background-color: #007bff;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        text-decoration: none;
+        transition: background-color 0.3s;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .button:hover {
+        background-color: #0056b3;
+    }
+    .button i {
+        font-size: 40px; /* Tamaño del ícono */
+        margin-bottom: 10px;
+    }
+</style>
+{%endblock%}
 
 {% block contenido %}
-    <div class="container my-5">
+    <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="col-lg-8">
                 <div class="card p-5 shadow-lg border-success text-center">
                     <h1 class="display-4 text-success mb-3">
                         <i class="bi bi-check-circle-fill me-2"></i> ¡Bienvenido, {{ request.user.username }}!
                     </h1>
-                    <p class="lead">
-                        Has iniciado sesión exitosamente en el **Sistema APR**.
+                    <p>
+                        Este es tu panel de control. Desde aquí podrás acceder a todas las funcionalidades del sistema segun tu rol.
                     </p>
                     
                     <hr class="my-4">
 
-                    <p>
-                        Este es tu panel de control. Desde aquí podrás acceder a todas las funcionalidades del sistema.
-                    </p>
-
+                    
+                    
+                    <div class="grid">
+                        <a href="{% url 'listar_cli' %}" class="button">
+                            <i class="fas fa-users"></i>
+                            Ver Clientes
+                            
+                        </a>
+                        <a href="{% url 'listar_fact' %}" class="button">
+                            <i class="fas fa-file-invoice"></i>
+                            Ver Facturas
+                        </a>
+                        <a href="{% url 'listar_tari' %}" class="button">
+                            <i class="fas fa-tags"></i>
+                            Ver Tarifas
+                        </a>
+                        <a href="{% url 'listar_cargo' %}" class="button">
+                            <i class="fas fa-dollar-sign"></i>
+                            Ver Cargos
+                        </a>
+                        <a href="{% url 'listar_subsidio' %}" class="button">
+                            <i class="fas fa-hand-holding-usd"></i>
+                            Ver Subsidios
+                        </a>
+                    </div>
                     <div class="mt-4">
                         <a href="{% url 'page_index' %}" class="btn btn-outline-secondary btn-lg me-3">
                             <i class="bi bi-house-door-fill me-2"></i> Ir a Inicio
@@ -43,4 +109,9 @@
             </div>
         </div>
     </div>
+
+
 {% endblock %}
+
+
+
