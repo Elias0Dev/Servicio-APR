@@ -391,7 +391,7 @@ def buscar_facturas_rut(request):
         try:
             cliente = Cliente.objects.get(rut=rut)
 
-            facturas_pendientes = Factura.objects.filter(id_cliente=cliente, estado=False)
+            facturas_pendientes = Factura.objects.filter(id_cliente=cliente, estado_pago=False)
 
             context["cliente"] = cliente
             context["facturas"] = facturas_pendientes

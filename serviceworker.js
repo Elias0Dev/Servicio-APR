@@ -3,6 +3,7 @@
 var staticCacheName = "django-pwa-v" + new Date().getTime();
 var filesToCache = [
     '/offline/',
+    '/manifest.json',
     '/detalle_boletas/',
     '/static/inicio/css/style.css',
     '/static/inicio/css/bootstrap.min.css',
@@ -42,13 +43,27 @@ self.addEventListener('activate', event => {
 
 // Serve from Cache
 self.addEventListener("fetch", event => {
+    
+    const url = event.request.url;
+
+    // Permitir que manifest use cache, pero no fetch del server offline
+    if (url.includes("manifest.json")) {
+        event.respondWith(
+            caches.match(event.request)
+                .then(resp => resp || fetch(event.request))
+        );
+        return;
+    }
+
+    // NO interceptar JSON API
+    if (url.endsWith(".json") || url.includes("/api/")) {
+        return; // dejar que falle si está offline
+    }
+
     event.respondWith(
         caches.match(event.request)
-            .then(response => {
-                return response || fetch(event.request);
-            })
-            .catch(() => {
-                return caches.match('/offline/');
-            })
-    )
+            .then(response => response || fetch(event.request))
+            .catch(() => caches.match('/offline/'))
+    );
 });
+
