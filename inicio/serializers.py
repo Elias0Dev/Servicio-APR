@@ -12,7 +12,7 @@ class ClienteSerializer(serializers.ModelSerializer):
 class FacturaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Factura
-        fields = ['id_cliente', 'lectura_actual']  
+        fields = '__all__'
 
 
 

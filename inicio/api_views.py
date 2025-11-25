@@ -1,6 +1,7 @@
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import status
+from django_filters.rest_framework import DjangoFilterBackend
 from .models import Contacto, Cliente, Factura, Tarifa, Cargo,Subsidio
 from .serializers import ClienteSerializer, FacturaSerializer, TarifaSerializer,CargoSerializer, SubsidioSerializer, ContactSerializer
 
@@ -14,6 +15,7 @@ class FacturaViewSet(viewsets.ModelViewSet):
     queryset = Factura.objects.all()
     serializer_class = FacturaSerializer
     lookup_field = 'id_factura'   # IMPORTANTE
+    filterset_fields = ['id_cliente', 'fecha_emision', 'estado_pago']
 
 class TarifaViewSet(viewsets.ModelViewSet):
     queryset = Tarifa.objects.all()

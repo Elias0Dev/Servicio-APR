@@ -2,20 +2,12 @@ from django.db import models
 
 # Create your models here.
 class Cliente(models.Model):
-    
-
     TIPO_CHOICES_1 = [
         ("persona", "Persona"),
         ("empresa", "Empresa"),
     ]
-    
-
-
-
-
     id_cliente = models.IntegerField(primary_key=True)
     
-
     nombre = models.CharField(max_length=80)
     rut = models.IntegerField()
     dv = models.CharField(max_length=1)
