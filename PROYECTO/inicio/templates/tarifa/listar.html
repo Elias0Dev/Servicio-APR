@@ -1,0 +1,53 @@
+<!-- se recibe el contenido de base.html -->
+{%extends 'inicio/base.html' %} {%block title%}
+<!-- Se envia el titulo de la page -->
+{%endblock%} {%load static%}
+<!--Carga la carpeta static de la app -->
+
+{% block js%}
+<!-- Se envia la referencias al js -->
+{%endblock%} {% block css%}
+<!-- Se envia la referencias al css -->
+{%endblock%} {% block contenido%}
+{% load humanize %}
+{%load crispy_forms_tags%}
+
+<div class="container">
+    <div style="display: flex; flex-direction: row; justify-content: space-between;">
+        <h1>Listado de Tarifas</h1>
+        <a href="{%url 'agregar_tari'%}" class="btn btn-success" >Agregar Tarifa</a>
+
+    </div>
+    
+    <hr>
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover table-responsive-sm" border="1">
+            <thead >
+                <tr>
+                    <th scope="col">Tipo</th>
+                    <th scope="col">Rango</th>
+                    <th scope="col">Cargo </th>
+                    <th scope="col">Fecha de Incio</th>
+                    <th scope="col">Opciones</th>
+                </tr>
+            </thead>
+        
+            <tbody>
+                {% for c in tarifa %}
+                <tr>
+                    <td>{{c.tipo}}</td>
+                    <td>{{c.rango_desde}}-{{c.rango_hasta}}</td>
+                    <td>${{c.cargo|floatformat:0|intcomma }}</td>
+                    <td>{{c.fecha_inicio}}</td>
+                    <td><a href="{%url 'modificar_tari' c.id_tarifa %}" class="btn btn-info btn-sm" >Modificar</a>  <a href="{%url 'eliminar_tari' c.id_tarifa%}" class="btn btn-danger btn-sm" >Eliminar</a></td>
+                </tr>
+                
+                {%endfor%}
+            </tbody>
+    
+        </table>
+    </div>
+    
+</div>
+
+{%endblock%}
