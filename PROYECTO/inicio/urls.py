@@ -16,6 +16,7 @@ urlpatterns = [
     path("cliente/modificar_cliente/<id>/", views.modificar_cliente, name="modificar_cli"),
     path("cliente/eliminar_cliente/<id>/", views.eliminar_cliente, name="eliminar_cli"),
 
+
     path("factura/agregar_factura/", views.agregar_factura, name="agregar_fact"),
     path("factura/listar_factura/", views.listar_factura, name="listar_fact"),
     path("factura/modificar_factura/<id>/", views.modificar_factura, name="modificar_fact"),
@@ -41,4 +42,7 @@ urlpatterns = [
     
     # Usuario
     path('accounts/profile/', views.perfil, name='perfil'),
+    path("factura/prediccion_estado_pago/<int:id>/",
+    views.prediccion_estado_pago,
+    name="prediccion_estado_pago"),
 ]

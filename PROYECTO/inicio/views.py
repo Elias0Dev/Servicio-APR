@@ -11,7 +11,7 @@ from .forms import ContactForm, ClienteForm, FacturaForm, TarifaForm, CargoForm,
 
 # --- Nuevas importaciones para gráficos ---
 import matplotlib
-matplotlib.use('Agg')  # Usa un backend sin interfaz gráfica
+matplotlib.use ('Agg')  # Usa un backend sin interfaz gráfica
 import matplotlib.pyplot as plt
 import base64
 from io import BytesIO 
@@ -730,3 +730,32 @@ def perfil(request):
     return render(request, 'inicio/perfil.html', context)
 
 
+import joblib
+from django.http import JsonResponse
+
+# Cargar modelo ML al importar módulo (ajusta la ruta según tu proyecto)
+modelo_ml = joblib.load('ruta/a/modelo_estado_pago.pkl')
+
+def prediccion_estado_pago(request, id):
+    try:
+        factura = Factura.objects.get(id_factura=id)
+    except Factura.DoesNotExist:
+        return JsonResponse({'error': 'Factura no encontrada'}, status=404)
+
+    datos = [
+        float(factura.total_pagar),
+        factura.consumo,
+        int(factura.subsidio),
+        int(factura.corte),
+        (factura.fecha_vencimiento - factura.fecha_emision).days
+    ]
+
+    probabilidad = modelo_ml.predict_proba([datos])[0][1]
+    clase_predicha = modelo_ml.predict([datos])[0]
+
+    resultado = {
+        'factura_id': id,
+        'probabilidad_pago': probabilidad,
+        'prediccion': 'Paga' if clase_predicha == 1 else 'No paga'
+    }
+    return JsonResponse(resultado)
