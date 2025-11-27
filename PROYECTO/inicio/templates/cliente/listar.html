@@ -66,9 +66,9 @@
                     <td><a href="mailto:{{c.email}}">{{c.email}}</a></td>
                     <td>{{c.direccion}}</td>
                     <td>{{c.numero_medidor}}</td>
-                    <td>
-                    <a href="{% url 'modificar_cli' c.id_cliente %}" class="btn btn-info btn-sm">Modificar</a>
-                    <a href="#" onclick="eliminar('{{ c.id_cliente }}')" class="btn btn-danger btn-sm">Eliminar</a>
+                    <td class="d-flex justify-content-center gap-2">
+                      <a href="{% url 'modificar_cli' c.id_cliente %}" class="btn btn-info btn-sm">Modificar</a>
+                      <a href="#" onclick="eliminar('{{ c.id_cliente }}')" class="btn btn-danger btn-sm">Eliminar</a>
                     </td>
                 </tr>
             {% endfor %}

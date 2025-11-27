@@ -36,7 +36,10 @@
                     <td>{{c.tipo}}</td>
                     <td>${{c.valor|floatformat:0|intcomma }}</td>
                     
-                    <td><a href="{%url 'modificar_cargo' c.id_cargo %}" class="btn btn-info btn-sm" >Modificar</a>  <a href="{%url 'eliminar_cargo' c.id_cargo%}" class="btn btn-danger btn-sm" >Eliminar</a></td>
+                    <td class="d-flex justify-content-center gap-2">
+                        <a href="{%url 'modificar_cargo' c.id_cargo %}" class="btn btn-info btn-sm" >Modificar</a>
+                        <a href="{%url 'eliminar_cargo' c.id_cargo%}" class="btn btn-danger btn-sm" >Eliminar</a>
+                    </td>
                 </tr>
                 
                 {%endfor%}

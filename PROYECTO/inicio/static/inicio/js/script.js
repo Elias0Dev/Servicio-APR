@@ -26,10 +26,13 @@ function mostrarDatos(cliente, facturasCliente) {
     // Ordenar facturas por fecha descendente
     facturasCliente.sort((a, b) => new Date(b.fecha_emision) - new Date(a.fecha_emision));
 
+    
+
     // Mostrar tabla
     facturasCliente.forEach(f => {
         let row = cuerpoTabla.insertRow();
         row.innerHTML = `
+            <td>${f.id_factura}</td>
             <td>${f.consumo}</td>
             <td>${new Date(f.fecha_emision).toLocaleDateString('es-CL')}</td>
             <td>$${Number(f.total_pagar).toLocaleString('es-CL')}</td>

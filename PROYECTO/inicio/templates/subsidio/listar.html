@@ -39,7 +39,10 @@
                     <td>{{c.num_decreto}}</td>
                     <td>{{c.tramo_rsh}}</td>
                     <td>${{c.monto|floatformat:0|intcomma }}</td>
-                    <td><a href="{%url 'modificar_subsidio' c.id_subsidio %}" class="btn btn-info btn-sm" >Modificar</a>  <a href="{%url 'eliminar_subsidio' c.id_subsidio%}" class="btn btn-danger btn-sm" >Eliminar</a></td>
+                    <td class="d-flex justify-content-center gap-2 px-0">
+                        <a href="{%url 'modificar_subsidio' c.id_subsidio %}" class="btn btn-info btn-sm" >Modificar</a>
+                        <a href="{%url 'eliminar_subsidio' c.id_subsidio%}" class="btn btn-danger btn-sm" >Eliminar</a>
+                    </td>
                 </tr>
                 
                 {%endfor%}
