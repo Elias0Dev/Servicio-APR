@@ -47,6 +47,7 @@ else:
     ALLOWED_HOSTS = ['*']
 # --- END SECURITY CRITICAL SETTINGS ---
 MESSAGE_STORAGE= "django.contrib.messages.storage.cookie.CookieStorage"
+LOGIN_REDIRECT_URL = '/accounts/profile/'
 LOGOUT_REDIRECT_URL = '/'
 
 # Application definition
