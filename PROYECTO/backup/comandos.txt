@@ -1,0 +1,4 @@
+python manage.py loaddata subsidio_django.json
+python manage.py loaddata cargo_tarifa_django.json
+python manage.py loaddata clientes_django.json
+python manage.py loaddata facturas_django.json
