@@ -38,14 +38,16 @@
 <div class="container">
     <div style="display: flex; flex-direction: row; justify-content: space-between;">
         <h1>Listado de Clientes</h1>
+        {%if perms.inicio.add_cliente%}
         <a href="{%url 'agregar_cli'%}" class="btn btn-success" >Agregar Cliente</a>
+        {%endif%}
     </div>
     
     <hr>
     <table class="table table-bordered table-hover table-responsive-sm" border="1">
         <thead >
             <tr>
-                <th scope="col">Numero de cliente</th>
+                <th scope="col">N° Socio</th>
                 <th scope="col">Nombre</th>
                 <th scope="col">Rut</th>
                 <th scope="col">telefono</th>
@@ -57,7 +59,7 @@
         </thead>
     
         <tbody>
-            {% for c in clientes %}
+            {% for c in entity %}
                 <tr>
                     <td>{{c.id_cliente}}</td>
                     <td>{{c.nombre}} {{c.apellido_paterno}} {{c.apellido_materno}}</td>
@@ -67,14 +69,21 @@
                     <td>{{c.direccion}}</td>
                     <td>{{c.numero_medidor}}</td>
                     <td class="d-flex justify-content-center gap-2">
+                      {%if perms.inicio.change_cliente%}
                       <a href="{% url 'modificar_cli' c.id_cliente %}" class="btn btn-info btn-sm">Modificar</a>
+                      {%endif%}
+                      {%if perms.inicio.delete_cliente%}
                       <a href="#" onclick="eliminar('{{ c.id_cliente }}')" class="btn btn-danger btn-sm">Eliminar</a>
+                      {%endif%}
                     </td>
                 </tr>
             {% endfor %}
         </tbody>
     
 </table>
+<div>
+  {%include 'paginator.html'%}
+</div>
 </div>
 
 {%endblock%}

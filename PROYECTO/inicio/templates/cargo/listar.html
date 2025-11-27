@@ -15,7 +15,9 @@
 <div class="container">
     <div style="display: flex; flex-direction: row; justify-content: space-between;">
         <h1>Listado de Cargos</h1>
-        <a href="{%url 'agregar_cargo'%}" class="btn btn-success" >Agregar Tarifa Fija</a>
+        {%if perms.inicio.add_cargo%}
+        <a href="{%url 'agregar_cargo'%}" class="btn btn-success" >Agregar un Cargo</a>
+        {%endif%}
 
     </div>
     
@@ -37,8 +39,12 @@
                     <td>${{c.valor|floatformat:0|intcomma }}</td>
                     
                     <td class="d-flex justify-content-center gap-2">
+                        {%if perms.inicio.change_cargo%}
                         <a href="{%url 'modificar_cargo' c.id_cargo %}" class="btn btn-info btn-sm" >Modificar</a>
+                        {%endif%}
+                        {%if perms.inicio.delete_cargo%}
                         <a href="{%url 'eliminar_cargo' c.id_cargo%}" class="btn btn-danger btn-sm" >Eliminar</a>
+                        {%endif%}
                     </td>
                 </tr>
                 

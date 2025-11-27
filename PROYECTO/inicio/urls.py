@@ -42,7 +42,4 @@ urlpatterns = [
     
     # Usuario
     path('accounts/profile/', views.perfil, name='perfil'),
-    path("factura/prediccion_estado_pago/<int:id>/",
-    views.prediccion_estado_pago,
-    name="prediccion_estado_pago"),
 ]

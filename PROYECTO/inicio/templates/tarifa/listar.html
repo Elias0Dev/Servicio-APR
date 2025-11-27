@@ -15,7 +15,9 @@
 <div class="container">
     <div style="display: flex; flex-direction: row; justify-content: space-between;">
         <h1>Listado de Tarifas</h1>
+        {%if perms.inicio.add_tarifa%}
         <a href="{%url 'agregar_tari'%}" class="btn btn-success" >Agregar Tarifa</a>
+        {%endif%}
 
     </div>
     
@@ -33,15 +35,19 @@
             </thead>
         
             <tbody>
-                {% for c in tarifa %}
+                {% for c in entity %}
                 <tr>
                     <td>{{c.tipo}}</td>
                     <td>{{c.rango_desde}}-{{c.rango_hasta}}</td>
                     <td>${{c.cargo|floatformat:0|intcomma }}</td>
                     <td>{{c.fecha_inicio}}</td>
                     <td class="d-flex justify-content-center gap-2 px-0">
+                        {%if perms.inicio.change_tarifa%}
                         <a href="{%url 'modificar_tari' c.id_tarifa %}" class="btn btn-info btn-sm" >Modificar</a>
+                        {%endif%}
+                        {%if perms.inicio.delete_tarifa%}
                         <a href="{%url 'eliminar_tari' c.id_tarifa%}" class="btn btn-danger btn-sm" >Eliminar</a>
+                        {%endif%}
                     </td>
                 </tr>
                 
@@ -49,6 +55,9 @@
             </tbody>
     
         </table>
+        <div>
+        {%include 'paginator.html'%}
+        </div>
     </div>
     
 </div>
