@@ -10,7 +10,11 @@ import seaborn as sns
 # 1. Cargar datos desde CSV (exportado desde Django)
 # El CSV debe tener al menos: total_pagar, consumo, subsidio, corte,
 # fecha_emision, fecha_vencimiento, estado_pago
-df = pd.read_csv('facturas.csv', parse_dates=['fecha_emision', 'fecha_vencimiento'])
+df = pd.read_csv(
+    'Factura.csv',
+    sep=';',                # <- separador correcto
+    parse_dates=['fecha_emision', 'fecha_vencimiento']
+)
 
 # 2. Ingeniería de características
 
@@ -54,7 +58,7 @@ y_pred = clf.predict(X_test)
 cm = confusion_matrix(y_test, y_pred)
 print("\nMatriz de confusión prueba:\n", cm)
 print("\nReporte de clasificación prueba:\n", classification_report(
-    y_test, y_pred, target_names=['No paga', 'Paga']
+    y_test, y_pred, labels=[0,1], target_names=['No paga', 'Paga']
 ))
 
 # 8. Gráfico: Matriz de confusión

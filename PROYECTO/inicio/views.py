@@ -734,7 +734,7 @@ import joblib
 from django.http import JsonResponse
 
 # Cargar modelo ML al importar módulo (ajusta la ruta según tu proyecto)
-modelo_ml = joblib.load('ruta/a/modelo_estado_pago.pkl')
+modelo_ml = joblib.load('ml_model\modelo_clasificacion_consumo.pkl')
 
 def prediccion_estado_pago(request, id):
     try:
