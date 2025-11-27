@@ -1,0 +1,1168 @@
+[
+    {
+        "model": "inicio.subsidio",
+        "pk": 1,
+        "fields": {
+            "cliente": 2,
+            "num_decreto": "588",
+            "tramo_rsh": "0",
+            "monto": "12380",
+            "fecha_aplicacion": "2024-07-17"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 2,
+        "fields": {
+            "cliente": 4,
+            "num_decreto": "600",
+            "tramo_rsh": "40",
+            "monto": "12380",
+            "fecha_aplicacion": "2024-10-21"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 3,
+        "fields": {
+            "cliente": 7,
+            "num_decreto": "584",
+            "tramo_rsh": "40",
+            "monto": "9130",
+            "fecha_aplicacion": "2024-06-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 4,
+        "fields": {
+            "cliente": 8,
+            "num_decreto": "600",
+            "tramo_rsh": "40",
+            "monto": "5880",
+            "fecha_aplicacion": "2024-10-21"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 5,
+        "fields": {
+            "cliente": 11,
+            "num_decreto": "508",
+            "tramo_rsh": "40",
+            "monto": "7830",
+            "fecha_aplicacion": "2022-06-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 6,
+        "fields": {
+            "cliente": 14,
+            "num_decreto": "520",
+            "tramo_rsh": "40",
+            "monto": "12380",
+            "fecha_aplicacion": "2022-09-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 7,
+        "fields": {
+            "cliente": 18,
+            "num_decreto": "508",
+            "tramo_rsh": "40",
+            "monto": "10430",
+            "fecha_aplicacion": "2022-06-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 8,
+        "fields": {
+            "cliente": 20,
+            "num_decreto": "482",
+            "tramo_rsh": "40",
+            "monto": "7780",
+            "fecha_aplicacion": "2021-10-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 9,
+        "fields": {
+            "cliente": 23,
+            "num_decreto": "556",
+            "tramo_rsh": "40",
+            "monto": "7780",
+            "fecha_aplicacion": "2023-08-21"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 10,
+        "fields": {
+            "cliente": 32,
+            "num_decreto": "556",
+            "tramo_rsh": "40",
+            "monto": "6430",
+            "fecha_aplicacion": "2023-08-21"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 11,
+        "fields": {
+            "cliente": 37,
+            "num_decreto": "779",
+            "tramo_rsh": "40",
+            "monto": "6880",
+            "fecha_aplicacion": "2024-03-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 12,
+        "fields": {
+            "cliente": 44,
+            "num_decreto": "564",
+            "tramo_rsh": "0",
+            "monto": "12380",
+            "fecha_aplicacion": "2023-10-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 13,
+        "fields": {
+            "cliente": 49,
+            "num_decreto": "490",
+            "tramo_rsh": "40",
+            "monto": "12380",
+            "fecha_aplicacion": "2025-03-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 14,
+        "fields": {
+            "cliente": 52,
+            "num_decreto": "508",
+            "tramo_rsh": "40",
+            "monto": "5880",
+            "fecha_aplicacion": "2022-06-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 15,
+        "fields": {
+            "cliente": 60,
+            "num_decreto": "588",
+            "tramo_rsh": "50",
+            "monto": "12380",
+            "fecha_aplicacion": "2024-07-19"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 16,
+        "fields": {
+            "cliente": 61,
+            "num_decreto": "494",
+            "tramo_rsh": "40",
+            "monto": "12380",
+            "fecha_aplicacion": "2025-03-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 17,
+        "fields": {
+            "cliente": 64,
+            "num_decreto": "548",
+            "tramo_rsh": "40",
+            "monto": "7180",
+            "fecha_aplicacion": "2023-05-19"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 18,
+        "fields": {
+            "cliente": 70,
+            "num_decreto": "635",
+            "tramo_rsh": "40",
+            "monto": "9780",
+            "fecha_aplicacion": "2025-08-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 19,
+        "fields": {
+            "cliente": 72,
+            "num_decreto": "588",
+            "tramo_rsh": "50",
+            "monto": "12380",
+            "fecha_aplicacion": "2024-07-19"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 20,
+        "fields": {
+            "cliente": 80,
+            "num_decreto": "588",
+            "tramo_rsh": "40",
+            "monto": "12380",
+            "fecha_aplicacion": "2024-07-19"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 21,
+        "fields": {
+            "cliente": 85,
+            "num_decreto": "502",
+            "tramo_rsh": "40",
+            "monto": "9130",
+            "fecha_aplicacion": "2022-04-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 22,
+        "fields": {
+            "cliente": 86,
+            "num_decreto": "580",
+            "tramo_rsh": "40",
+            "monto": "11730",
+            "fecha_aplicacion": "2024-05-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 23,
+        "fields": {
+            "cliente": 95,
+            "num_decreto": "556",
+            "tramo_rsh": "40",
+            "monto": "12380",
+            "fecha_aplicacion": "2023-08-21"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 24,
+        "fields": {
+            "cliente": 101,
+            "num_decreto": "482",
+            "tramo_rsh": "40",
+            "monto": "9780",
+            "fecha_aplicacion": "2021-10-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 25,
+        "fields": {
+            "cliente": 107,
+            "num_decreto": "616",
+            "tramo_rsh": "0",
+            "monto": "10430",
+            "fecha_aplicacion": "2025-03-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 26,
+        "fields": {
+            "cliente": 109,
+            "num_decreto": "536",
+            "tramo_rsh": "40",
+            "monto": "5880",
+            "fecha_aplicacion": "2023-02-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 27,
+        "fields": {
+            "cliente": 120,
+            "num_decreto": "508",
+            "tramo_rsh": "40",
+            "monto": "12380",
+            "fecha_aplicacion": "2022-06-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 28,
+        "fields": {
+            "cliente": 122,
+            "num_decreto": "564",
+            "tramo_rsh": "40",
+            "monto": "12380",
+            "fecha_aplicacion": "2023-10-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 29,
+        "fields": {
+            "cliente": 124,
+            "num_decreto": "588",
+            "tramo_rsh": "40",
+            "monto": "12380",
+            "fecha_aplicacion": "2024-07-19"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 30,
+        "fields": {
+            "cliente": 125,
+            "num_decreto": "635",
+            "tramo_rsh": "40",
+            "monto": "12380",
+            "fecha_aplicacion": "2025-08-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 31,
+        "fields": {
+            "cliente": 126,
+            "num_decreto": "588",
+            "tramo_rsh": "40",
+            "monto": "12380",
+            "fecha_aplicacion": "2024-07-19"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 32,
+        "fields": {
+            "cliente": 128,
+            "num_decreto": "532",
+            "tramo_rsh": "40",
+            "monto": "9780",
+            "fecha_aplicacion": "2023-01-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 33,
+        "fields": {
+            "cliente": 131,
+            "num_decreto": "779",
+            "tramo_rsh": "40",
+            "monto": "12380",
+            "fecha_aplicacion": "2024-03-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 34,
+        "fields": {
+            "cliente": 133,
+            "num_decreto": "556",
+            "tramo_rsh": "40",
+            "monto": "12380",
+            "fecha_aplicacion": "2023-08-21"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 35,
+        "fields": {
+            "cliente": 136,
+            "num_decreto": "588",
+            "tramo_rsh": "40",
+            "monto": "11730",
+            "fecha_aplicacion": "2024-07-19"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 36,
+        "fields": {
+            "cliente": 137,
+            "num_decreto": "536",
+            "tramo_rsh": "40",
+            "monto": "12380",
+            "fecha_aplicacion": "2023-02-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 37,
+        "fields": {
+            "cliente": 140,
+            "num_decreto": "520",
+            "tramo_rsh": "40",
+            "monto": "12380",
+            "fecha_aplicacion": "2022-09-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 38,
+        "fields": {
+            "cliente": 146,
+            "num_decreto": "528",
+            "tramo_rsh": "50",
+            "monto": "11080",
+            "fecha_aplicacion": "2022-12-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 39,
+        "fields": {
+            "cliente": 147,
+            "num_decreto": "556",
+            "tramo_rsh": "40",
+            "monto": "12380",
+            "fecha_aplicacion": "2023-08-21"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 40,
+        "fields": {
+            "cliente": 148,
+            "num_decreto": "556",
+            "tramo_rsh": "40",
+            "monto": "12380",
+            "fecha_aplicacion": "2023-08-21"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 41,
+        "fields": {
+            "cliente": 149,
+            "num_decreto": "616",
+            "tramo_rsh": "40",
+            "monto": "12380",
+            "fecha_aplicacion": "2025-03-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 42,
+        "fields": {
+            "cliente": 150,
+            "num_decreto": "556",
+            "tramo_rsh": "40",
+            "monto": "12380",
+            "fecha_aplicacion": "2023-08-21"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 43,
+        "fields": {
+            "cliente": 151,
+            "num_decreto": "635",
+            "tramo_rsh": "50",
+            "monto": "12380",
+            "fecha_aplicacion": "2025-08-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 44,
+        "fields": {
+            "cliente": 154,
+            "num_decreto": "508",
+            "tramo_rsh": "40",
+            "monto": "12380",
+            "fecha_aplicacion": "2022-06-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 45,
+        "fields": {
+            "cliente": 157,
+            "num_decreto": "498",
+            "tramo_rsh": "40",
+            "monto": "12380",
+            "fecha_aplicacion": "2022-03-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 46,
+        "fields": {
+            "cliente": 159,
+            "num_decreto": "502",
+            "tramo_rsh": "40",
+            "monto": "12380",
+            "fecha_aplicacion": "2022-04-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 47,
+        "fields": {
+            "cliente": 164,
+            "num_decreto": "498",
+            "tramo_rsh": "40",
+            "monto": "12380",
+            "fecha_aplicacion": "2022-03-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 48,
+        "fields": {
+            "cliente": 171,
+            "num_decreto": "608",
+            "tramo_rsh": "40",
+            "monto": "11730",
+            "fecha_aplicacion": "2024-12-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 49,
+        "fields": {
+            "cliente": 178,
+            "num_decreto": "498",
+            "tramo_rsh": "60",
+            "monto": "12380",
+            "fecha_aplicacion": "2022-03-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 50,
+        "fields": {
+            "cliente": 179,
+            "num_decreto": "588",
+            "tramo_rsh": "40",
+            "monto": "12380",
+            "fecha_aplicacion": "2024-07-19"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 51,
+        "fields": {
+            "cliente": 181,
+            "num_decreto": "635",
+            "tramo_rsh": "40",
+            "monto": "7180",
+            "fecha_aplicacion": "2025-08-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 52,
+        "fields": {
+            "cliente": 182,
+            "num_decreto": "536",
+            "tramo_rsh": "40",
+            "monto": "12380",
+            "fecha_aplicacion": "2023-02-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 53,
+        "fields": {
+            "cliente": 190,
+            "num_decreto": "508",
+            "tramo_rsh": "40",
+            "monto": "7380",
+            "fecha_aplicacion": "2022-06-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 54,
+        "fields": {
+            "cliente": 194,
+            "num_decreto": "536",
+            "tramo_rsh": "40",
+            "monto": "12380",
+            "fecha_aplicacion": "2023-02-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 55,
+        "fields": {
+            "cliente": 203,
+            "num_decreto": "608",
+            "tramo_rsh": "40",
+            "monto": "7830",
+            "fecha_aplicacion": "2024-12-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 56,
+        "fields": {
+            "cliente": 204,
+            "num_decreto": "608",
+            "tramo_rsh": "40",
+            "monto": "7830",
+            "fecha_aplicacion": "2024-12-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 57,
+        "fields": {
+            "cliente": 205,
+            "num_decreto": "536",
+            "tramo_rsh": "40",
+            "monto": "7180",
+            "fecha_aplicacion": "2023-02-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 58,
+        "fields": {
+            "cliente": 211,
+            "num_decreto": "494",
+            "tramo_rsh": "40",
+            "monto": "9780",
+            "fecha_aplicacion": "2022-01-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 59,
+        "fields": {
+            "cliente": 218,
+            "num_decreto": "556",
+            "tramo_rsh": "40",
+            "monto": "7180",
+            "fecha_aplicacion": "2023-08-21"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 60,
+        "fields": {
+            "cliente": 223,
+            "num_decreto": "520",
+            "tramo_rsh": "40",
+            "monto": "12380",
+            "fecha_aplicacion": "2022-09-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 61,
+        "fields": {
+            "cliente": 224,
+            "num_decreto": "508",
+            "tramo_rsh": "40",
+            "monto": "12380",
+            "fecha_aplicacion": "2022-06-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 62,
+        "fields": {
+            "cliente": 225,
+            "num_decreto": "556",
+            "tramo_rsh": "40",
+            "monto": "4580",
+            "fecha_aplicacion": "2023-08-21"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 63,
+        "fields": {
+            "cliente": 228,
+            "num_decreto": "588",
+            "tramo_rsh": "40",
+            "monto": "7330",
+            "fecha_aplicacion": "2024-07-19"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 64,
+        "fields": {
+            "cliente": 229,
+            "num_decreto": "584",
+            "tramo_rsh": "40",
+            "monto": "7780",
+            "fecha_aplicacion": "1900-01-01"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 65,
+        "fields": {
+            "cliente": 231,
+            "num_decreto": "564",
+            "tramo_rsh": "50",
+            "monto": "12380",
+            "fecha_aplicacion": "2023-10-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 66,
+        "fields": {
+            "cliente": 233,
+            "num_decreto": "635",
+            "tramo_rsh": "40",
+            "monto": "11730",
+            "fecha_aplicacion": "2025-08-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 67,
+        "fields": {
+            "cliente": 244,
+            "num_decreto": "494",
+            "tramo_rsh": "40",
+            "monto": "2380",
+            "fecha_aplicacion": "2022-01-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 68,
+        "fields": {
+            "cliente": 249,
+            "num_decreto": "0",
+            "tramo_rsh": "40",
+            "monto": "8480",
+            "fecha_aplicacion": "2024-10-21"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 69,
+        "fields": {
+            "cliente": 261,
+            "num_decreto": "588",
+            "tramo_rsh": "0",
+            "monto": "12380",
+            "fecha_aplicacion": "2024-07-19"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 70,
+        "fields": {
+            "cliente": 262,
+            "num_decreto": "564",
+            "tramo_rsh": "0",
+            "monto": "12380",
+            "fecha_aplicacion": "2023-10-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 71,
+        "fields": {
+            "cliente": 271,
+            "num_decreto": "631",
+            "tramo_rsh": "40",
+            "monto": "7780",
+            "fecha_aplicacion": "2025-07-18"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 72,
+        "fields": {
+            "cliente": 272,
+            "num_decreto": "520",
+            "tramo_rsh": "40",
+            "monto": "12380",
+            "fecha_aplicacion": "2022-09-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 73,
+        "fields": {
+            "cliente": 278,
+            "num_decreto": "528",
+            "tramo_rsh": "40",
+            "monto": "12380",
+            "fecha_aplicacion": "2022-12-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 74,
+        "fields": {
+            "cliente": 298,
+            "num_decreto": "588",
+            "tramo_rsh": "40",
+            "monto": "8730",
+            "fecha_aplicacion": "2024-07-19"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 75,
+        "fields": {
+            "cliente": 302,
+            "num_decreto": "502",
+            "tramo_rsh": "40",
+            "monto": "10530",
+            "fecha_aplicacion": "2022-04-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 76,
+        "fields": {
+            "cliente": 311,
+            "num_decreto": "779",
+            "tramo_rsh": "40",
+            "monto": "9630",
+            "fecha_aplicacion": "2024-03-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 77,
+        "fields": {
+            "cliente": 314,
+            "num_decreto": "560",
+            "tramo_rsh": "40",
+            "monto": "12780",
+            "fecha_aplicacion": "2023-09-21"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 78,
+        "fields": {
+            "cliente": 317,
+            "num_decreto": "528",
+            "tramo_rsh": "40",
+            "monto": "9180",
+            "fecha_aplicacion": "2022-12-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 79,
+        "fields": {
+            "cliente": 320,
+            "num_decreto": "779",
+            "tramo_rsh": "40",
+            "monto": "11430",
+            "fecha_aplicacion": "2024-03-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 80,
+        "fields": {
+            "cliente": 326,
+            "num_decreto": "635",
+            "tramo_rsh": "50",
+            "monto": "11430",
+            "fecha_aplicacion": "2025-08-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 81,
+        "fields": {
+            "cliente": 331,
+            "num_decreto": "482",
+            "tramo_rsh": "40",
+            "monto": "7830",
+            "fecha_aplicacion": "2021-10-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 82,
+        "fields": {
+            "cliente": 335,
+            "num_decreto": "494",
+            "tramo_rsh": "40",
+            "monto": "12780",
+            "fecha_aplicacion": "2025-03-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 83,
+        "fields": {
+            "cliente": 338,
+            "num_decreto": "779",
+            "tramo_rsh": "40",
+            "monto": "12780",
+            "fecha_aplicacion": "2024-03-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 84,
+        "fields": {
+            "cliente": 347,
+            "num_decreto": "532",
+            "tramo_rsh": "40",
+            "monto": "12780",
+            "fecha_aplicacion": "2023-01-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 85,
+        "fields": {
+            "cliente": 356,
+            "num_decreto": "482",
+            "tramo_rsh": "40",
+            "monto": "9630",
+            "fecha_aplicacion": "2021-10-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 86,
+        "fields": {
+            "cliente": 366,
+            "num_decreto": "482",
+            "tramo_rsh": "40",
+            "monto": "10980",
+            "fecha_aplicacion": "2021-10-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 87,
+        "fields": {
+            "cliente": 369,
+            "num_decreto": "536",
+            "tramo_rsh": "40",
+            "monto": "12330",
+            "fecha_aplicacion": "2023-02-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 88,
+        "fields": {
+            "cliente": 371,
+            "num_decreto": "508",
+            "tramo_rsh": "40",
+            "monto": "12780",
+            "fecha_aplicacion": "2022-06-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 89,
+        "fields": {
+            "cliente": 382,
+            "num_decreto": "502",
+            "tramo_rsh": "50",
+            "monto": "9630",
+            "fecha_aplicacion": "2022-04-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 90,
+        "fields": {
+            "cliente": 384,
+            "num_decreto": "612",
+            "tramo_rsh": "40",
+            "monto": "12780",
+            "fecha_aplicacion": "2021-01-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 91,
+        "fields": {
+            "cliente": 401,
+            "num_decreto": "779",
+            "tramo_rsh": "40",
+            "monto": "7780",
+            "fecha_aplicacion": "2024-03-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 92,
+        "fields": {
+            "cliente": 404,
+            "num_decreto": "580",
+            "tramo_rsh": "40",
+            "monto": "6430",
+            "fecha_aplicacion": "2024-05-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 93,
+        "fields": {
+            "cliente": 406,
+            "num_decreto": "612",
+            "tramo_rsh": "40",
+            "monto": "5980",
+            "fecha_aplicacion": "2025-01-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 94,
+        "fields": {
+            "cliente": 412,
+            "num_decreto": "540",
+            "tramo_rsh": "40",
+            "monto": "2380",
+            "fecha_aplicacion": "2023-03-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 95,
+        "fields": {
+            "cliente": 422,
+            "num_decreto": "779",
+            "tramo_rsh": "40",
+            "monto": "2830",
+            "fecha_aplicacion": "2024-03-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 96,
+        "fields": {
+            "cliente": 428,
+            "num_decreto": "580",
+            "tramo_rsh": "40",
+            "monto": "7780",
+            "fecha_aplicacion": "2024-05-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 97,
+        "fields": {
+            "cliente": 433,
+            "num_decreto": "616",
+            "tramo_rsh": "0",
+            "monto": "3280",
+            "fecha_aplicacion": "2025-03-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 98,
+        "fields": {
+            "cliente": 434,
+            "num_decreto": "779",
+            "tramo_rsh": "40",
+            "monto": "7780",
+            "fecha_aplicacion": "2024-03-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 99,
+        "fields": {
+            "cliente": 454,
+            "num_decreto": "584",
+            "tramo_rsh": "40",
+            "monto": "7780",
+            "fecha_aplicacion": "2024-06-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 100,
+        "fields": {
+            "cliente": 463,
+            "num_decreto": "584",
+            "tramo_rsh": "40",
+            "monto": "7780",
+            "fecha_aplicacion": "1900-01-01"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 101,
+        "fields": {
+            "cliente": 466,
+            "num_decreto": "0",
+            "tramo_rsh": "0",
+            "monto": "3930",
+            "fecha_aplicacion": "2025-05-01"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 102,
+        "fields": {
+            "cliente": 478,
+            "num_decreto": "580",
+            "tramo_rsh": "40",
+            "monto": "3730",
+            "fecha_aplicacion": "2024-05-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 103,
+        "fields": {
+            "cliente": 485,
+            "num_decreto": "612",
+            "tramo_rsh": "40",
+            "monto": "7780",
+            "fecha_aplicacion": "2025-01-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 104,
+        "fields": {
+            "cliente": 491,
+            "num_decreto": "616",
+            "tramo_rsh": "40",
+            "monto": "12380",
+            "fecha_aplicacion": "2025-03-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 105,
+        "fields": {
+            "cliente": 492,
+            "num_decreto": "779",
+            "tramo_rsh": "40",
+            "monto": "12380",
+            "fecha_aplicacion": "2024-03-20"
+        }
+    },
+    {
+        "model": "inicio.subsidio",
+        "pk": 106,
+        "fields": {
+            "cliente": 497,
+            "num_decreto": "635",
+            "tramo_rsh": "40",
+            "monto": "12380",
+            "fecha_aplicacion": "2025-08-20"
+        }
+    }
+]

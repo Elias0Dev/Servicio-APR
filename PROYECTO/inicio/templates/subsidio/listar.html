@@ -24,6 +24,7 @@
         <table class="table table-bordered table-hover table-responsive-sm" border="1">
             <thead >
                 <tr>
+                    <th scope="col">N° Socio</th>
                     <th scope="col">Cliente</th>
                     <th scope="col">Decreto</th>
                     <th scope="col">Tramo </th>
@@ -35,6 +36,7 @@
             <tbody>
                 {% for c in subsidio %}
                 <tr>
+                    <td>{{c.cliente.id_cliente}}</td>
                     <td>{{c.cliente.nombre}}</td>
                     <td>{{c.num_decreto}}</td>
                     <td>{{c.tramo_rsh}}</td>

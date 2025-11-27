@@ -425,10 +425,7 @@ def generar_boleta_pdf(request, id_factura):
 
     if subsidio_habil:
         subsidio = subsidio.monto
-        
-        
-        
-        
+
     else:
         subsidio = 0
         
