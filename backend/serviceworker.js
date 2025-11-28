@@ -1,5 +1,3 @@
-// Base Service Worker implementation.  To use your own Service Worker, set the PWA_SERVICE_WORKER_PATH variable in settings.py
-
 var staticCacheName = "django-pwa-v" + new Date().getTime();
 var filesToCache = [
     '/offline/',
@@ -21,32 +19,33 @@ self.addEventListener("install", event => {
     this.skipWaiting();
     event.waitUntil(
         caches.open(staticCacheName)
-            .then(cache => {
-                return cache.addAll(filesToCache);
-            })
-    )
-});
-
-// Clear cache on activate
-self.addEventListener('activate', event => {
-    event.waitUntil(
-        caches.keys().then(cacheNames => {
-            return Promise.all(
-                cacheNames
-                    .filter(cacheName => (cacheName.startsWith("django-pwa-")))
-                    .filter(cacheName => (cacheName !== staticCacheName))
-                    .map(cacheName => caches.delete(cacheName))
-            );
-        })
+            .then(cache => cache.addAll(filesToCache))
     );
 });
 
-// Serve from Cache
+// Clear old caches on activate
+self.addEventListener('activate', event => {
+    event.waitUntil(
+        caches.keys().then(cacheNames => 
+            Promise.all(
+                cacheNames
+                    .filter(name => name.startsWith("django-pwa-") && name !== staticCacheName)
+                    .map(name => caches.delete(name))
+            )
+        )
+    );
+});
+
+// Serve from cache only if offline
 self.addEventListener("fetch", event => {
-    
     const url = event.request.url;
 
-    // Permitir que manifest use cache, pero no fetch del server offline
+    // Siempre dejar pasar API y JSON
+    if (url.endsWith(".json") || url.includes("/api/")) {
+        return; 
+    }
+
+    // Siempre dejar pasar manifest
     if (url.includes("manifest.json")) {
         event.respondWith(
             caches.match(event.request)
@@ -55,15 +54,12 @@ self.addEventListener("fetch", event => {
         return;
     }
 
-    // NO interceptar JSON API
-    if (url.endsWith(".json") || url.includes("/api/")) {
-        return; // dejar que falle si está offline
+    // Solo usar cache si estamos offline
+    if (!navigator.onLine) {
+        event.respondWith(
+            caches.match(event.request)
+                .then(response => response || caches.match('/offline/'))
+        );
     }
-
-    event.respondWith(
-        caches.match(event.request)
-            .then(response => response || fetch(event.request))
-            .catch(() => caches.match('/offline/'))
-    );
+    // Si estamos online, no interceptamos (pasará directo al servidor)
 });
-

@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- la idea es que base.html sea aquella base donde se encuentre el navbar y footer
+        para el resto de page, con eso tenemos menos codigo duplicado en el resto de las pages -->
+    {%block title%}
+    <!-- Aqui va el titulo de la page para mostrar en el navegador -->
+    {%endblock%} 
+    {%load static%}
+    <!--Carga la carpeta static-->
+
+    <!-- Enlace a Bootstrap CSS 5.3.0 -->
+    <link href="{% static 'inicio/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link rel="manifest" href="{% url 'manifest' %}">
+
+    <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        padding-top: 70px;
+      }
+      main {
+        flex: 1;
+      }
+      .navbar {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 1000;
+        transition: transform 0.3s ease;
+      }
+      .navbar.hidden {
+        transform: translateY(-100%);
+      }
+      /* --- BURBUJA CHATBOT --- */
+      #chat-bubble {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 60px;
+        height: 60px;
+        background-color: #2563eb;
+        border-radius: 50%;
+        cursor: pointer;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        transition: opacity 0.3s;
+      }
+      /* Fondo oscuro (overlay) */
+      #chat-overlay {
+        display: none; /* Se muestra junto al chat */
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6); /* oscurece el fondo */
+        z-index: 1000;
+      }
+
+      /* Ventana del chat */
+      #chat-window {
+        display: none; /* se mostrará dinámicamente */
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%); /* centrado exacto */
+        width: 450px;
+        height: auto;
+        min-height: 300px;
+        max-height: 80vh;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 8px 24px rgba(0,0,0,.3);
+        overflow: visible;
+        z-index: 1001;
+        flex-direction: column;
+      }
+
+      #chat-window iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+        min-height: 300px;
+        max-height: 80vh;
+      }
+      #chat-close {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        border: none;
+        background: transparent;
+        font-size: 18px;
+        cursor: pointer;
+      }
+    </style>
+    {% block css %}
+    {% endblock %}
+
+    {% load pwa %}
+    {% progressive_web_app_meta %}
+  </head>
+  <body>
+    <!-- Barra de navegación -->
+    <header>
+      <!-- Se añade shadow-sm para una mejor separación visual -->
+      <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+        <div class="container-fluid">
+          <!-- Logo o nombre del sitio -->
+          <a class="navbar-brand" href="{% url 'page_index' %}">Sistema APR</a>
+          <!-- Botón para colapsar en móviles -->
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNav"
+            aria-controls="navbarNav"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <!-- Lista de elementos del navbar -->
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+              <!-- Dropdown para Servicios -->
+              <li class="nav-item dropdown">
+                <a
+                  class="nav-link dropdown-toggle"
+                  href="#"
+                  id="serviciosDropdown"
+                  role="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  Servicios
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="serviciosDropdown">
+                  <li>
+                    <a class="dropdown-item" href="{% url 'page_consultaBoletas' %}">Detalle de Boleta</a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="{% url 'page_pago_en_linea' %}">Pago en linea</a>
+                  </li>
+                </ul>
+              </li>
+              {% if user.is_authenticated %}
+              <li class="nav-item dropdown">
+                <a
+                  class="nav-link dropdown-toggle"
+                  href="#"
+                  id="serviciosDropdown"
+                  role="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  Datos
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="serviciosDropdown">
+
+                  {%if user.is_authenticated and perms.inicio.view_cliente %}
+                  <li>
+                    <a class="dropdown-item" href="{% url 'listar_cli' %}">Cliente</a>
+                  </li>
+                  {% endif %}
+                  {%if user.is_authenticated and perms.inicio.view_factura%}
+                  <li>
+                    <a class="dropdown-item" href="{% url 'listar_fact' %}">Factura</a>
+                  </li>
+                  {% endif %}
+                  {%if user.is_authenticated and perms.inicio.view_tarifa %}
+                  <li>
+                    <a class="dropdown-item" href="{% url 'listar_tari' %}">Tarifa</a>
+                  </li>
+                  {% endif %}
+                  {%if user.is_authenticated and perms.inicio.view_cargo %}
+                  <li>
+                    <a class="dropdown-item" href="{% url 'listar_cargo' %}">Cargo</a>
+                  </li>
+                  {% endif %}
+                  {%if user.is_authenticated and perms.inicio.view_subsidio%}
+                  <li>
+                    <a class="dropdown-item" href="{% url 'listar_subsidio' %}">Subsidio</a>
+                  </li>
+                  {% endif %}
+                </ul>
+              </li>
+              {% endif %}
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'page_contacto' %}">Contacto</a>
+              </li>
+            </ul>
+            <!-- Inicio de sesión a la derecha - LÓGICA CONDICIONAL -->
+            <ul class="navbar-nav">
+              {% if user.is_authenticated %}
+              <!-- Opción para usuarios autenticados -->
+              <li class="nav-item">
+                <a href="{% url 'perfil' %}"><span class="nav-link text-primary">Hola, {{ user.username }}</span></a>
+              </li>
+              <li class="nav-item">
+                <form method="POST" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button class="nav-link" type="submit">Cerrar Sesión</button>
+                </form>
+              </li>
+              {% else %}
+              <!-- Opciones para usuarios no autenticados -->
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'login' %}">Iniciar Sesión</a>
+              </li>
+              
+              {% endif %}
+            </ul>
+            <!-- FIN DE LÓGICA CONDICIONAL -->
+          </div>
+        </div>
+      </nav>
+    </header>
+    <main>
+      
+        
+      {% block contenido%}
+      <!-- aqui se recibe los codigos del body -->
+      {%endblock%}
+    </main>
+    <div id="chat-overlay"></div>
+    <!-- Chatbot burbuja y ventana -->
+    <div id="chat-bubble">
+      <img src="{% static 'inicio/img/pregunta.png' %}" alt="Chatbot" style="width:32px;">
+    </div>
+    <div id="chat-window">
+      <iframe src="{% url 'mostrar_chatbot' %}" style="width:100%;height:100%;border:none;" allowtransparency="true"></iframe>
+      <button id="chat-close">&times;</button>
+    </div>
+    <!-- Footer -->
+    <footer class="bg-dark text-white text-center py-3 mt-5">
+      <p>&copy; 2025 Sistema APR. Todos los derechos reservados.</p>
+    </footer>
+
+    <!-- Scripts de Bootstrap y Popper.js -->
+    <!-- Se unifica la versión de Bootstrap a 5.3.0 y se corrigen/eliminan atributos de integridad inválidos. -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+      crossorigin="anonymous"
+      defer
+    ></script>
+    <script src="{% static 'inicio/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'inicio/js/db.js'%}"></script>
+
+    <script defer>
+      let lastScrollTop = 0;
+      const navbar = document.querySelector(".navbar");
+
+      // Mejorar el comportamiento del navbar para que no se oculte al inicio
+      // y solo se muestre/oculte después de un mínimo de scroll.
+      window.addEventListener("scroll", function () {
+        const scrollTop =
+          window.pageYOffset || document.documentElement.scrollTop;
+
+        // Si el scroll está cerca de la parte superior, no lo ocultamos
+        if (scrollTop < 5) {
+            navbar.classList.remove("hidden");
+            lastScrollTop = scrollTop;
+            return;
+        }
+
+        if (scrollTop > lastScrollTop && scrollTop > 70) {
+          // Scrollear hacia abajo: ocultar navbar (solo si no estamos arriba)
+          navbar.classList.add("hidden");
+        } else {
+          navbar.classList.remove("hidden");
+        }
+        lastScrollTop = scrollTop;
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+      <!-- Mensajes de Django  -->
+      {% if messages %}
+        {% for mensaje in messages %}
+          <script>
+            Swal.fire({
+              title: "Todo Correcto",
+              text: "{{ mensaje }}",
+              icon: "success"
+            });
+          </script>
+          
+        {% endfor %}
+      {% endif %}
+    {% block js %}
+    {% endblock %}
+    
+    <script>
+      const chatBubble = document.getElementById('chat-bubble');
+      const chatWindow = document.getElementById('chat-window');
+      const chatOverlay = document.getElementById('chat-overlay');
+      const chatClose = document.getElementById('chat-close');
+      let chatAbierto = false;
+
+      function abrirChat() {
+        chatOverlay.style.display = 'block';
+        chatWindow.style.display = 'flex';
+        chatBubble.style.display = 'none';
+        chatAbierto = true;
+      }
+
+      function cerrarChat() {
+        chatOverlay.style.display = 'none';
+        chatWindow.style.display = 'none';
+        chatBubble.style.display = 'flex';
+        chatAbierto = false;
+      }
+
+      chatBubble.addEventListener('click', () => {
+        if (!chatAbierto) abrirChat();
+      });
+
+      chatClose.addEventListener('click', cerrarChat);
+      chatOverlay.addEventListener('click', cerrarChat);
+
+      
+    </script>
+  </body>
+</html>

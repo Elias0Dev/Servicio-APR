@@ -1,0 +1,73 @@
+<!-- se recibe el contenido de base.html -->
+{%extends 'inicio/base.html' %} {%block title%}
+<!-- Se envia el titulo de la page -->
+{%endblock%} {%load static%}
+<!--Carga la carpeta static de la app -->
+
+{% block js%}
+<!-- Se envia la referencias al js -->
+{%endblock%} {% block css%}
+<!-- Se envia la referencias al css -->
+{%endblock%} {% block contenido%}
+{% load humanize %}
+{%load crispy_forms_tags%}
+
+<div class="container">
+    <div style="display: flex; flex-direction: row; justify-content: space-between;">
+        <h1>Listado de Factura</h1>
+        {%if perms.inicio.add_factura%}
+        <a href="{%url 'agregar_fact'%}" class="btn btn-success" >Agregar Factura</a>
+        {%endif%}
+    </div>
+    <hr>
+    <table class="table table-bordered table-hover table-responsive-sm" border="1">
+        <thead >
+            <tr>
+                <th scope="col">Numero de Factura</th>
+                <th scope="col">Cliente</th>
+                <th scope="col">Fecha Emision</th>
+                <th scope="col">Fecha Vencimiento</th>
+                <th scope="col">Consumo del Periodo</th>
+                <th scope="col">Total a Pagar</th>
+                <th scope="col">Estado</th>
+                <th scope="col">Opcion</th>
+                
+            </tr>
+        </thead>
+    
+        <tbody>
+            {% for c in entity %}
+            <tr>
+                <td>{{c.id_factura}}</td>
+                <td>{{c.id_cliente.nombre}} {{c.id_cliente.apellido_paterno}} {{c.id_cliente.apellido_materno}} </td>
+                <td>{{c.fecha_emision}}</td>
+                <td>{{c.fecha_vencimiento}}</td>
+                <td>{{c.consumo}}</td>
+                <td>${{c.total_pagar|floatformat:0|intcomma }}</td>
+                <td>{% if c.estado %}
+                    Pagado
+                    {% else %}
+                    Pendiente
+                    {%endif%}
+                </td>
+                <td class="d-flex justify-content-center gap-2">
+                    {%if perms.inicio.change_factura%}
+                    <a href="{%url 'modificar_fact' c.id_factura %}" class="btn btn-info btn-sm" >Modificar</a>
+                    {%endif%}
+                    {%if perms.inicio.delete_factura%}
+                    <a href="{%url 'eliminar_fact' c.id_factura %}" class="btn btn-danger btn-sm" >Eliminar</a>
+                    {%endif%}
+                </td>
+                
+            </tr>
+            
+            {%endfor%}
+        </tbody>
+    
+</table>
+<div>
+  {%include 'paginator.html'%}
+</div>
+</div>
+
+{%endblock%}

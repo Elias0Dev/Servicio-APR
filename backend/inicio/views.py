@@ -1,8 +1,10 @@
 import pdfkit
 from django.shortcuts import render, redirect,get_object_or_404
+from django.core.paginator import Paginator
+from django.urls import reverse
 from django.contrib import messages
 from django.conf import settings
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse, HttpResponse, Http404
 from django.template.loader import render_to_string
 
 from datetime import date, timedelta
@@ -11,7 +13,7 @@ from .forms import ContactForm, ClienteForm, FacturaForm, TarifaForm, CargoForm,
 
 # --- Nuevas importaciones para gráficos ---
 import matplotlib
-matplotlib.use('Agg')  # Usa un backend sin interfaz gráfica
+matplotlib.use ('Agg')  # Usa un backend sin interfaz gráfica
 import matplotlib.pyplot as plt
 import base64
 from io import BytesIO 
@@ -19,7 +21,7 @@ from io import BytesIO
 # 🔑 IMPORTACIONES NECESARIAS PARA AUTENTICACIÓN
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login 
-from django.contrib.auth.decorators import login_required 
+from django.contrib.auth.decorators import login_required, permission_required
 
 from .perplexity import get_contextual_perplexity_response
 
@@ -37,8 +39,12 @@ def page_index(request):
     return render(request, 'inicio/index.html', context)
 
 def page_consultaBoletas(request):
+    print("user:", request.user, "authenticated:", request.user.is_authenticated)
+    from django.urls import reverse
+    print("URL para consulta_boletas:", reverse('page_consultaBoletas'))
     context = {}
     return render(request, 'inicio/consulta_boletas.html', context)
+
 
 def page_pago_en_linea(request):
     context = {}
@@ -64,6 +70,8 @@ def page_contact(request):
 
 #renderizado por modulos
 #cliente
+@login_required
+@permission_required('inicio.add_cliente')
 def agregar_cliente(request):
 
     data = {
@@ -81,13 +89,27 @@ def agregar_cliente(request):
 
     return render(request, 'cliente/agregar.html', data)
 
+@login_required
+@permission_required('inicio.view_cliente')
 def listar_cliente(request):
     clientes= Cliente.objects.all()
+    page = request.GET.get('page',1)
+
+    try:
+        paginator = Paginator(clientes, 10)
+        clientes = paginator.page(page)
+    except:
+        raise Http404
+
+        
     data = {
-        'clientes':clientes
+        'entity':clientes,
+        'paginator':paginator
     }
     return render(request, 'cliente/listar.html', data)
 
+@login_required
+@permission_required('inicio.change_cliente')
 def modificar_cliente(request, id):
 
     cliente = get_object_or_404(Cliente, id_cliente=id)
@@ -112,6 +134,8 @@ def modificar_cliente(request, id):
 
     return render(request, 'cliente/modificar.html',data)
 
+@login_required
+@permission_required('inicio.delete_cliente')
 def eliminar_cliente(request, id):
 
     cliente = get_object_or_404(Cliente, id_cliente=id)
@@ -121,7 +145,8 @@ def eliminar_cliente(request, id):
    
 
 #factura
-
+@login_required
+@permission_required('inicio.add_factura')
 def agregar_factura(request):
     data = {
         'form': FacturaForm()
@@ -213,14 +238,26 @@ def agregar_factura(request):
 
     return render(request, 'factura/agregar.html', data)
 
-
+@login_required
+@permission_required('inicio.view_factura')
 def listar_factura(request):
     factura= Factura.objects.all()
+    page = request.GET.get('page',1)
+
+    try:
+        paginator = Paginator(factura, 10)
+        factura = paginator.page(page)
+    except:
+        raise Http404
+    
     data = {
-        'factura': factura
+        'entity': factura,
+        'paginator':paginator
     }
     return render(request, 'factura/listar.html', data)
 
+@login_required
+@permission_required('inicio.change_factura')
 def modificar_factura(request, id):
 
     factura = get_object_or_404(Factura, id_factura=id)
@@ -241,6 +278,8 @@ def modificar_factura(request, id):
 
     return render(request, 'factura/modificar.html',data)
 
+@login_required
+@permission_required('inicio.delete_factura')
 def eliminar_factura(request, id):
 
     factura = get_object_or_404(Factura, id_factura=id)
@@ -248,6 +287,8 @@ def eliminar_factura(request, id):
     return redirect(to="listar_fact")
    
 #tarifa
+@login_required
+@permission_required('inicio.add_tarifa')
 def agregar_tarifa(request):
 
     data = {
@@ -264,13 +305,25 @@ def agregar_tarifa(request):
 
     return render(request, 'tarifa/agregar.html', data)
 
+@login_required
+@permission_required('inicio.view_tarifa')
 def listar_tarifa(request):
     tarifa= Tarifa.objects.all()
+    page = request.GET.get('page',1)
+
+    try:
+        paginator = Paginator(tarifa, 10)
+        tarifa = paginator.page(page)
+    except:
+        raise Http404
     data = {
-        'tarifa': tarifa
+        'entity': tarifa,
+        'paginator':paginator
     }
     return render(request, 'tarifa/listar.html', data)
 
+@login_required
+@permission_required('inicio.change_tarifa')
 def modificar_tarifa(request, id):
 
     tarifa = get_object_or_404(Tarifa, id_tarifa=id)
@@ -288,6 +341,8 @@ def modificar_tarifa(request, id):
 
     return render(request, 'tarifa/modificar.html',data)
 
+@login_required
+@permission_required('inicio.delete_tarifa')
 def eliminar_tarifa(request, id):
 
     tarifa = get_object_or_404(Tarifa, idtarifas=id)
@@ -295,6 +350,8 @@ def eliminar_tarifa(request, id):
     return redirect(to="listar_tari")
 
 #cargo
+@login_required
+@permission_required('inicio.add_cargo')
 def agregar_cargo(request):
 
     data = {
@@ -311,6 +368,8 @@ def agregar_cargo(request):
 
     return render(request, 'cargo/agregar.html', data)
 
+@login_required
+@permission_required('inicio.view_cargo')
 def listar_cargo(request):
     cargo= Cargo.objects.all()
     data = {
@@ -318,6 +377,8 @@ def listar_cargo(request):
     }
     return render(request, 'cargo/listar.html', data)
 
+@login_required
+@permission_required('inicio.change_cargo')
 def modificar_cargo(request, id):
 
     cargo = get_object_or_404(Cargo, id_cargo=id)
@@ -335,6 +396,8 @@ def modificar_cargo(request, id):
 
     return render(request, 'cargo/modificar.html',data)
 
+@login_required
+@permission_required('inicio.delete_cargo')
 def eliminar_cargo(request, id):
 
     cargo = get_object_or_404(cargo, id_cargo=id)
@@ -342,7 +405,8 @@ def eliminar_cargo(request, id):
     return redirect(to="listar_cargo")
 
 #Subsidio:
-
+@login_required
+@permission_required('inicio.add_subsidio')
 def agregar_subsidio(request):
 
     data = {
@@ -359,13 +423,25 @@ def agregar_subsidio(request):
 
     return render(request, 'subsidio/agregar.html', data)
 
+@login_required
+@permission_required('inicio.view_subsidio')
 def listar_subsidio(request):
     subsidio= Subsidio.objects.all()
+    page = request.GET.get('page',1)
+
+    try:
+        paginator = Paginator(subsidio, 10)
+        subsidio = paginator.page(page)
+    except:
+        raise Http404
     data = {
-        'subsidio': subsidio
+        'entity': subsidio,
+        'paginator':paginator
     }
     return render(request, 'subsidio/listar.html', data)
 
+@login_required
+@permission_required('inicio.change_subsidio')
 def modificar_subsidio(request, id):
 
     subsidio = get_object_or_404(Subsidio, id_subsidio=id)
@@ -383,6 +459,8 @@ def modificar_subsidio(request, id):
 
     return render(request, 'subsidio/listar.html',data)
 
+@login_required
+@permission_required('inicio.delete_subsidio')
 def eliminar_subsidio(request, id):
 
     subsidio = get_object_or_404(Subsidio, id_subsidio=id)
@@ -425,10 +503,7 @@ def generar_boleta_pdf(request, id_factura):
 
     if subsidio_habil:
         subsidio = subsidio.monto
-        
-        
-        
-        
+
     else:
         subsidio = 0
         
@@ -714,12 +789,8 @@ def api_chatbot(request):
 # ----------------------------------------------------------------------
 
 # 🔑 VISTA DE PERFIL (Protegida)
-@login_required(login_url='/cuentas/login/')
+@login_required()
 def perfil(request):
-    """
-    Renderiza la página de perfil del usuario, accesible después del login.
-    """
-    
     nombre_usuario = request.user.username 
 
     context = {

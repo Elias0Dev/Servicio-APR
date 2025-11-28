@@ -21,16 +21,7 @@ router.register(r'contactos', ContactoViewSet, basename='contacto')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    
-    # 2. AUTENTICACIÓN: Agrupamos Login/Logout y Registro bajo '/cuentas/'
-    path('cuentas/', include([
-        
-        # a) Login, Logout, Cambio de Contraseña de Django
-        path('login/', include('django.contrib.auth.urls')), 
-        
-    ])),
-    
-    # 3. Tus demás rutas
+    path('accounts/', include('django.contrib.auth.urls')),
     path('', include('inicio.urls')), 
     path('',include('pwa.urls')),
 
