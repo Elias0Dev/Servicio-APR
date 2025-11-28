@@ -29,7 +29,6 @@ from .perplexity import get_contextual_perplexity_response
 
 #renderizado de vistas publicas
 
-
 def page_404(request, exception=None):
     # exception=None para poder usarlo con DEBUG=True
     return render(request, '404.html', status=404)
@@ -801,3 +800,86 @@ def perfil(request):
     return render(request, 'inicio/perfil.html', context)
 
 
+
+##REPORTES --- PAGINA DE REPORTES----#
+from django.views.generic import TemplateView
+from django.db.models import Count, Sum, Avg
+from django.utils import timezone
+from datetime import datetime
+from .models import Cliente, Factura  # Ajusta según tus modelos
+from django.http import JsonResponse
+from django.views.decorators.http import require_http_methods
+import json
+
+from django.views.generic import TemplateView
+from django.db.models import Count, Sum, Avg
+from django.utils import timezone
+from datetime import datetime
+from .models import Cliente, Factura
+from django.http import JsonResponse
+from django.views.decorators.http import require_http_methods
+
+class ReportesView(TemplateView):
+    template_name = 'reportes/reportes.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        # Métricas principales CORREGIDAS
+        context['total_clientes'] = Cliente.objects.count()
+        context['facturas_pendientes'] = Factura.objects.filter(estado_pago=False).count()
+        context['consumo_promedio'] = Factura.objects.aggregate(prom=Avg('consumo'))['prom'] or 0
+        
+        # Facturas del mes actual CORREGIDO
+        hoy = timezone.now()
+        inicio_mes = hoy.replace(day=1)
+        context['facturas_mes'] = Factura.objects.filter(
+            fecha_emision__gte=inicio_mes
+        ).count()
+        
+        # Clientes por tipo CORREGIDO
+        context['clientes_persona'] = Cliente.objects.filter(tipo='persona').count()
+        context['clientes_empresa'] = Cliente.objects.filter(tipo='empresa').count()
+        
+        # Facturas por estado CORREGIDO
+        context['facturas_pagadas'] = Factura.objects.filter(estado_pago=True).count()
+        context['facturas_mora'] = Factura.objects.filter(estado_pago=False).count()
+        
+        # Top 5 clientes por consumo CORREGIDO
+        top_clientes = Factura.objects.values(
+            'id_cliente__nombre'
+        ).annotate(
+            total_consumo=Sum('consumo')
+        ).order_by('-total_consumo')[:5]
+        
+        context['top_clientes_nombres'] = [item['id_cliente__nombre'] or 'Sin nombre' for item in top_clientes]
+        context['top_clientes_consumo'] = [item['total_consumo'] or 0 for item in top_clientes]
+        
+        # MÉTRICAS EXTRA ÚTILES para tu sistema
+        context['facturas_con_corte'] = Factura.objects.filter(corte=True).count()
+        context['facturas_con_subsidio'] = Factura.objects.filter(subsidio=True).count()
+        context['total_pagar_pendiente'] = Factura.objects.filter(
+            estado_pago=False
+        ).aggregate(total=Sum('total_pagar'))['total'] or 0
+        
+        return context
+
+@require_http_methods(["GET"])
+def api_reportes_data(request):
+    mes = request.GET.get('mes')
+    
+    if mes:
+        facturas_mes = Factura.objects.filter(
+            fecha_emision__year=mes[:4],
+            fecha_emision__month=mes[5:]
+        )
+    else:
+        facturas_mes = Factura.objects.all()
+    
+    data = {
+        'total_facturas': facturas_mes.count(),
+        'consumo_total': facturas_mes.aggregate(total=Sum('consumo'))['total'] or 0,
+        'total_pagar': facturas_mes.aggregate(total=Sum('total_pagar'))['total'] or 0,
+        'clientes_con_facturas': facturas_mes.values('id_cliente').distinct().count()
+    }
+    return JsonResponse(data)

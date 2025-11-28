@@ -42,4 +42,6 @@ urlpatterns = [
     
     # Usuario
     path('accounts/profile/', views.perfil, name='perfil'),
+    path('reportes/', views.ReportesView.as_view(), name='reportes'),
+    path('api/reportes-data/', views.api_reportes_data, name='api_reportes_data'),
 ]
