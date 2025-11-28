@@ -157,12 +157,5 @@ class Contacto(models.Model):
     def __str__(self):
         return f"{self.nombre} - {self.asunto}"
     
-class ConsumoClasificado(models.Model):
-    factura = models.OneToOneField(Factura, on_delete=models.CASCADE)
-    categoria = models.CharField(max_length=50)
-    probabilidad = models.FloatField(null=True, blank=True)
-    fecha_analisis = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return f"{self.factura} -> {self.categoria} ({self.probabilidad:.2f})"
 
