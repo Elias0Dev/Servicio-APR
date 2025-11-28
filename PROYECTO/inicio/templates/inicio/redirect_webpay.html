@@ -1,0 +1,35 @@
+<!-- se recibe el contenido de base.html -->
+{%extends 'inicio/base.html'  %}
+
+{%block title%}
+<!-- Se envia el titulo de la page -->
+{%endblock%}
+
+{%load static%} <!--Carga la carpeta static de la app -->
+
+{% block js%}
+<!-- Se envia la referencias al js -->
+{%endblock%}
+
+{% block css%}
+<!-- Se envia la referencias al css -->
+{%endblock%}
+
+
+
+
+{% block contenido%}
+<!-- Se envia codigo a la etiqueta <body> -->
+
+    <form id="webpay_form" action="{{ url }}" method="POST">
+        <input type="hidden" name="token_ws" value="{{ token }}">
+        <button type="submit">Ir a Webpay</button>
+    </form>
+
+    <script>
+        document.getElementById('webpay_form').submit();  // Redirige automáticamente
+    </script>
+
+
+{%endblock%}
+

@@ -1,0 +1,84 @@
+<!-- se recibe el contenido de base.html -->
+{%extends 'inicio/base.html' %}
+
+{%block title%}
+<!-- Se envia el titulo de la page -->
+<title>Pago en Linea - Sistema APR</title>
+{%endblock%} 
+
+{%load static%}
+<!--Carga la carpeta static de la app -->
+
+{% block js%}
+<!-- Se envia la referencias al js -->
+{%endblock%} 
+
+{% block css%}
+<!-- Se envia la referencias al css -->
+ <link rel="stylesheet" href="{%static 'inicio/css/style.css'%}">
+{%endblock%} 
+
+{% load humanize %}
+{% block contenido%}
+<!-- Se envia codigo a la etiqueta <body> -->
+    <div class="container ">
+            <h2>Pago en Línea</h2>
+
+            {% if not request.GET.rut %}
+                <form method="GET" id="buscar_rut" action="{% url 'buscar_facturas_rut' %}">
+                    <label for="rut">Ingrese su RUT (sin DV):</label>
+                    <input type="number" name="rut" id="rut" value="{{ request.GET.rut }}" required />
+                    <br>
+                    <button type="submit" class="btn btn-primary">Buscar Facturas</button>
+                </form>
+            {% endif %}
+
+
+            <hr />
+
+            {% if error %}
+            <p class="error">{{ error }}</p>
+            {% elif mensaje %}
+            <p class="mensaje">{{ mensaje }}</p>
+            {% elif cliente %}
+            
+            <h4>Nombre: {{ cliente.nombre }}</h4> <h4> Direccion: {{cliente.direccion}}</h4>
+
+            <form method="POST" id="Tabla" action="#">
+                {% csrf_token %}
+                <table class="table table-hover"  border="2">
+                    <thead class="table-dark">
+                        <tr>
+                            <th scope="col">Seleccionar</th>
+                            <th scope="col">Emitido</th>
+                            <th scope="col">Vence</th>
+                            <th scope="col">Consumo (m³)</th>
+                            <th scope="col">Total a Pagar</th>
+                            <th scope="col">Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for factura in facturas %}
+                        <tr>
+                        <td><input type="checkbox" name="facturas" value="{{ factura.id_factura }}"></td>
+                        <td>{{ factura.fecha_emision|date:"d/m/Y" }}</td>
+                        <td>{{ factura.fecha_vencimiento|date:"d/m/Y" }}</td>
+                        <td>{{ factura.consumo }}</td>
+                        <td>${{ factura.total_pagar|floatformat:0|intcomma }}</td>
+                        <td>{% if factura.estado %}Pagada{% else %}Pendiente{% endif %}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <br>
+                <button class="btn btn-primary" type="submit">Pagar Seleccionadas</button>
+            </form>
+            {% endif %}
+        
+    </div>
+
+
+
+
+
+{%endblock%}

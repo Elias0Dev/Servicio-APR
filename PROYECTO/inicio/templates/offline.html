@@ -1,0 +1,53 @@
+<!-- se recibe el contenido de base.html -->
+{%extends 'inicio/base.html'  %}
+
+{%block title%}
+<!-- Se envia el titulo de la page -->
+{%endblock%}
+
+{%load static%} <!--Carga la carpeta static de la app -->
+
+{% block js%}
+<!-- Se envia la referencias al js -->
+{%endblock%}
+
+{% block css%}
+<!-- Se envia la referencias al css -->
+<style>
+    h1 {
+    color: #d9534f;
+    }
+    p {
+        font-size: 18px;
+    }
+    #status {
+        font-weight: bold;
+    }
+    .cliente {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    }
+
+</style>
+{%endblock%}
+
+
+
+
+{% block contenido%}
+<!-- Se envia codigo a la etiqueta <body> -->
+    <div class="container">
+        <h1 id="titulo">Modo Offline</h1>
+        <p id="mensaje">La web funciona parcialmente offline. Algunas funciones pueden estar limitadas. Revisa tu conexión para acceder a todo el contenido.</p>
+        <p id="status">Estado: Sin conexión</p>
+    </div>
+
+    <div id="clientes-container">
+    <!-- Aquí se insertarán los clientes -->
+    </div>
+
+
+{%endblock%}
+

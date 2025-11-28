@@ -1,0 +1,67 @@
+<!-- se recibe el contenido de base.html -->
+{%extends 'inicio/base.html' %} {%block title%}
+<!-- Se envia el titulo de la page -->
+{%endblock%} {%load static%}
+<!--Carga la carpeta static de la app -->
+
+{% block js%}
+<!-- Se envia la referencias al js -->
+{%endblock%} {% block css%}
+<!-- Se envia la referencias al css -->
+{%endblock%} {% block contenido%}
+{% load humanize %}
+{%load crispy_forms_tags%}
+
+<div class="container">
+    <div style="display: flex; flex-direction: row; justify-content: space-between;">
+        <h1>Listado de Clientes con Subsidio</h1>
+        {%if perms.inicio.add_subsidio%}
+        <a href="{%url 'agregar_subsidio'%}" class="btn btn-success" >Agregar Cliente</a>
+        {%endif%}
+
+    </div>
+    
+    <hr>
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover table-responsive-sm" border="1">
+            <thead >
+                <tr>
+                    <th scope="col">N° Socio</th>
+                    <th scope="col">Cliente</th>
+                    <th scope="col">Decreto</th>
+                    <th scope="col">Tramo </th>
+                    <th scope="col">Monto</th>
+                    <th scope="col">Opciones</th>
+                </tr>
+            </thead>
+        
+            <tbody>
+                {% for c in entity %}
+                <tr>
+                    <td>{{c.cliente.id_cliente}}</td>
+                    <td>{{c.cliente.nombre}}</td>
+                    <td>{{c.num_decreto}}</td>
+                    <td>{{c.tramo_rsh}}</td>
+                    <td>${{c.monto|floatformat:0|intcomma }}</td>
+                    <td class="d-flex justify-content-center gap-2 px-0">
+                        {%if perms.inicio.change_subsidio%}
+                        <a href="{%url 'modificar_subsidio' c.id_subsidio %}" class="btn btn-info btn-sm" >Modificar</a>
+                        {%endif%}
+                        {%if perms.inicio.delete_subsidio%}
+                        <a href="{%url 'eliminar_subsidio' c.id_subsidio%}" class="btn btn-danger btn-sm" >Eliminar</a>
+                        {%endif%}
+                    </td>
+                </tr>
+                
+                {%endfor%}
+            </tbody>
+    
+        </table>
+        <div>
+        {%include 'paginator.html'%}
+        </div>
+    </div>
+    
+</div>
+
+{%endblock%}

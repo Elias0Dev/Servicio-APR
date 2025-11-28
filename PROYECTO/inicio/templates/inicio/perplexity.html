@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chatbot Perplexity - Servicio APR</title>
+    {% load static %}
+    <link href="{% static 'inicio/css/bootstrap.min.css' %}" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        main {
+            flex: 1;
+        }
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            transition: transform 0.3s ease;
+        }
+        .navbar.hidden {
+            transform: translateY(-100%);
+        }
+        .chat-container {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        #respuesta {
+            background: #fff;
+            min-height: 60px;
+            margin-top: 12px;
+            padding: 10px;
+            border-radius: 6px;
+            color: #2563eb;
+            border: 1px solid #e1e1e1;
+            font-size: 1.1em;
+            overflow-y: auto;
+            max-height: 280px;
+        }
+    </style>
+</head>
+<body>
+
+
+    <main>
+        <div class="chat-container shadow">
+            <h4 class="text-center mb-3">Asistente Virtual APR</h4>
+            <img src="{% static 'inicio/img/logo.png' %}" alt="Logo" style="max-width: 140px;" class="mb-4 d-block mx-auto">
+            <div class="mb-3">
+                <input type="text" id="pregunta" class="form-control" placeholder="Escribe tu pregunta aquí"
+                    autocomplete="off" />
+            </div>
+            <div class="text-center">
+                <button onclick="enviarPregunta()" class="btn btn-primary">Enviar Pregunta</button>
+            </div>
+            <div id="respuesta" class="mt-3"></div>
+        </div>
+    </main>
+
+    
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+      crossorigin="anonymous"></script>
+    <script src="{% static 'inicio/js/bootstrap.bundle.min.js' %}"></script>
+    <script>
+        async function enviarPregunta() {
+            const pregunta = document.getElementById("pregunta").value;
+            const respuestaDiv = document.getElementById("respuesta");
+            respuestaDiv.textContent = "Cargando...";
+
+            const data = new FormData();
+            data.append("message", pregunta);
+
+            const r = await fetch("/perplexity/api/", {
+                method: "POST",
+                body: data,
+                headers: { "X-CSRFToken": "{{ csrf_token }}" },
+            });
+
+            const contentType = r.headers.get("content-type");
+
+            if (contentType && contentType.includes("application/pdf")) {
+                const blob = await r.blob();
+                const url = URL.createObjectURL(blob);
+                window.open(url, "_blank"); 
+                respuestaDiv.textContent = "La boleta ha sido abierta en una nueva pestaña para descarga.";
+            } else {
+                const resp = await r.json();
+                respuestaDiv.innerHTML = resp.response || resp.error;
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!-- se recibe el contenido de base.html -->
+{%extends 'inicio/base.html'  %}
+
+{%block title%}
+<!-- Se envia el titulo de la page -->
+{%endblock%}
+
+{%load static%} <!--Carga la carpeta static de la app -->
+
+{% block js%}
+<!-- Se envia la referencias al js -->
+{%endblock%}
+
+{% block css%}
+<!-- Se envia la referencias al css -->
+{%endblock%}
+
+
+
+
+{% block contenido%}
+<!-- Se envia codigo a la etiqueta <body> -->
+
+  <h2>{{ mensaje }}</h2>
+
+  {% if response %}
+  <h3>Detalles de la transacción:</h3>
+  <ul>
+    <li>Orden de compra: {{ response.buy_order }}</li>
+    <li>Monto: ${{ response.amount }}</li>
+    <li>Código de autorización: {{ response.authorization_code }}</li>
+    <li>Fecha de transacción: {{ response.transaction_date }}</li>
+    <li>Tipo de pago: {{ response.payment_type_code }}</li>
+  </ul>
+  {% endif %}
+
+  <a href="{% url 'buscar_facturas_rut' %}">Volver</a>
+
+{%endblock%}
+
