@@ -883,3 +883,43 @@ def api_reportes_data(request):
         'clientes_con_facturas': facturas_mes.values('id_cliente').distinct().count()
     }
     return JsonResponse(data)
+
+##EXPORTAR A CSV REPORTESS
+
+import csv
+
+def export_reportes_csv(request):
+    hoy = timezone.now()
+    inicio_mes = hoy.replace(day=1)
+
+    # mismos datos que el dashboard, los puedes ajustar
+    total_clientes = Cliente.objects.count()
+    facturas_pagadas = Factura.objects.filter(estado_pago=True).count()
+    facturas_mora = Factura.objects.filter(estado_pago=False).count()
+    consumo_promedio = Factura.objects.aggregate(prom=Avg('consumo'))['prom'] or 0
+    facturas_mes = Factura.objects.filter(fecha_emision__gte=inicio_mes).count()
+    clientes_persona = Cliente.objects.filter(tipo='persona').count()
+    clientes_empresa = Cliente.objects.filter(tipo='empresa').count()
+    facturas_con_corte = Factura.objects.filter(corte=True).count()
+    facturas_con_subsidio = Factura.objects.filter(subsidio=True).count()
+    total_pagar_pendiente = (
+        Factura.objects.filter(estado_pago=False).aggregate(total=Sum('total_pagar'))['total'] or 0
+    )
+
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = f'attachment; filename="reportes_apr_{hoy.date()}.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow(['Métrica', 'Valor'])
+    writer.writerow(['Total Clientes', total_clientes])
+    writer.writerow(['Facturas Pagadas', facturas_pagadas])
+    writer.writerow(['Facturas en Mora', facturas_mora])
+    writer.writerow(['Consumo Promedio (m3)', round(consumo_promedio, 2)])
+    writer.writerow(['Facturas Mes', facturas_mes])
+    writer.writerow(['Clientes Persona', clientes_persona])
+    writer.writerow(['Clientes Empresa', clientes_empresa])
+    writer.writerow(['Facturas con Corte', facturas_con_corte])
+    writer.writerow(['Facturas con Subsidio', facturas_con_subsidio])
+    writer.writerow(['Total $ Pendiente', float(total_pagar_pendiente)])
+
+    return response

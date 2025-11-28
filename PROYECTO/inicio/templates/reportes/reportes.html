@@ -19,9 +19,10 @@
                         <p class="text-muted mb-0">Estadísticas en tiempo real del sistema APR</p>
                     </div>
                     <div class="d-flex gap-2">
-                        <button class="btn btn-outline-primary btn-sm" onclick="exportCSV()">
+                        <a class="btn btn-outline-primary btn-sm"
+                        href="{% url 'exportar_reportes_csv' %}">
                             <i class="bi bi-download me-1"></i>Exportar CSV
-                        </button>
+                        </a>
                         <button class="btn btn-outline-secondary btn-sm" onclick="refreshData()">
                             <i class="bi bi-arrow-clockwise me-1"></i>Actualizar
                         </button>
